@@ -1,0 +1,41 @@
+<div class="modalbox">
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="4" class="ion-text-start">
+        <img [src]="details.icon" class="img-fluid" width="100px" [alt]="details.title">
+      </ion-col>
+      <ion-col size="8" class="ion-text-start mt-3">
+        <span class="_title">Filename</span><br>
+        <span class="_titleText1" [matTooltip]="details['title']">{{ details['title'] }}</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="4" class="">
+        <span class="_title">Type</span><br>
+        <span class="_titleText" [matTooltip]="details.mimeType">{{details.mimeType}}</span>
+      </ion-col>
+      <ion-col size="4" class="">
+        <span class="_title">Size</span><br>
+        <span class="_titleText" [matTooltip]="details.size">{{ details.size }}</span>
+      </ion-col>
+      <ion-col size="4" class="">
+        <span class="_title">Last modified</span><br>
+        <span class="_titleText" [matTooltip]="details['modifiedAt']">{{ details['modifiedAt'] }}</span>
+      </ion-col>
+      <ion-col size="12" class="">
+        <span class="_title">Path</span><br>
+        <span class="_titleText" style="display: flex;" [matTooltip]="details['path']">
+          <mat-icon itemprop="name" class="material-icons-outlined is-homeicon text-darkgray">home</mat-icon> 
+          <span class="_titleText" style="margin-top: 4px;">/{{ details['path'] }}</span>
+        </span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="is-d-flex is-justify-content-center">
+        <button mat-raised-button class="bg-blue text-white" (click)="closepopup()">OK</button>
+      </ion-col>
+    </ion-row>
+
+  </div>
+
+</div>

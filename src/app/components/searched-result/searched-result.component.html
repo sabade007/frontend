@@ -1,0 +1,1486 @@
+<ion-grid class="is-fullwidth is-paddingMain search-results">
+  <!-- File Breadcrumbs  -->
+  <div class="is-topStickyHeader" (click)="OncloseMenu()">
+    <ion-row>
+      <ion-col
+        size="6"
+        size-sm="7"
+        size-md="7"
+        size-lg="7"
+        size-xl="7"
+        class="mt-1"
+      >
+        <nav class="breadcrumbsListnav">
+          <ol class="breadcrumb1">
+            <li style="cursor: pointer" (click)="OnhomeFiles()">
+              <a class="homeicon">
+                <span>
+                  <mat-icon
+                    itemprop="name"
+                    class="material-icons-outlined is-close text-darkgray"
+                    >home</mat-icon
+                  >
+                </span>
+              </a>
+            </li>
+
+            <li
+              class="breadcrumblist"
+              style="cursor: pointer"
+              *ngFor="let breadcrumb of breadcrumbfiles; index as i"
+              (click)="Onbackbreadcrumb(breadcrumb.id)"
+            >
+              <a *ngIf="breadcrumbfiles.length > 0">
+                <span class="breadcrumbtitle">{{ breadcrumb.title }}</span>
+              </a>
+            </li>
+          </ol>
+        </nav>
+
+        <!-- <ol>
+          <li matRipple class="cursor-pointer" (click)="OnhomeFiles()">
+            <span class="material-icons-outlined text-darkgray">home</span>
+          </li>
+          <span
+            class="material-icons-outlined is-fontExtraLarge text-darkgray"
+            *ngIf="breadcrumbfiles.length > 0 && !Searchedpath"
+            >arrow_forward_ios</span
+          >
+          <div
+            *ngFor="let path of searchedPathData; index as i"
+            style="display: inline-block"
+          >
+            <span
+              class="material-icons-outlined is-fontExtraLarge text-darkgray"
+              >arrow_forward_ios</span
+            >
+            <span class="breadcrumbTitle" id="searchedPath">{{ path }}</span>
+          </div>
+        </ol>
+        <ol id="list">
+          <li
+            class="cursor-pointer"
+            *ngFor="let breadcrumb of breadcrumbfiles; index as i"
+          >
+            <span>
+              <span
+                class="material-icons-outlined is-fontExtraLarge text-darkgray"
+                *ngIf="breadcrumbfiles.length > 0 && Searchedpath"
+                >arrow_forward_ios</span
+              >
+              <span
+                class="breadcrumbTitle"
+                (click)="Onbackbreadcrumb(breadcrumb.id)"
+                >{{ breadcrumb.title }}</span
+              >
+              <span
+                class="material-icons-outlined is-fontExtraLarge text-darkgray"
+                >arrow_forward_ios</span
+              >
+            </span>
+          </li>
+        </ol> -->
+      </ion-col>
+      <ion-col
+        size="3"
+        size-sm="3.5"
+        size-md="3.5"
+        size-lg="3.5"
+        size-xl="3.5"
+        class="is-d-flex is-justify-content-end is-align-items-center"
+      >
+        <span
+          matRipple
+          id="step14"
+          class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="List View"
+          *ngIf="fileGridView"
+          (click)="fileListViewShow()"
+        >
+          <mat-icon
+            class="material-icons-outlined text-darkgray"
+            [ngClass]="fileListView ? 'text-blue' : 'text-dark'"
+          >
+            format_list_bulleted</mat-icon
+          >
+        </span>
+        <span
+          matRipple
+          id="step14"
+          class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="Grid View"
+          *ngIf="fileListView"
+          (click)="fileGridViewShow()"
+        >
+          <mat-icon
+            class="material-icons-outlined text-darkgray"
+            [ngClass]="fileGridView ? 'text-blue' : 'text-dark'"
+          >
+            grid_view</mat-icon
+          >
+        </span>
+      </ion-col>
+      <ion-col size="1" size-sm="1.5" size-md="1.5" size-lg="1.5" size-xl="1.5">
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          id="btn1"
+          (click)="goToDashboard()"
+          color="primary"
+          class="backbtn"
+        >
+          <span class="material-icons-outlined mr-2">arrow_back</span>Back
+        </button>
+      </ion-col>
+    </ion-row>
+    <mat-divider></mat-divider>
+  </div>
+
+  <div *ngIf = "isLoadingSearchResults" class="d-flex justify-content-center">
+    <img class="img-center" src="assets/images/icons/loader1.gif" alt= "{{productName}}">
+  </div>
+
+  <!-- File List View  -->
+  <ion-content style="height: calc(100vh - 220px);overflow: auto;--ion-background-color: #ffff !important;">
+  <ion-row class="my-2" *ngIf="fileListView">
+    <ion-col
+      size="12"
+      style="border: 0px solid #dcdddf; border-radius: 5px; margin-bottom: 15px"
+    >
+      <div *ngIf="showIcon && uploadedFile.length == 0" class="text-center">
+        <div
+          class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth"
+        >
+          <mat-icon class="material-icons-outlined is-trashIcon"
+            >folder</mat-icon
+          >
+          <h2>No files in here</h2>
+          <p class="is-fontMedium">
+            Upload some content or sync with your devices!
+          </p>
+        </div>
+      </div>
+      <ion-list>
+      <ion-row
+        class="bg-white is-fileList animated fadeInLeft"
+        *ngFor="let files of uploadedFile; index as i"
+      >
+        <ion-col
+          size="3"
+          size-sm="3"
+          size-md="1.5"
+          size-lg="1"
+          size-xl="1"
+          class="is-leftSide"
+        >
+          <span class="is-docImage">
+            <img
+              width="34px"
+              height="34px"
+              [src]="
+                mimes[files.mimeType] != '' ||
+                mimes[files.mimeType] != undefined
+                  ? mimes[files.mimeType].icon === 'src'
+                    ? files.icon
+                    : mimes[files.mimeType].icon
+                  : 'assets/images/otherDocument.png'
+              "
+              class="img-fluid"
+              alt="{{ productName }}"
+            />
+          </span>
+        </ion-col>
+        <!-- Mobile Screen -->
+        <ion-col *ngIf="isMobile"
+          size="8"
+          size-sm="8"
+          size-md="5"
+          size-lg="5"
+          size-xl="5"
+          class="px-2"
+          (click)="OnopenFile(files.id, files.mimeType, files.title, files.versionId)"
+        >
+          <h1 *ngIf="reNameFile" class="is-fileName">{{ files.title }}</h1>
+          <h1
+            *ngIf="!reNameFile && !(reNameId == files.id)"
+            (window:mouseup)="mouseUp()"
+            class="is-fileName"
+          >
+            {{ files.title }}
+          </h1>
+          <span
+            *ngIf="!reNameFile && reNameId == files.id"
+            (window:mouseup)="mouseUp()"
+            class="reNameInputinner-align Inputright-align"
+          >
+            <span
+              class="material-icons icon"
+              type="submit"
+              (click)="OnreNameFiles(reNameId)"
+              >arrow_forward</span
+            >
+            <input
+              [(ngModel)]="strname"
+              id="reNameFile"
+              type="text"
+              (keyup.enter)="OnreNameFiles(reNameId)"
+              class="inputAlign"
+              (change)="OnCreateNewName($event)"
+              (focusin)="onFocusInEvent($event)"
+              oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ().]|^ /g,'')"
+            />
+          </span>
+          <p *ngIf="files.mimeType != 'link'" class="mb-0">
+            <span class="is-label">Size: </span>
+            <span class="is-fileSize text-blue">{{ files.sizeRead }}</span>
+            <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+              <span class="is-label px-1"> Files: </span>
+              <span class="is-fileSize text-danger"
+                >{{ files.itemCount }} files</span
+              >
+            </label>
+          </p>
+        </ion-col>
+
+        <!-- Desktop Screen -->
+        <ion-col *ngIf="!isMobile"
+        size="8"
+        size-sm="8"
+        size-md="5"
+        size-lg="5"
+        size-xl="5"
+        class="px-2"
+        (dblclick)="OnopenFile(files.id, files.mimeType, files.title, files.versionId)"
+      >
+        <h1 *ngIf="reNameFile" class="is-fileName">{{ files.title }}</h1>
+        <h1
+          *ngIf="!reNameFile && !(reNameId == files.id)"
+          (window:mouseup)="mouseUp()"
+          class="is-fileName"
+        >
+          {{ files.title }}
+        </h1>
+        <span
+          *ngIf="!reNameFile && reNameId == files.id"
+          (window:mouseup)="mouseUp()"
+          class="reNameInputinner-align Inputright-align"
+        >
+          <span
+            class="material-icons icon"
+            type="submit"
+            (click)="OnreNameFiles(reNameId)"
+            >arrow_forward</span
+          >
+          <input
+            [(ngModel)]="strname"
+            id="reNameFile"
+            type="text"
+            (keyup.enter)="OnreNameFiles(reNameId)"
+            class="inputAlign"
+            (change)="OnCreateNewName($event)"
+            (focusin)="onFocusInEvent($event)"
+            oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ().]|^ /g,'')"
+          />
+        </span>
+        <p *ngIf="files.mimeType != 'link'" class="mb-0">
+          <span class="is-label">Size: </span>
+          <span class="is-fileSize text-blue">{{ files.sizeRead }}</span>
+          <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+            <span class="is-label px-1"> Files: </span>
+            <span class="is-fileSize text-danger"
+              >{{ files.itemCount }} files</span
+            >
+          </label>
+        </p>
+      </ion-col>
+        <ion-col
+          size="12"
+          size-sm="12"
+          size-md="1"
+          size-lg=""
+          size-xl="1"
+          class="px-0 is-sharedSection"
+          (click)="ClickedRow(i, files.id, $event)"
+        >
+          <a
+            [href]="files.tag"
+            *ngIf="files.mimeType == 'link'"
+            target="_blank"
+          >
+            <img
+              width="34px"
+              height="34px"
+              src="assets/images/link.png"
+              class="img-fluid"
+              alt= "{{productName}}"
+          /></a>
+        </ion-col>
+        <ion-col
+          size="12"
+          size-sm="12"
+          size-md="2"
+          size-lg="2"
+          size-xl="2"
+          class="px-0 is-sharedSection"
+          (click)="ClickedRow(i, files.id, $event)"
+        >
+          <div
+            *ngIf="files.shared == true"
+            class="is-d-flex is-justify-content-start is-align-items-center is-shared"
+          >
+            <span
+              (click)="documentShare(files.id, 'internal', files.title, files.mimeType)"
+              [matTooltip]="files.sharedWith[0]"
+              *ngIf="files.sharedWith.length >= 1 && files.sharedWith[0] != ''"
+              class="is-circle bg-blue-6"
+              >{{ files.sharedWith[0] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="documentShare(files.id, 'internal', files.title, files.mimeType)"
+              [matTooltip]="files.sharedWith[1]"
+              *ngIf="files.sharedWith.length >= 2 && files.sharedWith[1] != ''"
+              class="is-circle bg-orange-6"
+              >{{ files.sharedWith[1] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="documentShare(files.id, 'internal', files.title, files.mimeType)"
+              [matTooltip]="files.sharedWith[2]"
+              *ngIf="files.sharedWith.length >= 3 && files.sharedWith[2] != ''"
+              class="is-circle bg-danger-6"
+              >{{ files.sharedWith[2] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="documentShare(files.id, 'internal', files.title, files.mimeType)"
+              class="is-circle bg-success text-white"
+              *ngIf="files.sharedWith.length > 3"
+              >+{{ files.sharedWith.length - 3 }}</span
+            >
+          </div>
+        </ion-col>
+        <ion-col
+          size="12"
+          size-sm="12"
+          size-md="1.5"
+          size-lg="2"
+          size-xl="2"
+          class="px-0 is-dateTime"
+        >
+          <div class="">
+            <h2 class="is-createdAt" *ngIf="!createdTime">
+              <mat-icon class="material-icons-outlined text-pink mx-0"
+                >schedule</mat-icon
+              >
+              {{ files.modifiedAtRead }}
+            </h2>
+            <h2 class="is-createdAt" *ngIf="createdTime">
+              <mat-icon class="material-icons-outlined text-pink mx-0"
+                >date_range</mat-icon
+              >
+              {{ files.createdAtRead }}
+            </h2>
+          </div>
+        </ion-col>
+        <ion-col
+          size="1"
+          size-sm="1"
+          size-md="1"
+          size-lg="1"
+          size-xl="1"
+          class="is-d-flex is-justify-content-center is-align-items-center px-2 is-rightSide"
+        >
+          <div class="card-header-toolbar">
+            <button
+              matTooltip="More actions"
+              id="moreaction"
+              mat-icon-button
+              class="is-moreMenu text-blue"
+              [matMenuTriggerFor]="moreMenu"
+              aria-label="Example icon-button with a menu"
+              #trigger="matMenuTrigger"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #moreMenu="matMenu">
+              <div (mouseleave)="trigger.closeMenu()">
+                <button class="matMenu"
+                  mat-menu-item
+                  id="preview"
+                  *ngIf="files.mimeType != 'link' && files.mimeType != 'other'"
+                  (click)="
+                    OnopenFile(
+                      files.id,
+                      files.mimeType,
+                      files.title,
+                      files.versionId
+                    )
+                  "
+                >
+                  <mat-icon class="material-icons-outlined"
+                    >remove_red_eye</mat-icon
+                  >
+                  <span>Preview</span>
+                </button>
+                <mat-divider
+                  *ngIf="files.mimeType != 'other' && files.mimeType != 'link'"
+                ></mat-divider>
+                <button class="matMenu"
+                  mat-menu-item
+                  id="share"
+                  (click)="documentShare(files.id, 'internal', files.title,files.mimeType)"
+                >
+                  <mat-icon class="material-icons-outlined">share</mat-icon>
+                  <span>Share</span>
+                </button>
+                <!-- <button class="matMenu"
+                  mat-menu-item
+                  *ngIf="files.mimeType != 'link'"
+                  id="getLink"
+                  (click)="documentShare(files.id, 'public', files.title)"
+                >
+                  <mat-icon class="material-icons-outlined">link</mat-icon>
+                  <span>Get link</span>
+                </button> -->
+                <button class="matMenu"
+                  *ngIf="files.mimeType == 'link'"
+                  mat-menu-item
+                  id="getLink"
+                  [cdkCopyToClipboard]="files.tag"
+                >
+                  <mat-icon class="material-icons-outlined">link</mat-icon>
+                  <span>Copy URL</span>
+                </button>
+                <button class="matMenu"
+                  mat-menu-item
+                  id="fav"
+                  (click)="addFavorite(files.id, files.favorite)"
+                >
+                  <mat-icon class="material-icons-outlined"
+                    >star_border</mat-icon
+                  >
+                  <span *ngIf="files.favorite === false">Add to favorites</span>
+                  <span *ngIf="files.favorite === true">Remove from favorites</span>
+                </button>
+                <button class="matMenu"
+                  mat-menu-item
+                  id="rename"
+                  (click)="OnRename(files.id, files.title, files.mimeType)"
+                >
+                  <mat-icon class="material-icons-outlined">edit</mat-icon>
+                  <span>Rename</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button class="matMenu"
+                  mat-menu-item
+                  id="move or copy"
+                  (click)="OnmoveOrCopy(files.id)"
+                >
+                  <mat-icon class="material-icons-outlined"
+                    >drive_file_move</mat-icon
+                  >
+                  <span>Move or Copy</span>
+                </button>
+                <button class="matMenu"
+                  mat-menu-item
+                  id="download"
+                  (click)="OnDownload(files.id)"
+                >
+                  <mat-icon class="material-icons-outlined">download</mat-icon>
+                  <span>Download</span>
+                </button>
+                <button class="matMenu" *ngIf="files.mimeType != 'httpd/unix-directory'" (click)="manageVersions(files.id,files.mimeType,files.versionId)" id="manageVersion" mat-menu-item>
+                  <mat-icon class="material-icons-outlined">restore</mat-icon>
+                  <span>Manage Version</span>
+                </button>
+                <button class="matMenu" (click)="OnmoreDetails(files.id,files.versionId)" id="details" mat-menu-item>
+                  <mat-icon class="material-icons-outlined">info</mat-icon>
+                  <span>Details</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button class="matMenu"
+                  mat-menu-item
+                  id="trash"
+                  (click)="trashFile(files.id, files.itemCount)"
+                >
+                  <mat-icon class="material-icons-outlined">delete</mat-icon>
+                  <span>Trash</span>
+                </button>
+              </div>
+            </mat-menu>
+          </div>
+          <span class="is-favroiteIcon" *ngIf="files.favorite == true">
+            <mat-icon class="material-icons-outlined text-orange mx-0"
+              >star</mat-icon
+            >
+          </span>
+        </ion-col>
+      </ion-row>
+        </ion-list>
+        <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+          <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      <!-- <ion-row *ngIf="uploadedFile.length != 0 && openFolder == true">
+        <ion-col class="px-0">
+          <mat-paginator
+            class="media-table-paginator"
+            [length]="filesCount"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+            (page)="pageEvent = $event; onPageChange($event)"
+            showFirstLastButtons
+          >
+          </mat-paginator>
+        </ion-col>
+      </ion-row> -->
+    </ion-col>
+  </ion-row>
+
+  <!-- Folders & Files Grid View  -->
+  <div class="is-fullwidth" *ngIf="fileGridView">
+    <ion-row class="my-2">
+      <ion-col size="12" class="col-lg-12">
+        <!-- <div
+          class="card card-block card-stretch card-transparent"
+          *ngIf="uploadedFile != 0"
+        >
+          <div
+            class="card-header is-d-flex is-justify-content-between is-align-items-center pb-0"
+          >
+            <div class="header-title">
+              <h4 class="card-title mb-0">Folders and Files</h4>
+            </div>
+          </div>
+        </div> -->
+        <div *ngIf="showIcon && uploadedFile == 0" class="text-center">
+          <div
+            class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth"
+          >
+            <mat-icon class="material-icons-outlined is-trashIcon"
+              >folder</mat-icon
+            >
+            <h2>No files in here</h2>
+            <p class="is-fontMedium">
+              Upload some content or sync with your devices!
+            </p>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!--Grid View  -->
+    <ion-grid>
+    <ion-row class="ion-justify-content-start" style="margin-bottom: 20px">
+      <ion-col
+        size="6"
+        size-sm="6"
+        size-md="3"
+        size-lg="2.4"
+        size-xl="2.4"
+        class="my-2 animated fadeInLeft"
+        *ngFor="let files of uploadedFile; index as i"
+      >
+        <mat-card class="cursor-pointer px-2 pt-0 pb-2">
+          <div class="card-body1 is-folder">
+            <div class="is-header">
+              <span class="is-favroiteIcon" *ngIf="files.favorite == true">
+                <mat-icon
+                  class="material-icons-outlined text-orange mx-0 is-fontLarge"
+                  >star</mat-icon
+                >
+              </span>
+              <span class="is-shareIcon" *ngIf="files.shared == true">
+                <mat-icon
+                  class="material-icons-outlined text-blue mx-0 is-fontLarge"
+                  >share</mat-icon
+                >
+              </span>
+              <button
+                mat-icon-button
+                id="moreaction"
+                matTooltip="More actions"
+                class="is-moreMenu"
+                [matMenuTriggerFor]="moreMenu"
+                #trigger="matMenuTrigger"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <div (mouseleave)="trigger.closeMenu()">
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="preview"
+                    *ngIf="
+                      files.mimeType != 'other' && files.mimeType != 'link'
+                    "
+                    (click)="
+                      OnopenFile(
+                        files.id,
+                        files.mimeType,
+                        files.title,
+                        files.versionId
+                      )
+                    "
+                  >
+                    <mat-icon class="material-icons-outlined"
+                      >remove_red_eye</mat-icon
+                    >
+                    <span>Preview</span>
+                  </button>
+                  <mat-divider
+                    *ngIf="
+                      files.mimeType != 'other' && files.mimeType != 'link'
+                    "
+                  ></mat-divider>
+
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="share"
+                    (click)="documentShare(files.id, 'internal', files.title, files.mimeType)"
+                  >
+                    <mat-icon class="material-icons-outlined">share</mat-icon>
+                    <span>Share</span>
+                  </button>
+                  <button class="matMenu"
+                    *ngIf="files.mimeType == 'link'"
+                    mat-menu-item
+                    id="getLink"
+                    [cdkCopyToClipboard]="files.tag"
+                  >
+                    <mat-icon class="material-icons-outlined">link</mat-icon>
+                    <span>Copy URL</span>
+                  </button>
+                  <!-- <button class="matMenu"
+                    mat-menu-item
+                    *ngIf="files.mimeType != 'link'"
+                    id="getlink"
+                    (click)="documentShare(files.id, 'public', files.title)"
+                  >
+                    <mat-icon class="material-icons-outlined">link</mat-icon>
+                    <span>Get link</span>
+                  </button> -->
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="fav"
+                    (click)="addFavorite(files.id, files.favorite)"
+                  >
+                    <mat-icon class="material-icons-outlined"
+                      >star_border</mat-icon
+                    >
+                    <span *ngIf="files.favorite === false">Add to favorites</span>
+                    <span *ngIf="files.favorite === true">Remove from favorites</span>
+                  </button>
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="rename"
+                    (click)="OnRename(files.id, files.title, files.mimeType)"
+                  >
+                    <mat-icon class="material-icons-outlined">edit</mat-icon>
+                    <span>Rename</span>
+                  </button>
+                  <mat-divider></mat-divider>
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="move or copy"
+                    (click)="OnmoveOrCopy(files.id)"
+                  >
+                    <mat-icon class="material-icons-outlined"
+                      >drive_file_move</mat-icon
+                    >
+                    <span>Move or Copy</span>
+                  </button>
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="download"
+                    (click)="OnDownload(files.id)"
+                  >
+                    <mat-icon class="material-icons-outlined"
+                      >download</mat-icon
+                    >
+                    <span>Download</span>
+                  </button>
+                  <button class="matMenu" *ngIf="files.mimeType != 'httpd/unix-directory'" (click)="manageVersions(files.id,files.mimeType,files.versionId)" id="manageVersion" mat-menu-item>
+                    <mat-icon class="material-icons-outlined">restore</mat-icon>
+                    <span>Manage Version</span>
+                  </button>
+                  <button class="matMenu" (click)="OnmoreDetails(files.id,files.versionId)" id="details" mat-menu-item>
+                    <mat-icon class="material-icons-outlined">info</mat-icon>
+                    <span>Details</span>
+                  </button>
+                  <mat-divider></mat-divider>
+                  <button class="matMenu"
+                    mat-menu-item
+                    id="trash"
+                    (click)="trashFile(files.id, files.itemCount)"
+                  >
+                    <mat-icon class="material-icons-outlined">delete</mat-icon>
+                    <span>Trash</span>
+                  </button>
+                </div>
+              </mat-menu>
+            </div>
+            <!-- Folders Grid view -->
+            <div *ngIf="files.mimeType == 'httpd/unix-directory'">
+             <!-- Mobile Screen -->
+              <div *ngIf="isMobile" (click)="OnopenFile(files.id, files.mimeType, files.title, files.versionId)">
+                <div class="is-d-flex is-justify-content-between mt-2">
+                  <a>
+                    <div>
+                      <img
+                        alt={{productName}}
+                        src="assets/images/foldericon.png"
+                        width="35px"
+                        height="35px"
+                        class="text-center is-docThumb d-flex justify-align-center folder-fluid"
+                      />
+                    </div>
+                  </a>
+                </div>
+                <a class="folder">
+                  <h5 *ngIf="reNameFile" class="mb-2 is-fileName">
+                    {{ files["title"] }}
+                  </h5>
+                  <h5
+                    *ngIf="!reNameFile && !(reNameId == files['id'])"
+                    (window:mouseup)="mouseUp()"
+                    class="is-fileName"
+                  >
+                    {{ files["title"] }}
+                  </h5>
+                  <span
+                    *ngIf="!reNameFile && reNameId == files['id']"
+                    (window:mouseup)="mouseUp()"
+                    class="reNameInputinner-align Inputright-align"
+                  >
+                    <span
+                      class="material-icons icon"
+                      type="submit"
+                      (click)="OnreNameFiles(reNameId)"
+                      >arrow_forward</span
+                    >
+                    <input
+                      id="reNameFile"
+                      type="text"
+                      (keyup.enter)="OnreNameFiles(reNameId)"
+                      class="inputAlign"
+                      (change)="OnCreateNewName($event)"
+                      [(ngModel)]="strname"
+                      (focusin)="onFocusInEvent($event)"
+                      oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_() .]|^ /g,'')"
+                    />
+                  </span>
+                  <p class="mb-0">
+                    <span class="is-folderDetails"
+                      >{{ files["itemCount"] }} Files</span
+                    >,
+                    <span class="is-folderDetails">{{
+                      files.modifiedAtRead
+                    }}</span>
+                  </p>
+                </a>
+              </div>
+
+              <!-- Desktop Screen -->
+              <div *ngIf="!isMobile" (dblclick)="OnopenFile(files.id, files.mimeType, files.title, files.versionId)">
+                <div class="is-d-flex is-justify-content-between mt-2">
+                  <a>
+                    <div>
+                      <img
+                        alt="{{ productName }}"
+                        src="assets/images/foldericon.png"
+                        width="35px"
+                        height="35px"
+                        class="text-center is-docThumb d-flex justify-align-center folder-fluid"
+                      />
+                    </div>
+                  </a>
+                </div>
+                <a class="folder">
+                  <h5 *ngIf="reNameFile" class="mb-2 is-fileName">
+                    {{ files["title"] }}
+                  </h5>
+                  <h5
+                    *ngIf="!reNameFile && !(reNameId == files['id'])"
+                    (window:mouseup)="mouseUp()"
+                    class="is-fileName"
+                  >
+                    {{ files["title"] }}
+                  </h5>
+                  <span
+                    *ngIf="!reNameFile && reNameId == files['id']"
+                    (window:mouseup)="mouseUp()"
+                    class="reNameInputinner-align Inputright-align"
+                  >
+                    <span
+                      class="material-icons icon"
+                      type="submit"
+                      (click)="OnreNameFiles(reNameId)"
+                      >arrow_forward</span
+                    >
+                    <input
+                      id="reNameFile"
+                      type="text"
+                      (keyup.enter)="OnreNameFiles(reNameId)"
+                      class="inputAlign"
+                      (change)="OnCreateNewName($event)"
+                      [(ngModel)]="strname"
+                      (focusin)="onFocusInEvent($event)"
+                      oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_() .]|^ /g,'')"
+                    />
+                  </span>
+                  <p class="mb-0">
+                    <span class="is-folderDetails"
+                      >{{ files["itemCount"] }} Files</span
+                    >,
+                    <span class="is-folderDetails">{{
+                      files.modifiedAtRead
+                    }}</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <!-- Files Grid view -->
+            <!-- Mobile Screen -->
+            <div *ngIf="isMobile"
+              class="document-card image-thumb"
+              [title]="files.title"
+              (click)="OnopenFile(files.id, files.mimeType, files.title, files.versionId)"
+            >
+              <div
+                class="is-documentSection"
+                *ngIf="files.mimeType != 'httpd/unix-directory'"
+              >
+                <div class="text-center is-docThumb">
+                  <img
+                    width="34px"
+                    height="34px"
+                    [src]="
+                      mimes[files.mimeType] != '' ||
+                      mimes[files.mimeType] != undefined
+                        ? mimes[files.mimeType].icon === 'src'
+                          ? files.icon
+                          : mimes[files.mimeType].icon
+                        : 'assets/images/otherDocument.png'
+                    "
+                    class="img-fluid"
+                    alt="{{ productName }}"
+                  />
+                </div>
+                <h6 *ngIf="reNameFile" class="is-fileName">
+                  {{ files.title }}
+                </h6>
+                <h6
+                  *ngIf="!reNameFile && !(reNameId == files.id)"
+                  (window:mouseup)="mouseUp()"
+                  class="is-fileName"
+                >
+                  {{ files.title }}
+                </h6>
+                <p class="mb-1 mt-2">
+                  <span class="is-folderDetails"
+                    >{{ files["extention"] | uppercase }} ,</span
+                  >
+                  <span class="is-folderDetails">{{ files.createdAtRead }}</span>
+                </p>
+
+                <span
+                  *ngIf="!reNameFile && reNameId == files.id"
+                  (window:mouseup)="mouseUp()"
+                  class="reNameInputinner-align Inputright-align"
+                >
+                  <span
+                    class="material-icons icon"
+                    type="submit"
+                    (click)="OnreNameFiles(reNameId)"
+                    >arrow_forward</span
+                  >
+                  <input
+                    id="reNameFile"
+                    type="text"
+                    (keyup.enter)="OnreNameFiles(reNameId)"
+                    class="inputAlign"
+                    (change)="OnCreateNewName($event)"
+                    [(ngModel)]="strname"
+                    (focusin)="onFocusInEvent($event)"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_() .]|^ /g,'')"
+                  />
+                </span>
+              </div>
+            </div>
+            <!-- Desktop Screen -->
+            <div *ngIf="!isMobile"
+            class="document-card image-thumb"
+            [title]="files.title"
+            (dblclick)="OnopenFile(files.id, files.mimeType, files.title, files.versionId)"
+          >
+            <div
+              class="is-documentSection"
+              *ngIf="files.mimeType != 'httpd/unix-directory'"
+            >
+              <div class="text-center is-docThumb">
+                <img
+                  width="34px"
+                  height="34px"
+                  [src]="
+                    mimes[files.mimeType] != '' ||
+                    mimes[files.mimeType] != undefined
+                      ? mimes[files.mimeType].icon === 'src'
+                        ? files.icon
+                        : mimes[files.mimeType].icon
+                      : 'assets/images/otherDocument.png'
+                  "
+                  class="img-fluid"
+                  alt={{productName}}
+                />
+              </div>
+              <h6 *ngIf="reNameFile" class="is-fileName">
+                {{ files.title }}
+              </h6>
+              <h6
+                *ngIf="!reNameFile && !(reNameId == files.id)"
+                (window:mouseup)="mouseUp()"
+                class="is-fileName"
+              >
+                {{ files.title }}
+              </h6>
+              <p class="mb-1 mt-2">
+                <span class="is-folderDetails"
+                  >{{ files["extention"] | uppercase }} ,</span
+                >
+                <span class="is-folderDetails">{{ files.createdAtRead }}</span>
+              </p>
+
+              <span
+                *ngIf="!reNameFile && reNameId == files.id"
+                (window:mouseup)="mouseUp()"
+                class="reNameInputinner-align Inputright-align"
+              >
+                <span
+                  class="material-icons icon"
+                  type="submit"
+                  (click)="OnreNameFiles(reNameId)"
+                  >arrow_forward</span
+                >
+                <input
+                  id="reNameFile"
+                  type="text"
+                  (keyup.enter)="OnreNameFiles(reNameId)"
+                  class="inputAlign"
+                  (change)="OnCreateNewName($event)"
+                  [(ngModel)]="strname"
+                  (focusin)="onFocusInEvent($event)"
+                  oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_() .]|^ /g,'')"
+                />
+              </span>
+            </div>
+          </div>
+          </div>
+        </mat-card>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+    <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    <!-- <ion-row *ngIf="uploadedFile.length != 0 && openFolder == true">
+      <ion-col
+        size="12"
+        size-sm="12"
+        size-md="12"
+        size-lg="12"
+        size-xl="12"
+        class="px-0"
+      >
+        <mat-paginator
+          class="media-table-paginator"
+          [length]="filesCount"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+          (page)="pageEvent = $event; onPageChange($event)"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </ion-col>
+    </ion-row> -->
+  </div>
+  </ion-content>
+  <div>
+    <ion-row class="is-viewDetails" *ngIf="viewDetails">
+      <ion-col>
+        <div>
+          <div class="is-head">
+            <h3 class="mb-0 is-fileName px-1">{{ fileTitle }}</h3>
+            <span
+              class="is-d-flex cursor-pointer"
+              (click)="viewDetails = !viewDetails"
+            >
+              <mat-icon
+                class="material-icons-outlined text-dark close-ViewDetails"
+                (click)="closeViewDetails()"
+                >close</mat-icon
+              >
+            </span>
+          </div>
+          <div class="is-body pb-3 pt-3">
+            <mat-divider></mat-divider>
+            <div *ngIf="fileDetails.mimeType == 'httpd/unix-directory'">
+              <img
+                alt="{{ productName }}"
+                src="assets/images/foldericon.png"
+                width="35px"
+                height="35px"
+                class="text-center is-docThumb d-flex justify-align-center folder-fluid"
+              />
+            </div>
+            <div *ngIf="fileDetails.mimeType != 'httpd/unix-directory'">
+              <img
+                alt="{{ productName }}"
+                width="50px"
+                height="50px"
+                class="mt-2 text-center is-docThumb d-flex justify-align-center folder-fluid"
+                [src]="
+                  mimes[fileDetails.mimeType] != '' ||
+                  mimes[fileDetails.mimeType] != undefined
+                    ? mimes[fileDetails.mimeType].icon === 'src'
+                      ? fileicon
+                      : mimes[fileDetails.mimeType].icon
+                    : 'assets/images/otherDocument.png'
+                "
+              />
+            </div>
+            <mat-divider></mat-divider>
+
+            <mat-tab-group>
+              <mat-tab>
+                <ng-template mat-tab-label> Details </ng-template>
+                <!-- <ion-row  *ngIf="fileDetails.mimeType != 'httpd/unix-directory'">
+                  <span class="manage-versions px-2 py-2" (click)="manageVersions(fileDetails.id,fileDetails.mimeType)">
+                    Manage Versions
+                  </span>
+                </ion-row> -->
+                <div class="access px-0 py-2"  *ngIf="!(sharedWith == null || sharedWith == '' )">Shared with</div>
+                <div class="access px-0 py-2"  *ngIf="sharedWith == null || sharedWith == '' ">Shared with none</div>
+                <!-- <span class="notshared px-4 py-4" *ngIf="sharedWith == null || sharedWith == '' ">
+                  Shared with none
+                </span> -->
+                <ion-row
+                  class="is-shared mx-1"
+                  *ngIf="sharedWith != null"
+                >
+                  <span
+                    [matTooltip]="sharedWith[0]"
+                    *ngIf="sharedWith.length >= 1 && sharedWith[0] != ''"
+                    class="is-circle bg-blue-6"
+                  >
+                    {{ sharedWith[0] | titlecase | slice: 0:1 }}
+                  </span>
+                  <span
+                    [matTooltip]="sharedWith[1]"
+                    *ngIf="sharedWith.length >= 2 && sharedWith[1] != ''"
+                    class="is-circle bg-orange-6"
+                  >
+                    {{ sharedWith[1] | titlecase | slice: 0:1 }}
+                  </span>
+                  <span
+                    [matTooltip]="sharedWith[3]"
+                    *ngIf="sharedWith.length >= 3 && sharedWith[2] != ''"
+                    class="is-circle bg-danger-6"
+                  >
+                    {{ sharedWith[2] | titlecase | slice: 0:1 }}
+                  </span>
+                  <!-- <span [matTooltip]="sharedWith[2]" *ngIf=" sharedWith.length >= 4 && sharedWith[3] != '' "class="is-circle bg-danger-6">
+                    {{ sharedWith[3] | titlecase | slice: 0:1 }}
+                  </span>
+                  <span [matTooltip]="sharedWith[2]" *ngIf=" sharedWith.length >= 5 && sharedWith[4] != '' "class="is-circle bg-danger-6">
+                    {{ sharedWith[4] | titlecase | slice: 0:1 }}
+                  </span> -->
+                  <span
+                    class="is-circle bg-success text-white"
+                    *ngIf="sharedWith.length > 3"
+                  >
+                    +{{ sharedWith.length - 3 }}
+                  </span>
+                </ion-row>
+
+                <!-- Tags -->
+                <ion-row>
+                  <ion-col size="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
+                    <mat-chip class="cursorpointer" (click)="OnopenField()">
+                      <span class="material-icons-outlined" style="margin-right: 0.5rem">add</span>
+                      Add Tag
+                    </mat-chip>
+                  </ion-col>
+                  <ion-col size="6" size-sm="6" size-md="6" size-lg="6" size-xl="6" *ngIf="listTag != 0">
+                    <mat-icon class="material-icons-outlined is-edit" matTooltip="Edit" (click)="onClose()">edit
+                    </mat-icon>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" *ngIf="isTag">
+                    <form [formGroup]="createTagForm" autocomplete="on">
+                      <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Tag Name</mat-label>
+                        <input matInput type="text" id="tagname" placeholder="Tag Name" maxlength="15"
+                          [matAutocomplete]="auto" formControlName="tagName" (keyup.enter)="createTagName()"
+                          #tagname (keyup)="setInputField(tagname.value)"
+                          oninput="this.value = this.value.replace(/[^A-Za-z0-9]|^ /g,'')">
+                        <mat-error *ngIf="createTagForm.controls['tagName'].invalid">
+                          <span *ngIf="createTagFormControls.tagName.errors.required">Tag Name required</span>
+                        </mat-error>
+                      </mat-form-field>
+                      <span class="material-icons icon" matTooltip="Create Tag"
+                        style="width: 25px;margin-left: 6px;color:black;" type="submit"
+                        (click)="createTagName()">arrow_forward</span>
+                    </form>
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let option of searchTagList" [value]="option">
+                        <ion-row>
+                          <ion-col size="1" class="px-0">
+                            <div
+                              class="is-d-flex is-justify-content-start is-align-items-center is-shared _shared">
+                              <span>{{option}}</span>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </ion-col>
+                </ion-row>
+                <!-- <ion-row *ngIf="listTag != 0">
+                  <ion-col size="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
+                    <span class="labels">Labels</span>
+                  </ion-col>
+                  <ion-col size="6" size-sm="6" size-md="6" size-lg="6" size-xl="6">
+                    <mat-icon class="material-icons-outlined is-edit" matTooltip="Edit" (click)="onClose()">edit
+                    </mat-icon>
+                  </ion-col>
+                </ion-row> -->
+
+                <mat-chip-list>
+                  <div *ngIf="listTag.length > 5; else showFull">
+                    <mat-chip class="tag-style" *ngFor="let list of tagListTotal">
+                      <span>{{list.tagName}}</span>
+                      <mat-icon matChipRemove class="close-style" *ngIf="onclose"
+                        (click)="onDeleteTag(list.tagMappingId)">cancel</mat-icon>
+                    </mat-chip>
+                    <span class="fab" (click)="showMore = !showMore">
+                      {{showMore ? '-show less ' : '+show more'}} <em *ngIf="showMore"></em>
+                    </span>
+                  </div>
+                  <ng-template #showFull>
+                    <mat-chip class="tag-style" *ngFor="let list of listTag; let i = index">
+                      {{list.tagName}}
+                      <mat-icon matChipRemove class="close-style" *ngIf="onclose"
+                        (click)="onDeleteTag(list.tagMappingId)">cancel</mat-icon>
+                    </mat-chip>
+                  </ng-template>
+                </mat-chip-list>
+                <!-- <span class="badge rounded-pill bg-info tag-style" *ngFor="let list of listTag">
+                  <mat-icon matChipRemove *ngIf="onclose">cancel</mat-icon> 
+                    <mat-icon matChipRemove *ngIf="onclose">close</mat-icon>                        
+                  {{list.tagName}}
+                </span> -->
+                <!-- </mat-chip><mat-icon class="close-icon close-button" color="dark" *ngIf="onclose">close</mat-icon>{{list.tagName}}</span> -->
+
+                <ion-row>
+                  <span
+                    class="manage-access px-2 py-2"
+                    (click)="documentShare(fileid, 'internal', fileTitle, fileType)"
+                  >
+                    Manage access
+                  </span>
+                </ion-row>
+
+                <span class="ul px-0 py-2 m-0">
+                  <ion-row class="li">
+                    <ion-col size="4" class="detailstext">
+                      <span class="is-label">Type</span>
+                      <span class="is-data">{{ fileType }}</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="li">
+                    <ion-col size="4" class="detailstext">
+                      <span class="is-label">Size</span>
+                      <span class="is-data">{{ size }}</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="li">
+                    <ion-col size="4" class="detailstext">
+                      <span class="is-label">Owner</span>
+                      <span class="is-data">{{ owner | titlecase }}</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="li">
+                    <ion-col size="4" class="detailstext">
+                      <span class="is-label">Last Modified</span>
+                      <span class="is-data">{{ lastModifiedAt }}</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="li">
+                    <ion-col size="4" class="detailstext">
+                      <span class="is-label">Modified Date</span>
+                      <span class="is-data">{{ lastModifiedDate }}</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="li">
+                    <ion-col size="12" class="detailstext">
+                      <span class="is-label">Created</span>
+                      <span class="is-data">{{ createdat }}</span>
+                    </ion-col>
+                  </ion-row>
+                  <!-- <p>
+                    <span class="is-label">Type</span>
+                    <span class="is-data">{{fileType}}</span>
+                  </p>
+                  <p>
+                    <span class="is-label">Size</span>
+                    <span class="is-data">{{size}}</span>
+                  </p>
+                  <p>
+                    <span class="is-label">Owner</span>
+                    <span class="is-data">{{owner | titlecase}}</span>
+                  </p>
+                  <p>
+                    <span class="is-label">Modified</span>
+                    <span class="is-data">{{lastModifiedAt}}</span>
+                  </p>
+                  <p>
+                    <span class="is-label">Created</span>
+                    <span class="is-data">{{createdat}}</span>
+                  </p> -->
+                </span>
+
+                <div class="mt-2">
+                  <mat-form-field
+                    class="example-full"
+                    appearance="outline"
+                  >
+                    <mat-label>Description</mat-label>
+                    <textarea
+                      matInput
+                      class="input"
+                      maxlength="200"
+                      [(ngModel)]="description"
+                      (keyup.enter)="
+                        onAddDiscription(fileid, description)
+                      "
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+                <p class="helpertext ion-text-start">
+                  Press <strong>Enter</strong> to save the description
+                </p>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label> Activity </ng-template>
+                <div class="is-activityList">
+                  <p
+                    class="is-fontMedium text-center mt-2"
+                    *ngIf="activityList.length == 0"
+                  >
+                    No activities available
+                  </p>
+                  <div
+                    class="is-activityItem"
+                    *ngFor="let activity of activityList; index as i"
+                  >
+                    <div class="is-head">
+                      <span
+                        class="is-circle"
+                        [ngClass]="{
+                          'bg-success':
+                            activity.activityAction == 'created' ||  activity.activityAction == 'uploaded',
+                          'bg-pink': activity.activityAction == 'trashed',
+                          'bg-darkgray':
+                            activity.activityAction == 'restored',
+                          'bg-danger':
+                            activity.activityAction == 'deleted',
+                          'bg-blue': activity.activityAction == 'shared',
+                          'bg-orange':
+                            activity.activityAction == 'copied',
+                          'bg-darkgreen':
+                            activity.activityAction == 'moved',
+                          'bg-info':
+                            activity.activityAction == 'renamed' ||
+                            activity.activityAction == 'edited'
+                        }"
+                      >
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'created' ||  activity.activityAction == 'uploaded'"
+                        >
+                          add
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'trashed'"
+                        >
+                          delete
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'restored'"
+                        >
+                          restore_from_trash
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'deleted'"
+                        >
+                          delete_forever
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'renamed'"
+                        >
+                          edit
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'edited'"
+                        >
+                          edit
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'copied'"
+                        >
+                          content_copy
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'shared'"
+                        >
+                          share
+                        </span>
+                        <span
+                          class="material-icons-outlined iconAlign text-white"
+                          *ngIf="activity.activityAction == 'moved'"
+                        >
+                          drive_file_move
+                        </span>
+                      </span>
+                    </div>
+                    <div class="is-body" [matTooltip]="fileTitle">
+                      <span class="is-filename">
+                        {{ fileTitle }}
+                      </span>
+                      <span>{{ activity.timestamp }}</span>
+                      <span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'created' ||  activity.activityAction == 'uploaded'"
+                        >
+                          Created
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'trashed'"
+                        >
+                          Deleted
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'restored'"
+                        >
+                          Restored
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'renamed'"
+                        >
+                          Renamed
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'edited'"
+                        >
+                          Edited
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'copied'"
+                        >
+                          Copied
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'shared'"
+                        >
+                          Shared
+                        </span>
+                        <span
+                          class="actions"
+                          *ngIf="activity.activityAction == 'moved'"
+                        >
+                          Moved
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-grid>
+<tui-root class="fixed">
+  <ng-template #preview let-preview>
+    <tui-preview [rotatable]="false">
+      <tui-preview-title>{{ pic_title }}</tui-preview-title>
+
+      <button
+        tuiIconButton
+        tuiPreviewAction
+        icon="tuiIconDownload"
+        title="Download"
+        (click)="download(photo_id)"
+      ></button>
+      <button
+        tuiPreviewAction
+        tuiIconButton
+        icon="tuiIconCloseLarge"
+        title="Close"
+        (click)="preview.complete()"
+      ></button>
+
+      <div polymorpheus-outlet [content]="previewContent">
+        <ng-template let-src>
+          <img alt="" [src]="uploadedPhoto" />
+        </ng-template>
+      </div>
+    </tui-preview>
+  </ng-template>
+</tui-root>
+<tui-root class="fixed">
+  <ng-template #content let-content>
+    <tui-preview [rotatable]="false" [zoomable]="false">
+      <tui-preview-title>{{ vid_title }}</tui-preview-title>
+      <button
+        tuiIconButton
+        tuiPreviewAction
+        icon="tuiIconDownload"
+        title="Download"
+        (click)="download(file_id)"
+      ></button>
+
+      <iframe
+        [src]="url"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        class="content"
+        title="Close"
+      ></iframe>
+      <button
+        tuiIconButton
+        tuiPreviewAction
+        icon="tuiIconCloseLarge"
+        title="Close"
+        (click)="content.complete()"
+      ></button>
+    </tui-preview>
+  </ng-template>
+</tui-root>

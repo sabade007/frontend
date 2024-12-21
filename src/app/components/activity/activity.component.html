@@ -1,0 +1,201 @@
+<ion-grid class="is-fullwidth">
+  <ion-row>
+    <ion-col id="actions1" size="12" size-sm="12" size-md="11" size-lg="11" size-xl="11">
+      <div class="is-colorIndication">
+        <div class="is-actionItem">
+          <span class="is-bullet bg-success"></span>
+          <span class="is-colorLabel text-success">Create</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-info"></span>
+          <span class="is-colorLabel text-info">Edit</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-pink"></span>
+          <span class="is-colorLabel text-pink">Trash</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-danger"></span>
+          <span class="is-colorLabel text-danger">Delete</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-darkgray"></span>
+          <span class="is-colorLabel text-darkgray">Restored</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-blue"></span>
+          <span class="is-colorLabel text-blue">Shared</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-orange"></span>
+          <span class="is-colorLabel text-orange">Copied</span>
+        </div>
+        <div class="is-actionItem">
+          <span class="is-bullet bg-darkgreen"></span>
+          <span class="is-colorLabel text-darkgreen">Moved</span>
+        </div>
+      </div>
+    </ion-col>
+     <ion-col size="12" size-sm="12" size-md="1" size-lg="1" size-xl="1" class="text-right">
+      <button mat-raised-button matTooltip="Back" style="margin-left: -30px;" (click)="goToDashboard()" color="primary">
+        <span class="material-icons-outlined mr-2">arrow_back</span>Back</button>
+      <!-- <button mat-raised-button matTooltip="Back" id="btn2" style="margin-right: 0.8rem;" (click)="goToDashboard()" color="primary">
+        <span class="material-icons-outlined">arrow_back</span></button> -->
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-between is-panel">
+    <ion-col size="12" size-sm="12" size-md="8.2" size-lg="8.2" size-xl="8.2" class="bg-white is-left">
+      <div class="calendar animated fadeIn">
+        <div class="calendar__header">
+          <div class="calendar__header-month">
+             {{displayMonth}} {{displayYear}}
+            <!-- {{stringvalue}} -->
+          </div>
+          <!-- <p class="displaydate calendar__header-month">{{dates}}</p> -->
+          <div class="calendar__header-action">
+            <div>
+              <button class="btn-icon" type="button" (click)="decreaseMonth()">
+                <span class="material-icons-outlined">navigate_before</span>
+              </button>
+            </div>
+            <div class="margin-left-sm">
+              <button class="btn-txt" type="button" (click)="setCurrentMonth()">Today</button>
+            </div>
+            <div class="margin-left-sm">
+              <button class="btn-icon" type="button" (click)="increaseMonth()">
+                <span class="material-icons-outlined">navigate_next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="calendar__body">
+          <div class="calendar__body-header">
+            <div class="datebox-header">Mon</div>
+            <div class="datebox-header">Tue</div>
+            <div class="datebox-header">Wed</div>
+            <div class="datebox-header">Thu</div>
+            <div class="datebox-header">Fri</div>
+            <div class="datebox-header">Sat</div>
+            <div class="datebox-header">Sun</div>
+          </div>
+          
+          <div class="calendar__body-header"  *ngFor="let row of calendar | chunk: 7; let i = index" >
+            <div [ngClass]="c.isToday ? 'today' : 'datebox'" *ngFor="let c of row; let j = index" (click)="onclickdate(c)">
+              <div>
+                <span class="_dateAlign">{{c.date.getDate()}}</span>
+              </div>
+              <div class="eventbox">
+                <div *ngFor="let option of events">
+                  <div *ngIf="checkevent(option.date, c.date)" class="_eventCountAlign">
+                    <span class="is-circle fileCreated" *ngIf="option['acr']['fileCreated'] != 0">{{option['acr']['fileCreated']}}</span>
+                    <span class="is-circle fileRenamed" *ngIf="option['acr']['fileRenamed'] != 0 || option['acr']['fileEdited'] != 0">{{option['acr']['fileRenamed'] + option['acr']['fileEdited']}}</span>
+                    <span class="is-circle fileTrashed" *ngIf="option['acr']['fileTrashed'] != 0">{{option['acr']['fileTrashed']}}</span>
+                    <span class="is-circle fileDeleted" *ngIf="option['acr']['fileDeleted'] != 0">{{option['acr']['fileDeleted']}}</span>
+                    <span class="is-circle fileRestored" *ngIf="option['acr']['fileRestored'] != 0">{{option['acr']['fileRestored']}}</span>
+                    <span class="is-circle fileShared" *ngIf="option['acr']['fileShared'] != 0" >{{option['acr']['fileShared']}}</span>
+                    <span class="is-circle fileCopied" *ngIf="option['acr']['fileCopied'] != 0">{{option['acr']['fileCopied']}}</span>
+                    <span class="is-circle fileMoved" *ngIf="option['acr']['fileMoved'] != 0">{{option['acr']['fileMoved']}}</span>
+                  </div>
+                </div>
+                <p class="monthlabel" *ngIf="(i==0 && j==0) || (c.date.getDate() == 1)"> {{monthNames[c.date.getMonth()].substring(0,3)}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+    <ion-col size="12" size-sm="12" size-md="3.5" size-lg="3.5" size-xl="3.5" class="bg-white mx-2 is-right">
+      <div id="actions2">
+        <div class="is-colorIndication">
+          <div class="is-actionItem">
+            <span class="is-bullet bg-success"></span>
+            <span class="is-colorLabel text-success">Create</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-info"></span>
+            <span class="is-colorLabel text-info">Edit</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-pink"></span>
+            <span class="is-colorLabel text-pink">Trash</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-danger"></span>
+            <span class="is-colorLabel text-danger">Delete</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-darkgray"></span>
+            <span class="is-colorLabel text-darkgray">Restored</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-blue"></span>
+            <span class="is-colorLabel text-blue">Shared</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-orange"></span>
+            <span class="is-colorLabel text-orange">Copied</span>
+          </div>
+          <div class="is-actionItem">
+            <span class="is-bullet bg-darkgreen"></span>
+            <span class="is-colorLabel text-darkgreen">Moved</span>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+      <p class="text-center" style="padding-top: 10px;">{{stringvalue}}</p>
+      <div class="is-activityList">
+        <p class="is-fontMedium text-center mt-2 animated fadeInUp" *ngIf="activityList.length == 0">No activities available</p>
+        <div class="is-activityItem animated fadeInUp" *ngFor="let activity of activityList; index as i">
+          <div class="is-head">
+            <span class="is-circle" [ngClass]="{'bg-success' : (activity.activityAction == 'created' || activity.activityAction == 'uploaded'),
+                      'bg-pink' : (activity.activityAction == 'trashed'), 
+                      'bg-darkgray' : (activity.activityAction == 'restored'),
+                      'bg-danger' : (activity.activityAction == 'deleted'),
+                      'bg-blue' : (activity.activityAction == 'group_shared' || activity.activityAction == 'shared'),
+                      'bg-orange' : (activity.activityAction == 'copied'),
+                      'bg-darkgreen' : (activity.activityAction == 'moved'),
+                      'bg-info' : (activity.activityAction == 'renamed' || activity.activityAction == 'edited') }">
+
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'created'">
+                add
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'uploaded'">
+                add
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'trashed'">
+                delete
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'restored'">
+                restore_from_trash
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'deleted'">
+                delete_forever
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'renamed'">
+                edit
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'edited'">
+                edit
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'copied'">
+                content_copy
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'group_shared' || activity.activityAction ==  'shared'">
+                share
+              </span>
+              <span class="material-icons-outlined iconAlign text-white" *ngIf="activity.activityAction == 'moved'">
+                drive_file_move
+              </span>
+            </span>
+          </div>
+          <div class="is-body" [matTooltip]="activity.objectMetadata">
+            <span class="is-filename">
+              {{activity.objectMetadata}}
+            </span>
+            <span>{{ activity.timestamp}}</span>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

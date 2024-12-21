@@ -1,0 +1,67 @@
+@mixin for-phone-only {
+  @media (min-width: 320px) and (max-width: 767px) {
+    @content;
+  }
+}
+@mixin for-tablet-only {
+  @media (min-width: 768px) and (max-width: 1199px) {
+    @content;
+  }
+}
+@mixin for-minilaptop-and-up {
+  @media (min-width: 1200px) and (max-width: 5000px) {
+    @content;
+  }
+}
+
+$text-primary: #7fdd85;
+$text-info: #3dc2ff;
+$text-warning: #fad35f;
+$text-danger: #f25767;
+$text-darkgray: #8c9195;
+$text-pink: #ef9fc4;
+$text-lightgray: #f3f3f3;
+
+$bg-primary: #7fdd85;
+$bg-white: #fff;
+$bg-info: #3dc2ff;
+$bg-warning: #fad35f;
+$bg-danger: #f25767;
+$bg-darkgray: #8c9195;
+$bg-pink: #ef9fc4;
+$bg-lightgray: #f3f3f3;
+
+.modalbox {
+  width: 300px;
+  height: 150px;
+  overflow: hidden;
+  // font-family: 'Inter';
+}
+.modalheader {
+  font-size: 18px;
+  font-weight: 500;
+  .clearicon {
+    color: #636161;
+    margin: 10px 10px;
+  }
+}
+.modalbody {
+  padding: 15px 24px !important;
+}
+.heading {
+  font-size: 20px;
+  color: #000 !important;
+}
+.error {
+  color: red;
+  margin-top: -0.5rem;
+  font-size: 13px;
+  margin-left: 0.3rem;
+}
+mat-input{
+  color: #000 !important;
+}
+.text-color{
+  color: #000 !important;
+}
+

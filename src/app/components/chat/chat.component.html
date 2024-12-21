@@ -1,0 +1,1179 @@
+<ion-row id="frame">
+  <ion-col
+    class="chat-list"
+    size="12"
+    size-lg="3.5"
+    size-md="3.5"
+    size-sm="12"
+    [ngClass]="(recentChatList || !chatInfo)? 'is-recentChatMobile': 'is-recentChatDesktop'">
+    <!-- <ion-fab-button id="step11" size="small" class="is-flatAddDocsBtn panel-menu"
+      matTooltip="New Chat / Group" (click)="OnopenMenu()">
+      <ion-icon name="add-outline" class="is-addDocs"></ion-icon>
+    </ion-fab-button> -->
+    <button mat-raised-button id="step9" (click)="OnopenMenu()" class="panel-menu"
+      [ngClass]="(maintanance == 'true' && bannerHidden == 'false') ? 'is-flatAddDocsBtnwithbanner' : 'is-flatAddDocsBtn'"
+      color="primary" style="font-weight: 600" matTooltip="New Chat / Group">
+      <span class="material-icons-outlined" style="margin-right: 0.5rem">chat</span>Start Chat
+    </button>
+    <div id="step8" *ngIf="openMenu" class="_menu1"
+    [ngClass]="(maintanance == 'true' && bannerHidden == 'false') ? 'is_menu1Withbanner' : 'is_menu1'">
+      <button
+      class="panel-menu is-newGroupBtn"
+      mat-menu-item
+      id="upload"
+      (click)="newChat()"
+    >
+      <mat-icon class="material-icons-outlined">person</mat-icon>
+      <span class="px-2">New Chat</span>
+    </button>
+      <button
+        class="panel-menu is-newGroupBtn"
+        mat-menu-item
+        id="upload"
+        (click)="showRoomCreation()"
+      >
+        <mat-icon class="material-icons-outlined">peoples</mat-icon>
+        <span class="px-2">New group</span>
+      </button>
+      <!-- <button
+        class="panel-menu d-lg-none d-md-none d-sm-block"
+        mat-menu-item
+        id="upload"
+        (click)="closeChatBox()"
+      >
+        <mat-icon class="material-icons-outlined">people</mat-icon>
+        <span>Exit</span>
+      </button> -->
+    </div>
+    <div class="sidebar" id="sidebar" (click)="OncloseMenu()">
+      <div class="tab-pane fade active show sticky-top">
+        <div class="chatlist-header d-flex justify-content-between">
+          <!-- <div class="header-logo mr-5">
+            <img
+              alt="etheros"
+              class="is-logo ml-2"
+              src="assets/images/logocmp.png"
+            />
+          </div> -->
+          
+        </div>
+        <div class="search">
+          <form class="form-inline position-relative">
+            <input
+              type="search"
+              class="form-control"
+              id="conversations"
+              (keyup)="getItems($event)"
+              autocomplete="off"
+              placeholder="Search"
+            />
+            <button type="button" class="btn btn-link loop">
+              <em class="material-icons">search</em>
+            </button>
+          </form>
+          <!-- <button class="btn" data-toggle="dropdown" matTooltip="Chat requests" aria-haspopup="true"
+            aria-expanded="false">
+            <i class="material-icons" style="font-size: 35px" (click)="switchTab('requests')">people</i>
+            <span class="badge badge-light request-badge" *ngIf="requestListCount != 0">{{requestListCount}}</span>
+          </button> -->
+
+        </div>
+        <div class="list-group sort">
+          <button
+            class="btn filterDiscuss ionsBtn"
+            [ngClass]="showTab == 'chats' ? 'active' : ''"
+            data-toggle="list"
+            data-filter="all"
+            (click)="switchTab('chats'); chatList(); storeChatData();"
+          >
+            Chats
+          </button>
+          <button
+            class="btn filterDiscussionsBtn"
+            data-toggle="list"
+            [ngClass]="showTab == 'groups' ? 'active' : ''"
+            data-filter="read"
+            (click)="switchTab('groups'); getGroupList()"
+          >
+            Groups
+          </button>
+          <button *ngIf="allowSignup"
+            class="btn filterDiscussionsBtn"
+            data-toggle="list"
+            [ngClass]="showTab == 'contacts' ? 'active' : ''"
+            data-filter="unread"
+            (click)="switchTab('contacts'); getContacts(); requestList()"
+          >
+            Contacts
+            <span
+              class="badge badge-light request-badge"
+              *ngIf="requestListCount"
+              >{{ requestListCount }}</span
+            >
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="container px-2">
+        <div class="col-md-12 p-0">
+          <div class="tab-content">
+            <!-- Start of Contacts -->
+            <div class="contacts" *ngIf="showTab == 'contacts'">
+              <div class="list-group" id="contacts" role="tablist">
+                <h6 *ngIf="requestListCount > 0">Requests</h6>
+                <div
+                  class="filterMembers all online contact mb-3 Cursor-pointer"
+                  data-toggle="list"
+                  *ngFor="let reqList of filterRequestList"
+                  (click)="
+                    chatWith(reqList, 'chatlist','','');
+                    focusInputField.nativeElement.focus()
+                  "
+                >
+                  <ng-container
+                    class="filterDiscussions all unread single"
+                    [ngClass]="
+                      this.chatService.roomId == reqList.id ? 'active-chat' : ''
+                    "
+                    *ngIf="!reqList?.inContact"
+                  >
+                    <div
+                      *ngIf="
+                        !(
+                          reqList.avatarETag == 'data:image/png;base64,null' ||
+                          reqList.avatarETag == 'data:image/png;base64,' ||
+                          reqList.avatarETag == null ||
+                          reqList.avatarETag == ''
+                        )
+                      "
+                    >
+                      <img
+                        class="avatar-md"
+                        [src]="reqList.avatarETag"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        [title]="reqList.name"
+                        alt="avatar"
+                        onerror="this.src='assets/images/default-contact.png';"
+                      />
+                    </div>
+                    <div class="avatar-circle-lists" data-toggle="tooltip" [title]="reqList.name">
+                      <div class="initials-lists">{{
+                        reqList["name"].substring(0, 1) | titlecase
+                        }}</div>
+                    </div>
+                    <div class="status">
+                      <em
+                        class="material-icons"
+                        [ngClass]="reqList?.online ? 'online' : 'offline'"
+                        >fiber_manual_record</em
+                      >
+                    </div>
+                    <div class="data">
+                      <p class="last_message">{{ reqList.name }}</p>
+                      <span class="msg_date">{{
+                        reqList.lm | dateFormat: "chatListFormate"
+                      }}</span>
+                      <p class="last_message" *ngIf="reqList?.lastMessage?.msg">
+                        {{ reqList?.lastMessage?.msg }}
+                      </p>
+                    </div>
+                    <!-- <div class="person-add">
+                      <i class="material-icons">person</i>
+                    </div> -->
+                  </ng-container>
+                </div>
+                <h6 *ngIf="requestListCount > 0">Contacts</h6>
+                <div
+                  class="filterMembers all online contact Cursor-pointer"
+                  data-toggle="list"
+                  *ngFor="let contact of filterContactList"
+                  (click)="
+                    chatWith(contact, 'contacts','','');
+                    focusInputField.nativeElement.focus()
+                  "
+                  [ngClass]="
+                    this.chatService.roomId == contact.roomId
+                      ? 'active-chat'
+                      : ''
+                  "
+                >
+                  <img
+                    class="avatar-md"
+                    #img
+                    [src]="
+                      contact?.avatarETag?.split(',') ==
+                      'data:image/jpeg;base64'
+                        ? 'data:image/jpeg;base64,' + contact?.avatarETag
+                        : contact?.avatarETag
+                    "
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    [title]="contact.name"
+                    alt="avatar"
+                    onerror="this.src='assets/images/default-contact.png';"
+                    *ngIf="(contact?.avatarETag == '' || contact?.avatarETag == null) == false"
+                  />
+                  <div
+                    class="avatar-circle-lists"
+                    *ngIf="(contact?.avatarETag == '' || contact?.avatarETag == null) == true"
+                  >
+                    <span class="initials-lists">{{
+                      contact["name"].substring(0, 1) | titlecase
+                    }}</span>
+                  </div>
+                  <div class="status">
+                    <em
+                      class="material-icons online"
+                      [ngClass]="contact.active ? 'online' : 'offline'"
+                      >fiber_manual_record</em
+                    >
+                  </div>
+                  <div class="data">
+                    <p class="last_message">{{ contact.name }}</p>
+                    <p>@{{ contact.username }}</p>
+                  </div>
+                  <div class="person-add">
+                    <em class="material-icons">person</em>
+                  </div>
+                </div>
+                <div
+                  class="text-center no-datafound"
+                  *ngIf="filterContactList?.length == 0"
+                >
+                  <h6>No contacts to display
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <!-- End of Contacts -->
+            <!-- Start of chats -->
+            <div class="discussions" *ngIf="showTab == 'chats'">
+              <div class="list-group" id="chats" role="tablist">
+                <div
+                  href="#list-chat"
+                  id="list-chat-list"
+                  data-toggle="list"
+                  role="tab"
+                  *ngFor="let chatList of filterchatList"
+                  (click)="
+                    chatWith(chatList, 'chatlist','','');"
+                  [ngClass]="
+                    this.chatService.roomId == chatList.id ? 'active-chat' : ''
+                  "
+                >
+                  <div
+                    class="filterDiscussions all unread single Cursor-pointer"
+                    *ngIf="!(chatList.inContact == null)"
+                  >
+                    <img
+                    class="avatar-md"
+                    #img
+                    [src]="
+                    chatList?.avatarETag?.split(',') ==
+                      'data:image/jpeg;base64'
+                        ? 'data:image/jpeg;base64,' + chatList?.avatarETag
+                        : chatList?.avatarETag
+                    "
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    [title]="chatList.name"
+                    alt="avatar"
+                    onerror="this.src='assets/images/default-contact.png';"
+                    *ngIf="(chatList?.avatarETag == '' || chatList?.avatarETag == null) == false"
+                  />
+                  <div
+                    class="avatar-circle-lists" data-toggle="tooltip" [title]="chatList.name"
+                    *ngIf="(chatList?.avatarETag == '' || chatList?.avatarETag == null) == true"
+                  >
+                    <span class="initials-lists">{{
+                      chatList["name"].substring(0, 1) | titlecase
+                    }}</span>
+                  </div>
+
+                    <div class="status">
+                      <em
+                        class="material-icons"
+                        [ngClass]="chatList.online ? 'online' : 'offline'"
+                        >fiber_manual_record</em
+                      >
+                    </div>
+                    <!-- <div class="new bg-pink">
+                    <span>+7</span>
+                  </div> -->
+                    <div class="data">
+                      <p class="last_message">{{ chatList.name }}</p>
+                      <span>{{
+                        chatList.lm | dateFormat: "chatListFormate"
+                      }}</span>
+                      <p
+                        class="last_message"
+                        *ngIf="chatList?.lastMessage?.msg"
+                      >
+                        {{ chatList?.lastMessage?.msg }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="text-center no-datafound"
+                  *ngIf="filterchatList?.length == 0"
+                >
+                  <h6>No messages yet, start the conversation!</h6>
+                </div>
+              </div>
+            </div>
+            <!-- End of chats -->
+            <!-- Start of Group -->
+            <div class="discussions" *ngIf="showTab == 'groups'">
+              <div class="list-group" id="chats" role="tablist">
+                <div
+                  href="#list-chat"
+                  class="filterDiscussions all unread single Cursor-pointer"
+                  id="list-chat-list"
+                  data-toggle="list"
+                  role="tab"
+                  *ngFor="let group of filterGroupList"
+                  (click)="
+                    chatWith(group, 'groupList','','')"
+                  [ngClass]="
+                    this.chatService.roomId == group.id ? 'active-chat' : ''
+                  "
+                >
+                  <!-- <img class="avatar-md" src="dist/img/avatars/avatar-female-1.jpg" data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"> -->
+                  <div class="avatar-circle-lists">
+                    <span class="initials-lists">{{
+                      group["fname"].substring(0, 1) | titlecase
+                    }}</span>
+                  </div>
+                  <!-- <div class="status">
+                    <i class="material-icons online">fiber_manual_record</i>
+                  </div> -->
+                  <!-- <div class="new bg-pink">
+                    <span>+7</span>
+                  </div> -->
+                  <div class="data">
+                    <p class="groupNameList last_message">#{{ group.fname }}</p>
+                    <span *ngIf="group?.lastMessage?.ts && group?.lastMessage != null">{{
+                      group?.lastMessage?.ts | dateFormat: "chatListFormate"
+                    }}</span>
+                    <span *ngIf="group?.lastMessage == null">{{
+                      group?.ts | dateFormat: "chatListFormate"
+                    }}</span>
+                    <p
+                      class="last_message"
+                      [ngClass]="group?.lastMessage?.ts ? '' : 'empty_msg'"
+                    >
+                      {{ group?.lastMessage?.msg }}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="text-center no-datafound"
+                  *ngIf="filterGroupList?.length == 0"
+                >
+                  <h6>No groups to display</h6>
+                </div>
+              </div>
+            </div>
+            <!-- End of Group -->
+            <!-- Start of request lists -->
+            <div class="discussions" *ngIf="showTab == 'requests'">
+              <div class="list-group" id="chats" role="tablist">
+                <div
+                  href="#list-chat"
+                  id="list-chat-list"
+                  data-toggle="list"
+                  role="tab"
+                  *ngFor="let chatList of filterchatList"
+                  (click)="chatWith(chatList, 'chatlist', '','')"
+                >
+                  <div
+                    class="filterDiscussions all unread single active"
+                    *ngIf="!chatList.inContact"
+                  >
+                    <!-- <img class="avatar-md" src="dist/img/avatars/avatar-female-1.jpg" data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"> -->
+                    <div class="avatar-circle-lists">
+                      <span class="initials-lists">{{
+                        chatList["name"].substring(0, 1) | titlecase
+                      }}</span>
+                    </div>
+                    <!-- <div class="status">
+                      <i class="material-icons online">fiber_manual_record</i>
+                    </div> -->
+                    <!-- <div class="new bg-pink">
+                    <span>+7</span>
+                  </div> -->
+                    <div class="data">
+                      <p class="last_message">{{ chatList.name }}</p>
+                      <span>{{ chatList.lm | date: "short" }}</span>
+                      <p class="last_message">
+                        {{ chatList?.lastMessage?.msg }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="requestListCount == 0">
+                  <h6>There is No request's to be shown</h6>
+                </div>
+              </div>
+            </div>
+            <!-- End of request lists -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-col>
+
+  <ion-col
+    size="12"
+    size-md="8.5"
+    size-lg="8.5"
+    size-sm="12"
+    [ngClass]="
+      (!recentChatList)
+        ? 'is-recentChatMobile'
+        : 'is-recentChatDesktop'
+    "
+  >
+    <!-- End of Create Chat -->
+    <div class="main chat-background" >
+      <div class="tab-content" id="nav-tabContent">
+        <!-- Start of Babble -->
+        <div
+          class="babble tab-pane fade active show"
+          id="list-chat"
+          role="tabpanel"
+          aria-labelledby="list-chat-list"
+        >
+          <!-- Start of Chat -->
+          <div class="chat chat-background" id="chat1" *ngIf="constactSelected">
+            <div class="top">
+              <div class="container">
+                <div class="col-md-12">
+                  <div class="inside">
+                    <img (click)="showChatInfo()" style="cursor: pointer;"
+                      *ngIf="chatAvathar"
+                      class="avatar-md"
+                      [src]="chatAvathar"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      [title]="touser"
+                      alt="avatar"
+                      onerror="this.src='assets/images/default-contact.png';"
+                    />
+                    <div
+                      *ngIf="!chatAvathar"
+                      class="avatar-circle Cursor-pointer"
+                      role="button"
+                      (click)="showChatInfo()"
+                    >
+                      <span class="initials">{{
+                        touser.substring(0, 1) | titlecase
+                      }}</span>
+                    </div>
+                    <!-- <div class="status">
+                      <i class="material-icons online">fiber_manual_record</i>
+                    </div> -->
+                    <div
+                      class="data Cursor-pointer"
+                      role="button"
+                      (click)="showChatInfo()"
+                    >
+                      <h5>
+                        {{ touser }}
+                      </h5>
+                      <!-- <span>Active now</span> -->
+                    </div>
+                    <!-- <button class="btn connect d-md-block d-none" name="1">
+                      <i class="material-icons md-30">phone_in_talk</i>
+                    </button> 
+                    <button class="btn connect d-md-block d-none" name="1">
+                      <i class="material-icons md-36">videocam</i>
+                    </button> -->
+                    <!-- <button class="btn d-md-block d-none" (click)="showChatInfo()">
+                      <i class="material-icons md-30">info</i>
+                    </button> -->
+                    <button
+                      type="button"
+                      class="btn"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      (click)="closeChatWindow()"
+                    >
+                      <em class="material-icons">close</em>
+                    </button>
+                    <!-- <div class="dropdown">
+                      <button class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons md-30">more_vert</i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <button class="dropdown-item connect" name="1">
+                          <i class="material-icons">phone_in_talk</i>Voice Call
+                        </button>
+                        <button class="dropdown-item connect" name="1">
+                          <i class="material-icons">videocam</i>Video Call
+                        </button>
+                        <hr />
+                        <button class="dropdown-item">
+                          <i class="material-icons">clear</i>Clear History
+                        </button>
+                        <button class="dropdown-item">
+                          <i class="material-icons">block</i>Block Contact
+                        </button>
+                        <button class="dropdown-item">
+                          <i class="material-icons">delete</i>Delete Contact
+                        </button>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div (click)="OncloseMenu()"
+              class="content infinate-scroll chatWindow"
+              id="content"
+              #scrollMe
+              infiniteScroll
+              [infiniteScrollDistance]="2"
+              [infiniteScrollThrottle]="150"
+              [scrollWindow]="false"
+              (scrolledUp)="loadMoreMessages()"
+              [scrollTop]="scrollMe.scrollHeight"
+              (scroll)="onScroll($event)"
+            >
+              <!-- " -->
+              <div class="container mb-3">
+                <div
+                  class="col-md-12 text-center"
+                  *ngIf="filteredMessages?.messages?.length > 0"
+                >
+                  <div
+                    class="spinner-border text-primary"
+                    *ngIf="show_spiner"
+                    role="status"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <!-- <div class="date" *ngIf="this.messageCounts == 0">
+                    <hr />
+                    <span>Loaded all messages.</span>
+                    <hr />
+                  </div> -->
+
+                  <div
+                    *ngFor="let chats of filteredMessages.messages"
+                    [ngClass]="
+                      chats.t == 'au' ||
+                      chats.t == 'r' ||
+                      chats.t == 'ul' ||
+                      chats.t == 'ru'
+                        ? 'center-info'
+                        : ''
+                    "
+                  >
+                    <div class="date" *ngIf="chats.t == 'au'">
+                      <div class="info info-badge">
+                        {{
+                          chats?.u.id == this.userId
+                            ? "You"
+                            : (chats.u.username | titlecase)
+                        }}
+                        added
+                        {{
+                          chats?.toId == this.userId
+                            ? "You"
+                            : (chats?.msg | titlecase)
+                        }}
+                      </div>
+                    </div>
+                    <div class="date" *ngIf="chats.t == 'r'">
+                      <div class="info info-badge">
+                        {{
+                          chats?.u.id == this.userId
+                            ? "You"
+                            : (chats.u.username | titlecase)
+                        }}
+                        changed the subject to "{{ chats.msg }}".
+                      </div>
+                    </div>
+                    <div class="date" *ngIf="chats.t == 'ul'">
+                      <div class="info info-badge">
+                        {{
+                          chats?.u.id == this.userId
+                            ? "You"
+                            : (chats.u.username | titlecase)
+                        }}
+                        left.
+                      </div>
+                    </div>
+                    <div class="date" *ngIf="chats.t == 'ru'">
+                      <div class="info info-badge">
+                        {{
+                          chats?.u.id == this.userId
+                            ? "You"
+                            : (chats.u.username | titlecase)
+                        }}
+                        removed
+                        {{ chats.msg }}.
+                      </div>
+                    </div>
+                    <!-- <div class="date" *ngIf="dateCheck(chats?.ts)">
+                      <hr>
+                      <span>{{ getChatsOnDates() }}</span>
+                      <hr>
+                    </div> -->
+                    <div
+                      class="message mb-2 messageArrow"
+                      *ngIf="
+                        chats.t != 'au' &&
+                        chats.t != 'r' &&
+                        chats.t != 'ul' &&
+                        chats.t != 'ru'
+                      "
+                      [ngClass]="chats?.u.id === userId ? 'me' : ''"
+                    >
+                    <div [matTooltip]="chats.u.name | titlecase" *ngIf="showTab == 'groups'">
+                      <img
+                      *ngIf="chats?.u.id != userId && chatAvathar"
+                      class="avatar-md"
+                      [src]="chatAvathar"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      [title]="touser"
+                      alt="avatar"
+                      onerror="this.src='assets/images/default-contact.png';"
+                    />
+                        <div
+                          class="message-avatar-circle"
+                          *ngIf="chats?.u.id == userId || !chatAvathar"
+                        >
+                          <span class="message-avatar-title text-center">{{
+                            chats.u.name.substring(0, 1) | titlecase
+                          }}</span>
+                        </div>
+                    </div>
+                      <div class="text-main">
+                        <div
+                          *ngIf="
+                            chats?.attachments?.length == 0 ||
+                            !chats?.attachments
+                          "
+                          class="text-group"
+                          [ngClass]="
+                            chats?.u.id === userId ? 'me' : 'text-left'
+                          "
+                        >
+                          <div
+                            class="text"
+                            [ngClass]="chats?.u.id === userId ? 'me' : 'other'"
+                          >
+                            <p
+                              class="message-text"
+                              [ngClass]="
+                                chats?.u.id === userId
+                                  ? 'my-text'
+                                  : 'others-text'
+                              "
+                              [innerHTML]="chats?.msg | linkify"
+                            ></p>
+                          </div>
+                        </div>
+                        <div
+                          class="text-group"
+                          *ngIf="chats?.attachments?.length > 0"
+                          [ngClass]="
+                            chats?.u.id === userId ? 'me' : 'text-left'
+                          "
+                        >
+                          <div
+                            class="text"
+                            [ngClass]="chats?.u.id === userId ? 'me' : 'other'"
+                          >
+                            <div
+                              class="attachment"
+                              *ngFor="let attachment of chats?.attachments"
+                            >
+                              <button class="btn attach">
+                                <em class="material-icons md-18"
+                                  >insert_drive_file</em
+                                >
+                              </button>
+                              <div class="file">
+                                <h5>
+                                  <a [href]="attachment?.titleLink">{{
+                                    attachment?.title
+                                  }}</a>
+                                </h5>
+                                <span>{{ chats?.msg }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <span
+                          class="msg-date"
+                          [ngClass]="chats?.u.id === userId ? '' : 'text-left'"
+                          >{{ chats?.ts | dateFormat: "chatFormate" }}
+                          <img
+                            alt="delivered"
+                            src="assets/images/icons/check.svg"
+                            width="15"
+                            height="15"
+                            *ngIf="chats.unread && chats?.u.id === userId"
+                          />
+                          <img
+                            alt="read"
+                            src="assets/images/icons/check.svg"
+                            width="15"
+                            height="15"
+                            *ngIf="!chats.unread && chats?.u.id === userId"
+                          />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="message" *ngIf="isClintTyping == true">
+                    <img class="avatar-md" src="dist/img/avatars/avatar-female-5.jpg" data-toggle="tooltip" data-placement="top" title="" alt="avatar" data-original-title="Keith">
+                    <div
+                      class="message-avatar-circle"
+                      *ngIf="chats?.u.id != userId"
+                    >
+                      <span class="message-avatar-title">{{
+                        touser.substring(0, 1) | titlecase
+                      }}</span>
+                    </div>
+                    <div class="text-main">
+                      <div class="text-group">
+                        <div class="text typing">
+                          <div class="wave">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- <button
+                    class="btn scroll-down"
+                    data-toggle="modal"
+                    *ngIf="showScrollDownBtn"
+                    (click)="scrollToBottom()"
+                    data-target="#startnewchat"
+                  >
+                    <em class="material-icons">keyboard_arrow_down</em>
+                  </button>  -->
+                  <!-- <div class="message">
+												<img class="avatar-md" src="dist/img/avatars/avatar-female-5.jpg" data-toggle="tooltip" data-placement="top" title="Keith" alt="avatar">
+												<div class="text-main">
+													<div class="text-group">
+														<div class="text">
+															<div class="attachment">
+																<button class="btn attach"><i class="material-icons md-18">insert_drive_file</i></button>
+																<div class="file">
+																	<h5><a href="#">Tenacy Agreement.pdf</a></h5>
+																	<span>24kb Document</span>
+																</div>
+															</div>
+														</div>
+													</div>
+													<span>11:07 PM</span>
+												</div>
+											</div> -->
+                  <!-- <div class="message">
+												<img class="avatar-md" src="dist/img/avatars/avatar-female-5.jpg" data-toggle="tooltip" data-placement="top" title="Keith" alt="avatar">
+												<div class="text-main">
+													<div class="text-group">
+														<div class="text typing">
+															<div class="wave">
+																<span class="dot"></span>
+																<span class="dot"></span>
+																<span class="dot"></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div> -->
+                </div>
+              </div>
+            </div>
+            <div class="container text-field" *ngIf="inContact" (click)="OncloseMenu()">
+              <div class="col-md-12 text-col-12">
+                <div class="emoji-section" *ngIf="showEmoji">
+                  <emoji-mart
+                    set="apple"
+                    [darkMode]="darkMode"
+                    [isNative]=true
+                    [hideRecent]=false
+                    (emojiSelect)="handleClick($event)"
+                    title="Pick your emoji…"
+                    emoji="point_up"
+                  >
+                  <!-- [custom]="CUSTOM_EMOJIS" -->
+                  </emoji-mart>
+                </div>
+                <div class="bottom textArea">
+                  <form
+                    class="position-relative w-100"
+                    [formGroup]="messageForm"
+                  >
+                    <div class="backgroud-textarea">
+                      <textarea
+                        id="textArea"
+                        matInput
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="1"
+                        cdkAutosizeMaxRows="5"
+                        #messageInput
+                        [(ngModel)]="newMessage"
+                        name="message"
+                        class="message-field"
+                        #message
+                        maxlength="1024"
+                        placeholder="Type a message..."
+                        formControlName="message"
+                        (keyup.enter)="
+                          sendMessage(message.value); message.value = ''
+                        "
+                      ></textarea>
+                    </div>
+                    <button class="btn emoticons" *ngIf="showEmoji">
+                      <em
+                        class="material-icons"
+                        (click)="
+                          showEmoji = !showEmoji;
+                          focusInputField.nativeElement.focus()
+                        "
+                        >close</em
+                      >
+                    </button>
+                    <button class="btn emoticons" *ngIf="!showEmoji">
+                      <em
+                        class="material-icons"
+                        (click)="
+                          showEmoji = !showEmoji;
+                          focusInputField.nativeElement.focus()
+                        "
+                        >insert_emoticon</em
+                      >
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn send"
+                      (click)="sendMessage(message.value); message.value = ''"
+                    >
+                      <em class="material-icons">send</em>
+                    </button>
+                  </form>
+                  <!-- <label>
+                    <input type="file" (change)="attachment($event)" />
+                    <span class="btn attach d-sm-block d-none"><i class="material-icons">attach_file</i></span>
+                  </label> -->
+                </div>
+              </div>
+            </div>
+            <div
+              class="position-relative container chat-control"
+              *ngIf="!inContact"
+            >
+              <div class="col-md-12">
+                <div class="bottom-chat-control text-center">
+                  <div class="mb-2">
+                    The sender is not in your contact list. Accept this to add
+                    in your contact ?
+                  </div>
+                  <div>
+                    <button
+                      class="btn-success chat-control-btn mr-4"
+                      (click)="accept()"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      class="btn-danger chat-control-btn"
+                      (click)="reject()"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- chat landing page -->
+          <div
+            class="chat"
+            id="chat1"
+            *ngIf="!constactSelected && recentChatList"
+          >
+            <div>
+              <div class="container">
+                <div class="col-md-12">
+                  <div class="inside float-right">
+                    <div class="pull-right">
+                      <!-- <button
+                        _ngcontent-lqd-c440=""
+                        class="cancel-btn"
+                        (click)="closeChatBox()"
+                      >
+                        Leave
+                      </button> -->
+                    </div>
+                  </div>
+                  <div class="logocenter">
+                    <img
+                      alt="etheros"
+                      class="is-logo"
+                      src="assets/images/logocmp.png"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End chat landing page -->
+          <!-- End of Chat -->
+        </div>
+        <!-- End of Babble -->
+      </div>
+    </div>
+  </ion-col>
+  <!-- <ion-col
+    *ngIf="infoWindowSize == 3"
+    class="info-part"
+    size="12"
+    [attr.size-lg]="infoWindowSize"
+    size-md="8.5"
+    size-lg="8.5"
+    size-sm="12"
+    [ngClass]="
+      !recentChatList || !chatInfo || info
+        ? 'is-recentChatMobile'
+        : 'is-recentChatDesktop'
+    "
+  >
+  </ion-col> -->
+  <div>
+    <ion-row class="is-viewDetails" id="details" *ngIf="viewDetails">
+      <ion-col>
+        <div class="sidebar right-sidebar" id="sidebar">
+          <div
+            class="title bg-white sticky-top info-title d-flex justify-content-between is-align-items-center p-2"
+          >
+            <h5 class="mb-0">{{ infoTitle }} info</h5>
+            <button
+              type="button"
+              class="btn"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <em class="material-icons" (click)="closeInfo()">close</em>
+            </button>
+          </div>
+          <div class="container right-container">
+            <div class="col-md-12 pd-r px-0">
+              <div class="tab-content">
+                <!-- Start of info -->
+                <div class="settings mt-3">
+                  <div class="profile">
+                    <div
+                      class="bg-white bd-radius p-1 pt-4 mb-3"
+                      *ngIf="historyType != 'groupList'"
+                    >
+                      <div class="d-flex justify-content-center pb-2">
+                        <img
+                          *ngIf="chatAvathar"
+                          class="avatar-xl"
+                          [src]="chatAvathar"
+                          alt="avatar"
+                          onerror="this.src='assets/images/default-contact.png';"
+                        />
+                        <div
+                          *ngIf="!chatAvathar"
+                          class="group-avatar-circle d-flex justify-content-center"
+                        >
+                          <span class="group-initials">{{
+                            UserInfo?.user?.name?.substring(0, 1) | titlecase
+                          }}</span>
+                        </div>
+                      </div>
+                      <div class="group-title-area d-flex justify-content-center">
+                        <h1 class="group-title">{{ UserInfo?.user?.name }}</h1>
+                      </div>
+                      <div class="mb-2">@{{ UserInfo?.user?.username }}</div>
+                    </div>
+                    <div
+                      class="bg-white bd-radius p-1 pt-4 mb-3"
+                      *ngIf="historyType == 'groupList'"
+                    >
+                      <div class="d-flex justify-content-center mb-2">
+                        <div
+                          class="group-avatar-circle d-flex justify-content-center"
+                        >
+                          <span class="group-initials">{{
+                            groupInfo.group.fname?.substring(0, 1) | titlecase
+                          }}</span>
+                        </div>
+                      </div>
+                      <div
+                        class="group-title-area d-flex justify-content-center"
+                        *ngIf="!showGroupNameEdit"
+                        (mouseenter)="showEdit()"
+                        (mouseleave)="hideEdit()"
+                        (click)="groupNameEdit()"
+                      >
+                        <h1 class="group-title Cursor-pointer">
+                          {{ groupInfo.group.fname }}
+                        </h1>
+                        <em
+                          class="material-icons ml-2 Cursor-pointer"
+                          *ngIf="showEditIcon"
+                          >edit</em
+                        >
+                      </div>
+                      <div
+                        *ngIf="showGroupNameEdit"
+                        class="group-title-area d-flex justify-content-center"
+                      >
+                        <input
+                          class="group-name-input"
+                          matInput
+                          [value]="groupInfo.group.fname"
+                          maxlength="30"
+                          [(ngModel)]="groupName"
+                        />
+                        <em class="material-icons ml-2" style="cursor: pointer;" (click)="SaveGroupName()"
+                          >check</em
+                        >
+                      </div>
+                      <span *ngIf="historyType == 'groupList'"
+                        >Group -
+                        {{ groupMembers?.members?.length }} participants</span
+                      >
+                    </div>
+    
+                    <!-- <div class="bg-white bd-radius pt-3 pl-3" *ngIf=" UserInfo1 == null || UserInfo1 == '' &&
+                      historyType != 'groupList'">
+                      <span>0 groups in common</span>
+                    </div> -->
+                    <div
+                      class="bg-white bd-radius pt-3 pl-3"
+                      *ngIf="
+                        historyType != 'groupList' &&
+                        UserInfo?.user?.rooms?.length > 0
+                      "
+                    >
+                      <span class="is-mb-3" *ngIf="UserInfoCount > 1">{{ UserInfoCount }} groups in common</span>
+                      <span class="is-mb-3" *ngIf="UserInfoCount == 1">{{ UserInfoCount }} group in common</span>
+                      <div>
+                        <div
+                          class="list-group"
+                          id="contacts"
+                          role="tablist"
+                          *ngFor="let group of UserInfo1"
+                        >
+                          <div
+                            href="#"
+                            class="filterMembers all online contact user-in-groups Cursor-pointer"
+                            data-toggle="list"
+                            (click)="chatWith(group, 'groupList','', 'groupInfo')"
+                          >
+                            <!-- <img class="avatar-md" src="dist/img/avatars/avatar-female-1.jpg" data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"> -->
+                            <div
+                              class="avatar-circle d-flex justify-content-center"
+                            >
+                              <span class="member-initials">{{
+                                group.name.substring(0, 1) | titlecase
+                              }}</span>
+                            </div>
+                            <div class="data mt-1">
+                              <span class="groupMembersName">{{ group.name }}</span>
+                            </div>
+                          </div>
+                          <hr />
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="bg-white bd-radius pt-3 pl-3"
+                      *ngIf="historyType == 'groupList'"
+                    >
+                    <ion-row class="mb-3">
+                      <ion-col size="9">
+                        <span class="is-d-flex is-justify-content-start" style="display: flex;">Group peoples</span>
+                      </ion-col>
+                      <ion-col size="1" *ngIf="historyType == 'groupList' && groupOwnerId == userId">
+                        <em class="material-icons ml-2 text-success" matTooltip="Add people"  (click)="addGroupMembers()" style="cursor: pointer;">add_circle</em>
+                      </ion-col>
+                    </ion-row>
+                      <div>
+                        <div
+                          class="list-group"
+                          id="contacts"
+                          role="tablist"
+                          *ngFor="let groupMembers of groupMembers.members"
+                        >
+                          <div
+                            href="#"
+                            class="filterMembers all online contact user-in-groups"
+                            data-toggle="list"
+                          >
+                          <ion-row>
+                            <ion-col size="2">
+                              <img *ngIf="!(groupMembers.avatarETag == null || groupMembers.avatarETag == '' || groupMembers.avatarETag == 'null')" 
+                                class="avatar-md1" [src]="groupMembers.avatarETag" data-toggle="tooltip" data-placement="top" title="Janette" alt="avatar"
+                                onerror="this.src='assets/images/default-contact.png';">
+                              <div *ngIf="groupMembers.avatarETag == null || groupMembers.avatarETag == '' || groupMembers.avatarETag == 'null'"
+                                class="member-avatar-circle d-flex justify-content-center">
+                                <span class="member-initials">{{
+                                  groupMembers.name?.substring(0, 1) | titlecase
+                                }}</span>
+                              </div>
+                            </ion-col>
+                            <ion-col size="9" class="px-2" style="display: flex; align-items: center;">
+                              <div class="px-2 d-flex is-justify-content-start">
+                                <span [matTooltip] ="groupMembers.name" class="px-2 groupMembersName">{{ groupMembers.name }}</span>
+                                <span class="span-owner" *ngIf="groupInfo.group.u.id == groupMembers.id"
+                                  >(Owner)</span>
+                                <span class="span-me" *ngIf="userId == groupMembers.id"
+                                  >(Me)</span>
+                              </div>
+                            </ion-col>
+                            <ion-col size="1">
+                              <em class="material-icons text-danger" *ngIf=" groupInfo.group.u.id != groupMembers.id &&
+                                groupOwnerId == userId" style="cursor: pointer;"
+                                (click)="removeFromGroup(groupMembers.id, groupMembers.name)"
+                                >cancel</em>
+                            </ion-col>
+                          </ion-row>
+                          </div>
+                          <hr />
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="bg-white bd-radius mt-3"
+                      *ngIf="historyType == 'groupList' && groupOwnerId != userId"
+                    >
+                      <button
+                        type="button"
+                        class="btn add-members-btn text-success"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                        (click)="exitFromGroup()"
+                      >
+                        Exit Group<em class="material-icons ml-2">exit_to_app</em>
+                      </button>
+                    </div>
+                  </div>
+                  <!--  -->
+                </div>
+                <!-- end of info -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-row>

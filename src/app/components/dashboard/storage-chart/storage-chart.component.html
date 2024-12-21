@@ -1,0 +1,91 @@
+<ion-row class="is-widget">
+  <ion-col size="12" id="step2" size-sm="12" size-md="12" size-lg="12" size-xl="12">
+    <div class="card-body bg-white chart">
+      <h4 class="mb-2 is-fontExtraLarge">Storage</h4>
+      <div class="_TitleUnderLine mb-0"></div>
+      <p class="_storageInPercent"  matTooltip="{{ storageValueInPercentage }}% of {{readableTotalSpace}} Used">
+        {{ readableUsedSpace }} of {{ readableTotalSpace }} Used
+      </p>
+      <ion-progress-bar
+        type="determinate"
+        [color]="storageColorChanger()"
+        value="{{ prosValue }}"
+        class="_progressbar"
+        >{{ prosValue }}
+      </ion-progress-bar><br>
+      <!-- <ion-row>
+        <ion-col size-sm="1" size-md="1" size-lg="1" size-xl="1">
+          <div class="is-circle2">
+            <mat-icon class="materials-icons-outlined text-white">images</mat-icon>
+          </div>
+        </ion-col>
+        <ion-col size-sm="6" size-md="6" size-lg="6" size-xl="6">
+          <p class="font px-2">Photos</p>
+        </ion-col>
+        <ion-col size-sm="5" size-md="5" size-lg="5" size-xl="5" class="text-right">
+          <p class="font2">{{imagesizeReadable}}</p>
+        </ion-col> 
+      </ion-row> -->
+      <ion-row>
+        <ion-col size-sm="1" size-md="1" size-lg="1" size-xl="1">
+          <div class="is-circle3">
+            <mat-icon class="material-icons-outlined text-white">description</mat-icon>
+          </div>
+        </ion-col>
+        <ion-col size-sm="6" size-md="6" size-lg="6" size-xl="6">
+          <p class="font px-2">Documents</p>
+        </ion-col>
+        <ion-col size-sm="5" size-md="5" size-lg="5" size-xl="5" class="text-right">
+          <p class="font2">{{docssizeReadable}}</p>
+        </ion-col> 
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="1" size-md="1" size-lg="1" size-xl="1">
+          <div class="is-circle4">
+            <mat-icon class="material-icons-outlined text-white">play_circle_outline</mat-icon>
+          </div>
+        </ion-col>
+        <ion-col size-sm="6" size-md="6" size-lg="6" size-xl="6">
+          <p class="font px-2">Media files</p>
+        </ion-col>
+        <ion-col size-sm="5" size-md="5" size-lg="5" size-xl="5" class="text-right">
+          <p class="font2">{{mediaSizeReadable}}</p>
+        </ion-col>
+      </ion-row>
+       <ion-row>
+        <ion-col size-sm="1" size-md="1" size-lg="1" size-xl="1">
+          <div class="is-circle2">
+            <mat-icon class="materials-icons-outlined text-white">description</mat-icon>
+          </div>
+        </ion-col>
+        <ion-col size-sm="6" size-md="6" size-lg="6" size-xl="6">
+          <p class="font px-2">Other files</p>
+        </ion-col>
+        <ion-col size-sm="5" size-md="5" size-lg="5" size-xl="5" class="text-right">
+          <p class="font2">{{othersizeReadable}}</p>
+        </ion-col> 
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+          <ion-row>
+            <ion-col size="8" size-sm="8" size-md="8" size-lg="12" size-xl="12" class="text-left">
+              <p><span style="white-space: nowrap;" class="_countTitle">Total Storage :</span> <br><span class="_countSub _subQuotaText">{{ readableTotalSpace }}</span></p>
+            </ion-col>
+          </ion-row>
+          <div style="margin-left: 0.8rem;white-space: nowrap; ">
+            <span class="_storage _freeSpace"></span>
+            <span style="white-space: nowrap;">Free Space</span>
+          </div>
+          <div style="margin-left: 0.8rem; white-space: nowrap;">
+            <span class="_storage _usedSpace"></span>
+            <span style="white-space: nowrap;">Used Space</span>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="8" size-lg="8" size-xl="8"
+          class="is-d-flex is-align-items-center is-justify-content-start">
+          <div #charts></div>
+        </ion-col>
+      </ion-row> -->
+    </div>
+  </ion-col>
+</ion-row>

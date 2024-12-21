@@ -1,0 +1,701 @@
+<ion-app class="bg-light" style="background-color: white !important;" *ngIf="showLandingPage">
+  <ion-header>
+    
+    <ion-toolbar class="ion-text-capitalize bg-gradient"  color="none" no-border style="background: #284aa9;">
+      <ion-row class="ion-justify-content-between ion-align-items-center">
+       
+        <ion-col size-sm="3" class="hidden-xs">
+          <ion-title>
+            <img src="assets/landing/logo-white.png" width="150" alt="{{ productName }}"/>
+          </ion-title>
+        </ion-col>
+        <ion-col size-sm="3" size-xs="3" hidden-md>
+          <ion-title>
+            <img src="assets/landing/sm-logo.png" width="50" alt="{{ productName }}"/>
+          </ion-title>
+        </ion-col>
+        <ion-col size-sm="5" size-xs="5" class="hidden-xs text-white">
+          <div class="ion-flex ion-justify-content-start">
+            <ion-buttons slot="secondary" hidden-xs visible-block-md >
+              <ion-button color="light" (click)="ScrollToTop()"><span style="color: white !important;">Home</span></ion-button>           
+              <ion-button color="light" (click)="goToFeatures()"><span style="color: white !important;">Features</span></ion-button>
+              <ion-button color="light" (click)="goToEncryption()"><span style="color: white !important;">Encryption</span></ion-button>
+              <ion-button color="light" (click)="goToPricing()"><span style="color: white !important;">Pricing</span></ion-button>
+              <ion-button color="light"><a class="is-fontMedium" [href]="helpCenter" target="_blank"><span style="color: white !important;">Support</span></a></ion-button>
+            </ion-buttons>
+          </div>
+        </ion-col>
+        <ion-col size-sm="3" size-xs="3">
+          <div>
+            <!-- <ion-button   color="light" slot="primary" fill="outline" class="ion-margin-end" (click)="navigateToLogin()"><ion-icon name="person-outline"></ion-icon> Sign up </ion-button> -->
+            <ion-button *ngIf="login" color="light" slot="primary" style="border-color: white !important;" fill="outline" class="ion-margin-end text-white" (click)="navigateToLogin()"><span style="color: white !important;">Sign In </span><ion-icon style="color: white !important;" name="log-in-outline"></ion-icon></ion-button>
+            <ion-button *ngIf="dashboard" color="light" slot="primary" fill="outline" class="ion-margin-end" (click)="navigateToDashboard()"><span style="color: white !important;">Dashboard</span><ion-icon style="color: white !important;" name="log-in-outline"></ion-icon></ion-button>
+          </div>
+        </ion-col>
+        <ion-col size-sm="2" size-xs="2"  hidden-md>
+          <div>
+            <ion-buttons slot="secondary" >
+              <ion-button color="light" [matMenuTriggerFor]="menu"> <ion-icon name="menu-outline"></ion-icon> </ion-button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="ScrollToTop()"><span style="color: black !important;">Home</span></button>
+                <button mat-menu-item (click)="goToFeatures()"><span style="color: black !important;">Features</span></button>
+                <button mat-menu-item (click)="goToEncryption()"><span style="color: black !important;">Encryption</span></button>
+                <button mat-menu-item (click)="goToPricing()"><span style="color: black !important;">Pricing</span></button>
+                <button mat-menu-item><a class="is-fontMedium" [href]="helpCenter" target="_blank"><span style="color: black !important;">Support</span></a></button>
+              </mat-menu>
+            </ion-buttons>
+          </div>
+        </ion-col>
+      </ion-row>
+     
+  
+      
+
+      
+
+     
+
+    
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="bg-light"  [scrollEvents]="true">
+    <ion-grid class="bg-gradient p-0 position-relative gradient"  style="margin-bottom: -5%;">
+  <ion-row class="h-100vh" >
+    <ion-col size="12" size-sm  class="p-0 position-absolute hidden-xs">
+      <img src="assets/landing/backgroud@2x.webp" class="bg-white" alt="{{ productName }}"/>
+    </ion-col>
+   
+    <ion-col size="12" size-sm > 
+      <ion-row class="ion-justify-content-center ion-align-items-center h-100 w-100">
+      <div class="ion-text-start ion-margin font-set" >
+        <h1 class="ion-no-margin text-white" ><strong>Get your own Content <br> Collabration workspace today</strong></h1>
+        <h2 class="opacity-75 text-white">Collaborate, Communicate and <br> Connect-seamlessly and efficiently.</h2>
+        <ion-row class="w-100">
+        <ion-col  size-sm="8" size-xs="8" class="ps-0">
+          <input type="text" style="background-color: white;"  placeholder="Enter your Email Address" #useremail class="input-custom"/>
+        </ion-col>
+        <ion-col size-sm="3"  size-xs="4" class="">
+          <ion-button color="warning" class="btn-style-1 w-100 fs-9" (click)="gotoSignUp(useremail.value)"><strong>Sign up today</strong></ion-button>
+        </ion-col>
+      </ion-row>
+        
+      </div>
+    </ion-row>
+    </ion-col>
+    <ion-col size="12" size-sm >
+  
+    </ion-col>
+   
+  </ion-row>
+    <!-- <ion-row class="svg-wave position-absolute">
+      <ion-col size="12" size-sm class="ion-no-padding"> 
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#0f349f" fill-opacity="1" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,250.7C1248,256,1344,288,1392,304L1440,320L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+      </div>
+      </ion-col>
+    </ion-row> -->
+  </ion-grid>
+<br><br><br>
+  <ion-grid class="bg-white ion-padding" style="background-color: white !important;">
+
+   
+    <ion-row class="ion-flex ion-justify-content-center" style="padding-bottom: 8%; padding-top: 0%;">
+      <ion-col size="12"  size-xs="12" size-md="5" class="position-relative "> 
+        <mat-card class="w-auto position-absolute animate crd-1 text-left">
+          <ion-icon name="cash-outline"  class="icon-yellow"></ion-icon>
+          <h5 >Save costs<br>across the board</h5>
+        </mat-card>
+        <mat-card class="w-auto position-absolute animate crd-2 text-left mb-3">
+
+          <ion-icon name="cloud-outline" class="icon-yellow"></ion-icon>
+          <h5>Save costs<br>across the board</h5>
+        </mat-card>
+        <img src="assets/landing/pexels-photo.jpg" class="rounded-3" width="500" alt="{{ productName }}"/>
+      </ion-col>
+      <ion-col size="12" size-xs="12"  size-md="5"> 
+        <ion-row class="ion-flex ion-justify-content-start ion-align-items-center h-100" style="color: black;">
+          <div class="ion-text-start ion-margin">
+          <h1 class="ion-no-margin mt-4"><strong>Up your<br> Communication game</strong></h1>
+          <h5 class="opacity-75">
+            For businesses or personal use Indryve is a game-changer<br> when it comes to collaboration and sharing. It comes with an<br> integrated Office Suite that comprises Documents, Presentations<br> and Spreadsheets. 
+          </h5>
+          
+          <ion-button color="warning" class="btn-style-1 fs-9" (click)="gotoSignUp(useremail)"><strong>Sign up today</strong></ion-button>
+
+        </div>
+        <img src="assets/landing/dots.png" class="position-absolute dot-2 opacity-50"  alt="{{ productName }}" width="100"/>
+      </ion-row>
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+
+
+    <ion-grid class="bg-light ion-no-padding position-relative">
+      <ion-row class="position-absolute w-100 hidden-xs" style="top: -178px;" >
+        <ion-col class="ion-no-padding">
+          <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ecf0f6" fill-opacity="1" d="M0,160L80,149.3C160,139,320,117,480,106.7C640,96,800,96,960,106.7C1120,117,1280,139,1360,149.3L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+        </ion-col>
+      </ion-row>
+      <ion-row class="position-absolute w-100 hidden-xs" style="bottom: -178px; transform: rotate(180deg);">
+        <ion-col class="ion-no-padding">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ecf0f6" fill-opacity="1" d="M0,160L80,149.3C160,139,320,117,480,106.7C640,96,800,96,960,106.7C1120,117,1280,139,1360,149.3L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+        </ion-col>
+      </ion-row>
+      <ion-row id="features" class="ion-justify-content-center ion-align-items-center" style="padding-top: 0%; padding-bottom: 0%;">
+        <ion-col size-sm="12" size-xs="12">
+          <ion-row class="ion-justify-content-center ion-align-items-center h-100" style="color: black;">
+            <div class="ion-text-center ion-margin">
+            <h1 class="ion-no-margin"><strong>More Features</strong></h1>
+            <h5 class="opacity-75">Store, access and share your files in one secure place. Store any and every file. Access files any <br>time, anywhere from your desktop and mobile devices. Control how files are shared. 
+            </h5>
+            <!-- <button mat-button color="primary" class="px-0">Learn more <ion-icon name="arrow-forward-outline"></ion-icon></button> -->
+           
+          </div>
+          <img src="assets/landing/dots.png" class="position-absolute dot-2 opacity-50"  alt="{{ productName }}" width="100"/>
+        </ion-row>
+        </ion-col>
+        <ion-col size="7" size-sm="8" size-xs="12"> 
+          <ion-row class="ion-justify-content-center ion-align-items-center h-100 card-style">
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/file_.png" width="40" alt="{{ productName }}"/>
+                </div>
+                  <h3 class="mb-0"><strong>Files</strong></h3>
+                  <h5 class="">Upload any kind of files</h5>
+              </ion-card-content>
+            </ion-card>
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/photo_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Photos</strong></h3>
+                  <h5 class="w-100px">Upload any kind of Photos</h5>
+              </ion-card-content>
+            </ion-card>
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/share_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Shared</strong></h3>
+                  <h5 class="w-100px">Share files to friends</h5>
+              </ion-card-content>
+            </ion-card>
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/calendar_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Activity</strong></h3>
+                  <h5 class="w-100px">You can track activities</h5>
+              </ion-card-content>
+            </ion-card>
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/contact_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Contacts</strong></h3>
+                  <h5 class="w-100px">Save Friends to contacts</h5>
+              </ion-card-content>
+            </ion-card>
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/star_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Favorites</strong></h3>
+                  <h5 class="w-100px">Mark as Favorite</h5>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/bin_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Trash</strong></h3>
+                  <h5 class="w-100px">Delete Files to trash</h5>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card>
+              <ion-card-content>
+                <div class="img-div">
+                  <img src="assets/landing/cloud_.png" width="40" alt="{{ productName }}"/>
+                  </div>
+                  <h3 class="mb-0"><strong>Storage</strong></h3>
+                  <h5 class="w-100px">Upload files & folders</h5>
+              </ion-card-content>
+            </ion-card>
+            
+          </ion-row>
+
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+
+    
+
+    <ion-grid class="bg-white ion-padding">
+
+   
+      <ion-row id="encryption" class="ion-flex ion-justify-content-center" style="padding-bottom: 8%; padding-top: 8%;">
+       
+        <ion-col size="12" size-xs="12" size-md="5"> 
+          <ion-row class="ion-flex ion-justify-content-start ion-align-items-center h-100" style="color: black;">
+            <div class="ion-text-start ion-margin">
+            <h1 class="ion-no-margin"><strong>Breach proof and secure</strong></h1>
+            <h5 class="opacity-75">
+              Indryve offers revolutionary security. You are not<br> just a data point in a giant cloud. Your information is<br> completely encrypted and resides on secure servers. You <br>can centrally control, monitor, secure and protect your<br> data and communication across your organization with<br> best-in-class policies. 
+
+            </h5>
+            
+  
+          </div>
+          <img src="assets/landing/dots.png" class="position-absolute dot-2 opacity-50" alt="{{ productName }}" width="100"/>
+        </ion-row>
+        </ion-col>
+
+        <ion-col size="12"  size-xs="12" size-md="5" class="position-relative "> 
+          <mat-card class="w-auto position-absolute animate crd-1 text-left">
+            <ion-icon name="shield-half-outline" class="icon-yellow"></ion-icon>
+            <h5 >Bullet proof<br>Security</h5>
+          </mat-card>
+          <mat-card class="w-auto position-absolute animate crd-2 text-left">
+            <ion-icon name="lock-closed-outline" class="icon-yellow"></ion-icon>
+            <h5>Extensive security<br>hardening features</h5>
+          </mat-card>
+          <img src="assets/landing/ban3.webp" class="rounded-3" width="500" alt="{{ productName }}"/>
+        </ion-col>
+      </ion-row>
+      </ion-grid>
+
+      <ion-grid class="bg-white ion-padding py-5" >
+        <ion-row class="position-relative ion-flex ion-justify-content-center">
+         
+          <!-- <ion-col size="12" size-xs="6">
+           <img src="assets/landing/sch.png" />
+          </ion-col> -->
+        
+          </ion-row> 
+          <br>    
+          <ion-row>
+            <ion-col size="12" size-xs="12" size-md="6" class="">
+              <mat-card class="text-left bg-light-2 rounded-3" style="padding: 30px;">
+                <h2>For<strong> Enterprises</strong></h2>
+                <ion-row >
+                  <ion-col size="12" size-xs="10">
+                    <h5 class="text-left">Indryve is perfect for enterprises of all sizes. SMEs can pay as they scale while large firms can save tremendous costs. With Indryve, you can centrally control, monitor, secure and protect your data and communication across your organization with best-in class policies. 
+                    </h5>
+                  </ion-col>
+                  <ion-col size="12" size-xs="2" >
+                    <img src="assets/landing/ico_1.png"  style="margin-top: -50px;" alt="{{ productName }}"/>
+                  </ion-col>
+                </ion-row>
+                
+              </mat-card>
+            </ion-col>
+          </ion-row>    
+          <ion-row class="ion-flex ion-justify-content-center " style="margin-top:2%;">
+            <ion-col size-xs="12" size-md="6" class="">
+              <mat-card class="text-left bg-light-2 rounded-3 crd-stl-2">
+                <h2>For<strong> Personal Users</strong></h2>
+                <ion-row >
+                  <ion-col size="12" size-xs="10">
+                    <h5 class="text-left">Your data is bullet-proof safe. Indryve is a strong, robust home for all your data. From images, documents, spreadsheets to all types of files, everything remains secure and under your control. Indryve comes with the power of open source which means it is developed in an open, transparent and trustworthy manner. 
+ 
+                    </h5>
+                  </ion-col>
+                  <ion-col size="12" size-xs="2" >
+                    <img src="assets/landing/ico_2.png"  style="margin-top: -50px;" alt="{{ productName }}"/>
+                  </ion-col>
+                </ion-row>
+                
+              </mat-card>
+            </ion-col>
+          </ion-row>    
+      </ion-grid>
+
+      <ion-grid class="bg-gradient ion-no-padding position-relative" style="background: #123085 !important;">
+        <ion-row class="position-absolute w-100 hidden-xs" style="top: -178px;" >
+          <ion-col class="ion-no-padding">
+            <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#123085" fill-opacity="1" d="M0,160L80,149.3C160,139,320,117,480,106.7C640,96,800,96,960,106.7C1120,117,1280,139,1360,149.3L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+          </ion-col>
+        </ion-row>
+        <ion-row class="position-absolute w-100 hidden-xs" style="bottom: -178px; transform: rotate(180deg);">
+          <ion-col class="ion-no-padding">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#123085" fill-opacity="1" d="M0,160L80,149.3C160,139,320,117,480,106.7C640,96,800,96,960,106.7C1120,117,1280,139,1360,149.3L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+          </ion-col>
+        </ion-row>
+        <ion-row id="pricing" class="ion-justify-content-center ion-align-items-center" style="padding-top:3%; padding-bottom: 0%;">
+          <ion-col size-sm="12" size-xs="12">
+            <ion-row class="ion-justify-content-center ion-align-items-center h-100">
+              <div class="ion-text-center ion-margin">
+                <h1 class="ion-no-margin text-white"><strong>An Array of plan options</strong></h1>
+                <h5 class="text-white opacity-75">For businesses or personal use Indryve is a game-changer when it comes to<br> collaboration and sharing. It comes with an integrated Office Suite that comprises<br> Documents, Presentations and Spreadsheets. </h5>
+              </div>
+              <img src="assets/landing/dots.png" class="position-absolute dot-2 opacity-50"  width="100" alt="{{ productName }}"/>
+            </ion-row>
+          </ion-col>
+          <ion-col size="12" size-sm="8" size-xs="12"> 
+            <ion-row class="ion-justify-content-center ion-align-items-center h-100 i-cards">
+              
+              <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+                <ion-card class="rounded-3" style="background-color: white;height: 380px;">
+                  <ion-card-content>
+                    <h3><strong>Individual Accounts <br> 10GB per user</strong></h3>
+                    <div class="img-div">
+                      <img src="assets/landing/data-storage.png" width="50" alt="{{ productName }}"/>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <br>
+                      <h1 class="mb-0"><strong>  Free<span style="font-size: 10px;"></span></strong></h1>
+                      <!-- <h5 >$19.99 paid yearly</h5> -->
+                    
+                      <div class="row justify-content-center">
+                        <ion-col size=12>
+                          <ion-icon name="cloud-outline" class="fs-90"></ion-icon>
+                        </ion-col>
+                        <ion-col size=12>
+                          <span class="text-blue" style="font-size: 20px;">STORAGE</span> <br><strong class="text-blue">10 GB</strong>
+                        </ion-col>
+                      </div>
+
+                      <div class="row justify-content-center mt-3">
+                        <div class="col-2 col-sm-4">
+                          <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                        </div>
+                        <!-- <div class="col-3 col-sm-8 p-0 text-start">
+                          <span class="lh-set" style="font-size: 12px;">CLIENT SIDE ENCRYPTION</span>
+                        </div> -->
+                      </div>
+
+                      <span (click)="gotoSignUp(useremail)" style="cursor: pointer;font-size: 15px;" class="text-blue">Get Started</span>
+            
+                    <!-- <ion-button color="warning" class="btn-style-1 w-100 fs-9 mt-3" (click)="gotoSignUp(useremail)"><b>Get Started</b></ion-button> -->
+
+              
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              
+              <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+                <ion-card class="rounded-3" style="background-color: white;height: 380px;">
+                  <ion-card-content>
+                    <h3><strong>Starter Pack <br> 30 GB per User</strong></h3>
+                    <div class="img-div">
+                      <img src="assets/landing/data-storage.png" width="50" alt="{{ productName }}"/>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <br>
+                      <h1 class="mb-0"><span style="margin-right: 10px;">₹ </span> <strong>  1200<span style="font-size: 10px;"> / Year</span></strong></h1>
+                      <!-- <h5 >$19.99 paid yearly</h5> -->
+                    
+                      <div class="row justify-content-center">
+                        <ion-col size=12>
+                          <ion-icon name="cloud-outline" class="fs-90"></ion-icon>
+                        </ion-col>
+                        <ion-col size=12>
+                          <span class="text-blue" style="font-size: 20px;">STORAGE</span> <br><strong class="text-blue">30 GB</strong>
+                        </ion-col>
+                      </div>
+
+                      <div class="row justify-content-center mt-3">
+                        <div class="col-2 col-sm-4">
+                          <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                        </div>
+                        <!-- <div class="col-3 col-sm-8 p-0 text-start">
+                          <span class="lh-set" style="font-size: 12px;">CLIENT SIDE ENCRYPTION</span>
+                        </div> -->
+                      </div>
+
+            
+                    <!-- <ion-button color="warning" class="btn-style-1 w-100 fs-9 mt-3" (click)="gotoSignUp(useremail)"><b>Get Started</b></ion-button> -->
+
+              
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              
+              
+              
+              <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+                <ion-card class="rounded-3" style="background-color: white;height: 380px;">
+                  <ion-card-content>
+                    <h3><strong>Standard Pack <br> 60 GB per User</strong></h3>
+                    <div class="img-div">
+                      <img src="assets/landing/data-storage2.png" width="60" alt="{{ productName }}"/>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <br>
+                      <h1 class="mb-0"><span style="margin-right: 10px;">₹</span> <strong> 2100  <span style="font-size: 10px;">/ Year</span></strong></h1>
+                      <!-- <h5 class=" ion-text-center">$49.99 paid yearly</h5> -->
+
+                      <div class="row justify-content-center">
+                        <ion-col size=12>
+                          <ion-icon name="cloud-outline" class="fs-90"></ion-icon>
+                        </ion-col>
+                        <ion-col size=12>
+                          <span class="text-blue" style="font-size: 20px;">STORAGE</span> <br><strong class="text-blue">60 GB</strong>
+                        </ion-col>
+                      </div>
+
+                      <div class="row mt-3 justify-content-center">
+                        <div class="col-2 col-sm-4">
+                          <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                        </div>
+                        <!-- <div class="col-3 col-sm-8 p-0 text-start">
+                          <span class="lh-set" style="font-size: 12px;">CLIENT SIDE ENCRYPTION</span> 
+                        </div> -->
+                      </div>
+
+                <!-- <ion-row class="ion-flex ion-justify-content-center ion-align-items-center">
+                  <ion-col size-xs="3"><ion-icon name="cloud-outline" class="fs-90"></ion-icon></ion-col>
+                  <ion-col size-xs="7">
+                    <h2 class="text-left m-0"><span style="font-size: 12px;">STORAGE</span> <br><b>1 TB</b></h2>
+                  </ion-col>
+                </ion-row> -->
+                <!-- <ion-button color="warning" class="btn-style-1 w-100 fs-9 mt-3" (click)="gotoSignUp(useremail)"><b>Get Started</b></ion-button> -->
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+                <ion-card class="rounded-3" style="background-color: white;height: 380px;">
+                  <ion-card-content>
+                    <h3><strong>Classic Pack<br> 1 TB per User</strong></h3>
+                    <div class="img-div">
+                      <img src="assets/landing/data-storage2.png" width="60" alt="{{ productName }}"/>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <br>
+                      <h1 class="mb-0"><span style="margin-right: 10px;">₹</span> <strong> 3500  <span style="font-size: 10px;">/ Year</span></strong></h1>
+                      <!-- <h5 class=" ion-text-center">$49.99 paid yearly</h5> -->
+
+                      <div class="row justify-content-center">
+                        <ion-col size=12>
+                          <ion-icon name="cloud-outline" class="fs-90"></ion-icon>
+                        </ion-col>
+                        <ion-col size=12>
+                          <span class="text-blue" style="font-size: 20px;">STORAGE</span> <br><strong class="text-blue">1 TB</strong>
+                        </ion-col>
+                      </div>
+
+                      <div class="row mt-3 justify-content-center">
+                        <div class="col-2 col-sm-4">
+                          <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                        </div>
+                        <!-- <div class="col-3 col-sm-8 p-0 text-start">
+                          <span class="lh-set" style="font-size: 12px;">CLIENT SIDE ENCRYPTION</span> 
+                        </div> -->
+                      </div>
+
+                <!-- <ion-row class="ion-flex ion-justify-content-center ion-align-items-center">
+                  <ion-col size-xs="3"><ion-icon name="cloud-outline" class="fs-90"></ion-icon></ion-col>
+                  <ion-col size-xs="7">
+                    <h2 class="text-left m-0"><span style="font-size: 12px;">STORAGE</span> <br><b>1 TB</b></h2>
+                  </ion-col>
+                </ion-row> -->
+                <!-- <ion-button color="warning" class="btn-style-1 w-100 fs-9 mt-3" (click)="gotoSignUp(useremail)"><b>Get Started</b></ion-button> -->
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+                <ion-card class="rounded-3" style="background-color: white;height: 380px;">
+                  <ion-card-content>
+                    <h3><strong>Prime Pack<br> 2 TB Per User</strong></h3>
+                    <div class="img-div">
+                      <img src="assets/landing/data-storage2.png" width="60" alt="{{ productName }}"/>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <br>
+                      <h1 class="mb-0"><span style="margin-right: 10px;">₹</span> <strong> 6000  <span style="font-size: 10px;">/ Year</span></strong></h1>
+                      <!-- <h5 class=" ion-text-center">$49.99 paid yearly</h5> -->
+
+                      <div class="row justify-content-center">
+                        <ion-col size=12>
+                          <ion-icon name="cloud-outline" class="fs-90"></ion-icon>
+                        </ion-col>
+                        <ion-col size=12>
+                          <span class="text-blue" style="font-size: 20px;">STORAGE</span> <br><strong class="text-blue">2 TB</strong>
+                        </ion-col>
+                      </div>
+
+                      <div class="row mt-3 justify-content-center">
+                        <div class="col-2 col-sm-4">
+                          <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                        </div>
+                        <!-- <div class="col-3 col-sm-8 p-0 text-start">
+                          <span class="lh-set" style="font-size: 12px;">CLIENT SIDE ENCRYPTION</span> 
+                        </div> -->
+                      </div>
+
+                <!-- <ion-row class="ion-flex ion-justify-content-center ion-align-items-center">
+                  <ion-col size-xs="3"><ion-icon name="cloud-outline" class="fs-90"></ion-icon></ion-col>
+                  <ion-col size-xs="7">
+                    <h2 class="text-left m-0"><span style="font-size: 12px;">STORAGE</span> <br><b>1 TB</b></h2>
+                  </ion-col>
+                </ion-row> -->
+                <!-- <ion-button color="warning" class="btn-style-1 w-100 fs-9 mt-3" (click)="gotoSignUp(useremail)"><b>Get Started</b></ion-button> -->
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+
+              <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+                <ion-card class="rounded-3" style="background-color: white;height: 380px;">
+                  <ion-card-content>
+                    <h3><strong>Master Pack<br> 5 TB per User</strong></h3>
+                    <div class="img-div">
+                      <img src="assets/landing/data-storage3.png" width="55" alt="{{ productName }}"/>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <br>
+                      <h1 class="mb-0"><span style="margin-right: 10px;">₹  </span> <strong> 11988  <span style="font-size: 10px;">/ Year</span></strong></h1>
+                      <!-- <h5 class="">$179.99 paid yearly</h5> -->
+
+                      <div class="row justify-content-center">
+                        <ion-col size=12>
+                          <ion-icon name="cloud-outline" class="fs-90"></ion-icon>
+                        </ion-col>
+                        <ion-col size=12>
+                          <span class="text-blue" style="font-size: 20px;">STORAGE</span> <br><strong class="text-blue">5 TB</strong>
+                        </ion-col>
+                      </div>
+
+                      <div class="row mt-3 justify-content-center">
+                        <div class="col-2 col-sm-4">
+                          <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                        </div>
+                        <!-- <div class="col-3 col-sm-8 p-0 text-start">
+                          <span class="lh-set" style="font-size: 12px;">CLIENT SIDE ENCRYPTION</span>
+                        </div> -->
+                      </div>
+                      <!-- <ion-button color="warning" class="btn-style-1 w-100 fs-9 mt-3" (click)="gotoSignUp(useremail)"><b>Get Started</b></ion-button> -->
+                <!-- <ion-row class="ion-flex ion-justify-content-center ion-align-items-center">
+                  <ion-col size-xs="3"><ion-icon name="cloud-outline" class="fs-90"></ion-icon></ion-col>
+                  <ion-col size-xs="7">
+                    <h2 class="text-left m-0"><span style="font-size: 12px;">STORAGE</span> <br><b>5 TB</b></h2>
+                  </ion-col>
+                </ion-row> -->
+                <!-- <ion-row class="ion-flex ion-justify-content-center ion-align-items-center">
+                  <ion-col size-xs="3">
+                    <ion-icon name="shield-half-outline"  class="fs-90" ></ion-icon>
+                  </ion-col>
+                  <ion-col size-xs="7"  class="ion-padding-bottom">
+                    <h2 class="text-left m-0"><span class="lh-set">CLIENT SIDE ENCRYPTION</span></h2>
+                  </ion-col>
+                
+                </ion-row> -->
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+              
+            </ion-row>
+  
+            <ion-row class="ion-justify-content-center ion-align-items-center h-100">
+              <div class="ion-text-center ion-margin">
+                <h1 class="ion-no-margin mt-4 text-white"><strong>Contact us for customized Storage requirements and On-premises Enterprise implementations.</strong></h1>
+              </div>
+            </ion-row>
+
+          </ion-col>
+
+        </ion-row>
+         
+  
+      </ion-grid>
+
+      <ion-grid id="support" class="bg-blue-2 ion-padding">
+        <ion-row class="position-relative" style="padding-top: 5%;">          
+          <button mat-fab color="secondaryMain" class="bg-secondary top-btn"  (click)="ScrollToTop()">
+            <ion-icon name="arrow-up" class="title text-white fs-9"></ion-icon>
+          </button>
+          <ion-col size-sm size-xs="12">
+           
+            <div  class="ion-text-left ion-margin">
+              <img src="assets/landing/logo-white.png" width="150" alt="{{ productName }}"/>
+              <br><br>
+              <h5 class="text-white opacity-75">
+                © 2024, Indryve Inc.<br>
+                Delaware, USA <br>
+              </h5>
+             
+            </div>
+          </ion-col>
+          <ion-col size-sm size-xs="12">
+            <div  class="ion-text-left ion-margin text-white opacity-75">
+              <h5><strong>Navigation</strong></h5>
+              <!-- <br> -->
+              <h5>
+                <span class="is-fontNormal" style="cursor:pointer ;" (click)="ScrollToTop()">Home</span><br>
+                <span class="is-fontNormal" style="cursor:pointer ;" (click)="navigateSignUp()">Sign Up</span><br>
+                <span class="is-fontNormal" style="cursor:pointer ;" (click)="navigateToLogin()">Sign In</span><br>
+              </h5>
+            </div>
+          </ion-col>
+          <ion-col size-sm size-xs="12">
+            <div  class="ion-text-left ion-margin text-white opacity-75">
+              <h5><strong>Support</strong></h5>
+              <!-- <br> -->
+              <h5>
+                <span><a class="is-fontNormal" [href]="helpCenter" target="_blank"><span style="color: white;">Help Center</span></a></span><br/>
+                <!-- <a href="#" target="_blank"><h5><span style="color: white;">Submit Ticket</span></h5></a> -->              
+                <span><a class="is-fontNormal" [href]="contactUs" target="_blank"><span style="color: white;">Contact Us</span></a></span>
+              </h5>
+            </div>
+          </ion-col>
+          <ion-col size-sm size-xs="12">
+            <div  class="ion-text-left ion-margin text-white opacity-75">
+              <h5><strong>Legal</strong></h5>
+              <!-- <br> -->
+              <h5>
+                <span><a class="is-fontNormal" [href]="PrivacyPolicyLanding" target="_blank"><span style="color: white;">Privacy Policy</span></a></span><br/>
+                <span><a class="is-fontNormal" [href]="LicenceAgreement" target="_blank"><span style="color: white;">End User License Agreement (EULA)
+                </span></a></span>
+                <!-- <span href="#" target="_blank">Privacy Policy</span><br> -->
+                <!-- <span href="#" target="_blank">Terms of Service</span><br> -->
+                <!-- <span>Report Abuse</span> -->
+              </h5>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid class="bg-blue-2 ion-padding">
+        
+        <ion-row class="ion-justify-content-between">
+          <ion-col size-sm="3" size-xs="12">
+            <!-- <div >
+              <ion-buttons slot="secondary" hidden-xs visible-block-md >
+                <ion-button color="light" href="#" target="_blank"> Terms </ion-button>           
+                <ion-button color="light" href="#" target="_blank"> Privacy </ion-button>
+                <ion-button color="light" href="#" target="_blank"> License </ion-button>
+              </ion-buttons>
+            </div> -->
+          </ion-col>
+          <ion-col size-sm="5" size-xs="12" class="ion-text-center text-white">            
+            <h5 class="mb-0 "><span>© 2024, Indryve Inc. All rights reserved. </span></h5>
+          </ion-col>
+          <ion-col size-sm="3" size-xs="12">
+            <ion-button mat-icon-button color="transparent" class="text-white" [href]="facebooKURL" target="_blank">
+              <a></a>
+              <ion-icon name="logo-facebook" class="fs-90"></ion-icon>
+            </ion-button>
+            <ion-button mat-icon-button color="transparent" class="text-white" [href]="twitterURL" target="_blank">
+              <ion-icon name="logo-twitter" class="fs-90"></ion-icon>
+            </ion-button>
+            <ion-button mat-icon-button color="transparent" class="text-white" [href]="linkedinURL" target="_blank">
+              <ion-icon name="logo-linkedin" class="fs-90"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+</ion-content>
+</ion-app>

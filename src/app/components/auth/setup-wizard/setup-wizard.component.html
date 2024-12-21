@@ -1,0 +1,515 @@
+<ion-grid class="is-fullwidth">
+  <ion-row class="ion-justify-content-between is-panel">
+    <ion-col
+      size="12"
+      size-sm="12"
+      size-md="4"
+      size-lg="4"
+      size-xl="4"
+      class="bg-white leftside"
+    >
+      <h1 class="login-title bg-white">Setup Wizard</h1>
+      <img
+        src="../../../../assets/images/setup-wizard.svg"
+        width="100%"
+        class="leftimg"
+        alt="{{ productName }}" 
+      />
+    </ion-col>
+    <ion-col
+      size="12"
+      size-sm="12"
+      size-md="7"
+      size-lg="7"
+      size-xl="7"
+      class="bg-white is-right"
+    >
+      <ion-col
+        size="12"
+        class="is-d-flex is-justify-content-end px-3 py-3 is-topLogo"
+      >
+        <img src="assets/images/logocmp.png" style="width: 200px" alt="{{ productName }}"/>
+      </ion-col>
+      <div class="text-center">
+        <mat-horizontal-stepper [linear]="true" #stepper class="mt-3">
+          <mat-step [stepControl]="firstForm">
+            <ng-template matStepLabel>Organization Information</ng-template>
+            <h3 class="text-center title mt-2 mb-3">
+              Organization Information
+            </h3>
+            <form [formGroup]="firstForm" autocomplete="off">
+              <ion-row class="mb-2">
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="6"
+                  size-lg="6"
+                  size-xl="6"
+                >
+                  <mat-form-field
+                    class="example-full is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Organization Name</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="Organization Name"
+                      formControlName="oname"
+                    />
+                    <mat-error *ngIf="firstForm.controls['oname'].invalid"
+                      >Organization Name is required!
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="6"
+                  size-lg="6"
+                  size-xl="6"
+                >
+                  <mat-form-field
+                    class="example-full is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Organization Type</mat-label>
+                    <mat-select formControlName="option" required>
+                      <mat-option
+                        *ngFor="let options of options"
+                        [value]="options.value"
+                      >
+                        {{ options.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="firstForm.controls['option'].invalid"
+                      >Please Select an Option!</mat-error
+                    >
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="6"
+                  size-lg="6"
+                  size-xl="6"
+                >
+                  <mat-form-field
+                    class="example-full is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Industry</mat-label>
+                    <mat-select formControlName="industrys" required>
+                      <mat-option
+                        *ngFor="let industry of industry"
+                        [value]="industry.value"
+                      >
+                        {{ industry.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="firstForm.controls['industrys'].invalid"
+                      >Please Select Industry!</mat-error
+                    >
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="6"
+                  size-lg="6"
+                  size-xl="6"
+                >
+                  <mat-form-field
+                    class="example-full is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Size</mat-label>
+                    <mat-select formControlName="sizes" required>
+                      <mat-option
+                        *ngFor="let size of size"
+                        [value]="size.value"
+                      >
+                        {{ size.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="firstForm.controls['sizes'].invalid"
+                      >Please Select Size!</mat-error
+                    >
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="6"
+                  size-lg="6"
+                  size-xl="6"
+                >
+                  <mat-form-field
+                    class="example-full is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Country</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="Country"
+                      formControlName="country"
+                    />
+                    <mat-error *ngIf="firstForm.controls['country'].invalid"
+                      >Country is required!
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="6"
+                  size-md="6"
+                  size-lg="6"
+                  size-xl="6"
+                >
+                  <mat-form-field
+                    class="example-full is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Website</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="Website"
+                      formControlName="website"
+                    />
+                    <mat-error *ngIf="firstForm.controls['website'].invalid"
+                      >Website is required!
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12" class="ion-text-center">
+                  <button
+                    mat-raised-button
+                    type="submit"
+                    matStepperNext
+                    id="sign-up"
+                    color="primary"
+                  >
+                    Next
+                  </button>
+                </ion-col>
+              </ion-row>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="setupwizardForm">
+            <ng-template matStepLabel>Admin Information</ng-template>
+            <h3 class="text-center title mt-2 mb-3">Admin Information</h3>
+            <form [formGroup]="setupwizardForm" autocomplete="off">
+              <ion-row class="mb-2">
+                <ion-col
+                  size="12"
+                  size-sm="12"
+                  size-md="12"
+                  size-lg="12"
+                  size-xl="12"
+                >
+                  <mat-form-field
+                    class="example-full-width is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Full Name</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="Full Name"
+                      formControlName="name"
+                    />
+                    <mat-error *ngIf="setupwizardForm.controls['name'].invalid">
+                      <span *ngIf="setupwizardFormControls.name.errors.required"
+                        >Full Name is required</span
+                      >
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="12"
+                  size-md="12"
+                  size-lg="12"
+                  size-xl="12"
+                >
+                  <mat-form-field
+                    class="example-full-width is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>User Name</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="User Name"
+                      formControlName="username"
+                    />
+                    <mat-error
+                      *ngIf="setupwizardForm.controls['username'].invalid"
+                      >User Name is required!</mat-error
+                    >
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="12"
+                  size-md="12"
+                  size-lg="12"
+                  size-xl="12"
+                >
+                  <mat-form-field
+                    class="example-full-width is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Admin Email</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="Admin Email"
+                      formControlName="email"
+                    />
+                    <mat-error
+                      *ngIf="setupwizardForm.controls['email'].invalid"
+                    >
+                      <span
+                        *ngIf="setupwizardFormControls.email.errors.required"
+                        >Organization Email is required</span
+                      >
+                    </mat-error>
+                    <mat-error
+                      *ngIf="setupwizardForm.get('email').hasError('email')"
+                    >
+                      Email must be a valid!
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="12"
+                  size-md="12"
+                  size-lg="12"
+                  size-xl="12"
+                >
+                  <mat-form-field
+                    class="example-full-width is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Phone</mat-label>
+                    <input
+                      class="inputfield"
+                      type="text"
+                      matInput
+                      placeholder="Phone"
+                      maxlength="10"
+                      formControlName="phone"
+                    />
+                    <mat-error
+                      *ngIf="setupwizardForm.controls['phone'].invalid"
+                    >
+                      <span
+                        *ngIf="setupwizardFormControls.phone.errors.required"
+                        >Phone is required</span
+                      >
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- <div class="errorDiv" *ngIf="setupwizardFormControls.phone.touched">
+                      <label class="label-style"
+                        [ngClass]="setupwizardFormControls.phone.hasError('pattern') || signupFormControls.phone.hasError('minlength')  ? 'text-danger' : 'is-d-none'">
+                        Phone number is Invalid!
+                      </label>
+                    </div> -->
+                </ion-col>
+
+                <ion-col
+                  size="12"
+                  size-sm="12"
+                  size-md="12"
+                  size-lg="12"
+                  size-xl="12"
+                >
+                  <mat-form-field
+                    class="example-full-width is-signUp"
+                    appearance="outline"
+                  >
+                    <mat-label>Connection Password</mat-label>
+                    <input
+                      class="inputfield"
+                      #password
+                      [type]="hide ? 'password' : 'text'"
+                      matInput
+                      placeholder="Connection Password"
+                      formControlName="password"
+                    />
+                    <span
+                      class="password-icon"
+                      mat-icon-button
+                      matSuffix
+                      (click)="hide = !hide"
+                      [attr.aria-label]="'Hide password'"
+                      [attr.aria-pressed]="hide"
+                    >
+                      <mat-icon class="eyeicon text-blue">{{
+                        hide ? "visibility_off" : "visibility"
+                      }}</mat-icon>
+                    </span>
+                    <mat-error
+                      *ngIf="setupwizardForm.controls['password'].invalid"
+                    >
+                      <span
+                        *ngIf="setupwizardFormControls.password.errors.required"
+                        >Password is required</span
+                      ></mat-error
+                    >
+                  </mat-form-field>
+                  <div
+                    class="errorDiv"
+                    *ngIf="setupwizardFormControls.password.touched"
+                  >
+                    <label
+                      class="label-style"
+                      [ngClass]="
+                        setupwizardFormControls.password.hasError('pattern')
+                          ? 'text-danger'
+                          : 'is-d-none'
+                      "
+                    >
+                      Password should be atleast 8 characters long and should
+                      contain one number,one character and one special
+                      character!
+                    </label>
+                  </div>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="12" class="ion-text-center">
+                  <button
+                    mat-raised-button
+                    type="submit"
+                    matStepperNext
+                    id="sign-up"
+                    color="primary"
+                  >
+                    Next
+                  </button>
+                </ion-col>
+              </ion-row>
+            </form>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Storage information</ng-template>
+            <h3 class="text-center title mt-2 mb-3">Storage Information</h3>
+            <!-- <p>You are now done.</p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button (click)="stepper.reset()">Reset</button>
+            </div> -->
+            <ion-row>
+              <form [formGroup]="storageForm" autocomplete="off">
+                <ion-row class="ion-text-center">
+                  <ion-col size="12" class="ion-text-center radioinputs">
+                    <mat-radio-group
+                      color="primary"
+                      aria-label="Select an option"
+                      class="ion-text-center"
+                    >
+                      <mat-radio-button
+                        class="px-8"
+                        value="Local"
+                        (click)="OnselectDatafolder()"
+                        >Data Folder</mat-radio-button
+                      >
+                      <mat-radio-button
+                        class="px-4"
+                        value="Minio"
+                        (click)="OnselectMinio()"
+                        >Minio Server</mat-radio-button
+                      >
+                    </mat-radio-group>
+                    <ion-col
+                      size="12"
+                      size-sm="12"
+                      size-md="12"
+                      size-lg="12"
+                      size-xl="12"
+                      class="ion-text-center"
+                    >
+                      <mat-form-field
+                        *ngIf="datafolderinput"
+                        class="example-full-width mt-4 px-4"
+                        appearance="outline"
+                      >
+                        <mat-label>Enter Folder Path</mat-label>
+                        <input
+                          class="inputfield"
+                          type="text"
+                          matInput
+                          placeholder="Enter Folder Path"
+                          formControlName="path"
+                        />
+                        <mat-error *ngIf="storageForm.controls['path'].invalid">
+                          Plese Enter Data Folder Path!
+                        </mat-error>
+                      </mat-form-field>
+                      <mat-form-field
+                        *ngIf="minioinput"
+                        class="example-full-width mt-4 px-4"
+                        appearance="outline"
+                      >
+                        <mat-label>Enter Server Path</mat-label>
+                        <input
+                          class="inputfield"
+                          type="text"
+                          matInput
+                          placeholder="Enter Server Path"
+                          formControlName="minio"
+                        />
+                        <mat-error
+                          *ngIf="storageForm.controls['minio'].invalid"
+                        >
+                          Please Enter Minio Path!
+                        </mat-error>
+                      </mat-form-field>
+                    </ion-col>
+                  </ion-col>
+                </ion-row>
+              </form>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center mt-4">
+                <button
+                  mat-raised-button
+                  type="submit"
+                  matStepperNext
+                  id="sign-up"
+                  color="primary"
+                  (click)="stepper.reset()"
+                >
+                  Finish
+                </button>
+              </ion-col>
+            </ion-row>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

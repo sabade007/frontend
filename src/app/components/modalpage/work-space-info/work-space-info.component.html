@@ -1,0 +1,86 @@
+<div id="searchDiv" class="modalbox1">
+  <div class="modalheader is-topStickyHeader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+    <h1 class="heading mb-0 mt-1">Workspace</h1>
+  </div>
+  <!-- <ion-row>
+    <ion-col size="11" class="ion-text-center heading">
+      <h2>Workspace</h2>
+    </ion-col>
+    <ion-col size="1">
+      <a class="clearicon" mat-icon-button (click)="closepopup()">
+        <ion-icon name="close-outline"></ion-icon>
+      </a>
+    </ion-col>
+  </ion-row> -->
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="2" size-sm="2" size-md="2" size-lg="2" size-xl="2" class="is-d-flex is-justify-content-start profileimg1">
+        <span class="is-position-relative _proText">
+          <button class="mx-2 _Updateprofile"
+            [ngClass]="WorkSpaceName.substring(0) | titlecase" mat-mini-fab>
+            {{ WorkSpaceName.substring(0, 2) | titlecase }}
+          </button>
+        </span>
+      </ion-col>
+      <ion-col size="10" size-sm="10" size-md="10" size-lg="10" size-xl="10" class="is-d-flex is-justify-content-start">
+        <a class="folder">
+          <h5 class="is-fileName is-d-flex is-justify-content-start">{{WorkSpaceName | titlecase}}</h5>
+          <p> 
+            <span class="is-folderDetails is-d-flex is-justify-content-start ">Owner : {{workSpaceOwner | titlecase}},  Contact : {{contactCount}}</span>
+          </p>
+        </a>
+      </ion-col>
+    </ion-row>
+
+    <ion-row size="12" *ngIf="!editPermission">
+      <ion-col size="12" size-sm="12" size-md="6" size-lg="4" size-xl="4" class="my-2"
+        *ngFor="let list of contactsList; index as i" >
+        <mat-card>
+          <div>
+            <ion-row size="12">
+              <ion-col size="2" class="px-0 is-sharedSection">
+                <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+                  <span class="is-circle bg-blue-6">{{list.fullName | titlecase | slice:0:1}}</span>
+                </div>
+              </ion-col>
+              <ion-col size="10" class="text-left">
+                <span class="_userName">{{list.fullName | titlecase}}</span>
+                <span class="_userEmail" [matTooltip] = "list.mailId">{{list.mailId}}</span>
+              </ion-col>
+            </ion-row>
+          </div>
+        </mat-card>
+      </ion-col>
+    </ion-row>
+    <ion-row size="12">
+      <div class="_list" *ngIf="editPermission">
+        <div *ngFor="let list of contactsList; index as i" class="_userList">
+          <ion-row>
+            <ion-col size="1" class="px-0 is-sharedSection">
+              <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+                <span class="is-circle bg-blue-6">{{list.userName | titlecase | slice:0:1}}</span>
+              </div>
+            </ion-col>
+            <ion-col size="8" class="text-left">
+              <span class="_userName" [matTooltip]="list.userName">{{list.userName | titlecase}}</span>
+              <span class="_userEmail" [matTooltip]="list.mailId">{{list.mailId}}</span>
+            </ion-col>
+            <ion-col size="3" *ngIf="list.permissions != 'OWNER'">
+              <mat-form-field appearance="outline">
+                <mat-select [(value)]="list.permissions">
+                  <mat-option *ngFor="let permission of Userpermission"
+                    (click)="OnupdatePermissions(permission.value , list.userName)" [value]="permission.value">
+                    {{permission.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </ion-row>
+  </div>
+</div>

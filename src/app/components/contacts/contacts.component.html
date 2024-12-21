@@ -1,0 +1,1093 @@
+<ion-grid class="is-paddingMain is-fullwidth">
+
+  <div *ngIf="listContact || listGroups">
+    <ion-row class="ion-justify-content-between">
+      <ion-col
+        size="3"
+        size-sm="12"
+        size-md="3"
+        size-lg="3"
+        size-xl="3"
+        class="is-d-flex is-align-items-center is-justify-content-start newcontactBtn">
+        <button mat-raised-button id="btn1" *ngIf="listContact" (click)="OnCreateContact()" class="mt-3 panel-menu" color="primary" style="font-weight: 600"
+          matTooltip="Add New Contact">
+          <span class="material-icons-outlined mr-2">add</span>New Contact
+        </button>
+        <button mat-raised-button id="btn2" *ngIf="listContact" (click)="OnCreateContact()" class="mt-3 panel-menu" color="primary" style="font-weight: 600"
+          matTooltip="Add New Contact">
+          <span class="material-icons-outlined">add</span>
+        </button>
+        <button mat-raised-button id="btn1" *ngIf="listGroups" (click)="OnCreateGroups()" class="mt-3 panel-menu" color="primary" style="font-weight: 600"
+          matTooltip="Add New Group">
+          <span class="material-icons-outlined mr-2">add</span>New Group
+        </button>
+        <button mat-raised-button id="btn2" *ngIf="listGroups" (click)="OnCreateGroups()" class="mt-3 panel-menu" color="primary" style="font-weight: 600"
+          matTooltip="Add New Group">
+          <span class="material-icons-outlined">add</span>
+        </button>
+      </ion-col>
+      <ion-col
+        size="9"
+        size-sm="9"
+        size-md="6"
+        size-lg="6"
+        size-xl="6"
+        class="is-d-flex is-justify-content-center mt-4">
+        <mat-form-field class="example-form-field" appearance="outline" *ngIf="listContact">
+          <mat-label>Search Contact</mat-label>
+          <input matInput type="text" [(ngModel)]="searchValue" (keyup)="OnSearchValue(searchValue)" autocomplete="off"/>
+          <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear"(click)="OncancelSearch(); searchValue = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field class="example-form-field" appearance="outline" *ngIf="listGroups">
+          <mat-label>Search Group</mat-label>
+          <input matInput type="text" [(ngModel)]="searchValue" (keyup)="OnSearchGroup(searchValue)" autocomplete="off"/>
+          <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear"(click)="OncancelSearch1(); searchValue = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </ion-col>
+      <ion-col
+        size="3"
+        size-sm="1.5"
+        size-md="1.5"
+        size-lg="1.5"
+        size-xl="1.5"
+        class="is-d-flex is-align-items-center is-justify-content-center iconbtn"
+      >
+        <span
+          matRipple
+          id="step14"
+          class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="List View"
+          *ngIf="fileGridView"
+          (click)="fileListViewShow()"
+        >
+          <mat-icon
+            class="material-icons-outlined text-darkgray"
+            [ngClass]="fileListView ? 'text-blue' : 'text-dark'"
+          >
+            format_list_bulleted</mat-icon
+          >
+        </span>
+        <span
+          matRipple
+          id="step14"
+          class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="Grid View"
+          *ngIf="fileListView"
+          (click)="fileGridViewShow()"
+        >
+          <mat-icon
+            class="material-icons-outlined text-darkgray"
+            [ngClass]="fileGridView ? 'text-blue' : 'text-dark'"
+          >
+            grid_view</mat-icon
+          >
+        </span>
+      </ion-col>
+      <ion-col
+        size="1"
+        size-sm="1.5"
+        size-md="1.5"
+        size-lg="1.5"
+        size-xl="1.5"
+        class="backbtnnn"
+      >
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          id="btn1"
+          style="margin-top: 1.5rem;"
+          (click)="goToDashboard()"
+          color="primary"
+          class="backbtn"
+        >
+          <span class="material-icons-outlined mr-2">arrow_back</span>Back
+        </button>
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          id="btn2"
+          (click)="goToDashboard()"
+          color="primary"
+          style="margin-right: 40px !important;"
+          class="backbtn2"
+        >
+          <span class="material-icons-outlined">arrow_back</span>
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" size-sm="12" size-md="6" size-lg="4" size-xl="6"  class="px-1 is-d-flex is-align-items-center tabs">
+        <tui-tabs>
+          <button tuiTab class="shared" [ngClass]="{ 'text-blue': listContact }"
+            (click)="OnShowContact()">Contacts
+          </button>
+          <button tuiTab class="mx-4 shared" [ngClass]="{ 'text-blue': listGroups }"
+            (click)="OnShowGroups()">Groups
+          </button>
+        </tui-tabs>
+      </ion-col>
+    </ion-row>
+    <mat-divider></mat-divider>
+    
+    <div *ngIf = "isLoadingContacts" class="d-flex justify-content-center">
+      <img class="img-center" src="assets/images/icons/loader1.gif" alt="{{ productName }}">
+    </div>
+
+    <div *ngIf="listContact && !isLoadingContacts">
+      <ion-content style="height: calc(100vh - 275px);overflow: auto;--ion-background-color: #ffff !important;">
+      <ion-row>
+        <ion-col size="12">
+          <div *ngIf="showIcon && contactList == 0" class="text-center">
+            <div
+              class="
+                is-d-flex
+                is-align-items-center
+                is-justify-content-center
+                is-flex-column
+                is-fullwidth
+              "
+            >
+              <mat-icon class="material-icons-outlined is-trashIcon"
+                >people</mat-icon
+              >
+              <h2 class="text-secondary">There are no contacts yet</h2>
+              <p class="is-fontMedium text-secondary">
+                Create Contacts by clicking the button New Contact
+              </p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      
+      <div *ngIf="fileGridView">
+      <ion-grid>
+      <ion-row
+        class="my-2"
+        style="margin-bottom: 1rem !important"
+        >
+        <ion-col
+          size="12"
+          size-sm="12"
+          size-md="6"
+          size-lg="4"
+          size-xl="4"
+          class="my-2 animated fadeInLeft"
+          *ngFor="let list of contactList; let idx = index"
+        >
+          <mat-card class="cursor-pointer px-0 pt-0 pb-0 card">
+            <div class="document-card image-thumb" [matTooltip]="list.title">
+              <button
+                mat-icon-button
+                matTooltip="More actions"
+                class="is-moreMenu"
+                [matMenuTriggerFor]="moreMenu"
+                #trigger="matMenuTrigger"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="OnViewContact(list)">
+                  <mat-icon class="material-icons-filled">visibility</mat-icon>
+                  <span>View Contact</span>
+                </button>
+                <button mat-menu-item (click)="OnEditContact(list)">
+                  <mat-icon class="material-icons-filled">edit</mat-icon>
+                  <span>Edit Contact</span>
+                </button>
+                <button mat-menu-item (click)="OnDelete(list.id)">
+                  <mat-icon class="material-icons-filled">delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+              <a class="is-documentSection">
+                <ion-row>
+                  <ion-col
+                    size="2"
+                    size-sm="2"
+                    size-md="2"
+                    size-lg="3"
+                    size-xl="3"
+                  >
+                    <div class="is-header">
+                      <span
+                        class="is-position-relative _proText mt-4"
+                        *ngIf="list.contactImgSrc == null || list.contactImgSrc == '' || list.contactImgSrc == '' || list.contactImgSrc == 'null'">
+                        <button
+                          [matTooltip]="list.firstName | titlecase"
+                          class="mx-2 profile-btn"
+                          [ngClass]="
+                            list['firstName'].substring(0, 1) | titlecase
+                          "
+                          mat-mini-fab
+                        >
+                          {{ list["firstName"].substring(0, 1) | titlecase }}
+                        </button>
+                      </span>
+                      <div
+                      *ngIf="!(list.contactImgSrc == null || list.contactImgSrc == '' || list.contactImgSrc == '' || list.contactImgSrc == 'null')">
+                        <img
+                          [src]="list.contactImgSrc"
+                          class="_profileImage mt-4" onerror="this.src='assets/images/default-contact.png';"
+                          alt="{{ productName }}" 
+                        />
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-col
+                    size="10"
+                    size-sm="10"
+                    size-md="8"
+                    size-lg="8"
+                    size-xl="8"
+                  >
+                    <span
+                      class="
+                        text-lightgray
+                        justify-align-center
+                        _GVnameAlign
+                        mt-4
+                      "
+                      matTooltip="{{ list.firstName }}{{' '}}{{list.lastName }}"
+                      >{{ list.firstName }}{{' '}}{{ list.lastName }}</span
+                    >
+  
+                    <br />
+                    <span
+                      class="text-darkgray is-fontMedium _emailAlignn mb-4"
+                      matTooltip="{{ list.mailId }}"
+                      >{{ list.mailId }}</span
+                    ><br/>
+                  </ion-col>
+  
+                  <button
+                  mat-button
+                  class="_inviteBtngrid"
+                  (click)="OnInvite(list.id)"
+                  *ngIf="showInvite &&
+                    list.etherosUser == false &&
+                    list.inviteStatus == false &&
+                    list.validEmail 
+                  "
+                >
+                  Invite
+                </button>
+                  <button
+                      mat-button
+                      class="_invitedBtngrid"
+                      (click)="OnInvite(list.id)"
+                      *ngIf="showInvite &&
+                        list.etherosUser == false && list.inviteStatus == true
+                      "
+                    >
+                      Invited
+                    </button>
+                    <!-- <button
+                      mat-button
+                      class="_correctBtngrid"
+                      (click)="OnEditContact(list)"
+                      *ngIf="
+                        list.etherosUser == false &&
+                        list.inviteStatus == false &&
+                        !list.validEmail
+                      "
+                    >
+                      Check mail !
+                    </button> -->
+                </ion-row>
+              </a>
+            </div>
+          </mat-card>
+        </ion-col>
+      </ion-row>
+        </ion-grid>
+        <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+          <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </div>
+    
+      
+      <!-- <div class="fileListView" *ngIf="fileListView"> -->
+        <ion-row class="my-2" *ngIf="fileListView">
+          <ion-col
+            size="12"
+            style="
+              border: 0px solid #dcdddf;
+              border-radius: 5px;
+              margin-bottom: 20px;
+            "
+          >
+          <ion-list>
+            <ion-row
+              class="bg-white is-fileList animated fadeInLeft"
+              *ngFor="let list of contactList; let idx = index"
+            >
+              <ion-col size="2" size-sm="2" size-md="2" size-lg="2" size-xl="2" style="margin-top: -6px;">
+                <div class="is-header">
+                  <span
+                    class="is-position-relative _proText mt-4"
+                    *ngIf="list.contactImgSrc == 'data:image/png;base64,null' ||
+                      list.contactImgSrc == 'data:image/png;base64,' || list.contactImgSrc == null || list.contactImgSrc == '' || list.contactImgSrc == '' || list.contactImgSrc == 'null'">
+                    <button
+                      [matTooltip]="list.firstName | titlecase"
+                      class="mx-2 profile-btn"
+                      [ngClass]="list['firstName'] | titlecase | slice:0:1"
+                      mat-mini-fab
+                    >
+                      {{ list["firstName"] | titlecase | slice:0:1 }}
+                    </button>
+                  </span>
+                  <div
+                    *ngIf="!(list.contactImgSrc == 'data:image/png;base64,null' ||
+                      list.contactImgSrc == 'data:image/png;base64,' || list.contactImgSrc == null || list.contactImgSrc == '' || list.contactImgSrc == '' || list.contactImgSrc == 'null')">
+                    <img [src]="list.contactImgSrc" class="_profileImage mt-4"  onerror="this.src='assets/images/default-contact.png';" alt="{{ productName }}"
+                    />
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size="5" size-sm="5" size-md="5" size-lg="6" size-xl="6" style="margin-top:  -14px;">
+                <span
+                  class="text-lightgray justify-align-center _nameAlign mt-4"
+                  matTooltip="{{ list.firstName }}{{' '}}{{ list.lastName}}"
+                  >{{ list.firstName}}{{' '}}{{ list.lastName}}</span
+                >
+                <br />
+                <span
+                  class="text-darkgray is-fontMedium _emailAlign mb-4"
+                  matTooltip="{{ list.mailId }}"
+                  >{{ list.mailId }}</span
+                >
+              </ion-col>
+              <ion-col
+                size="3"
+                size-sm="3"
+                size-md="3"
+                size-lg="3"
+                size-xl="3" style="margin-top: 24px;"
+                class="is-d-flex is-align-items-center"
+              >
+                <button
+                  mat-button
+                  class="_inviteBtn"
+                  (click)="OnInvite(list.id)"
+                  *ngIf="showInvite &&
+                    list.etherosUser == false &&
+                    list.inviteStatus == false && list.mailId != '' || list.mailId == null
+                  "
+                >
+                  Invite
+                </button>
+                <!-- <button
+                  mat-button
+                  class="_correctBtn"
+                  (click)="OnEditContact(list)"
+                  *ngIf="
+                    list.etherosUser == false &&
+                    list.inviteStatus == false &&
+                    !list.validEmail
+                  "
+                >
+                  Check mail
+                </button> -->
+                <button
+                  mat-button
+                  class="_invitedBtn"
+                  (click)="OnInvite(list.id)"
+                  *ngIf="showInvite &&list.etherosUser == false && list.inviteStatus == true"
+                >
+                  Invited
+                </button>
+              </ion-col>
+              <ion-col
+                size="1"
+                size-sm="1"
+                size-md="1.5"
+                size-lg="1"
+                size-xl="1" style="margin-top: -15px;"
+                class="
+                  is-d-flex is-justify-content-center is-align-items-center
+                  px-2
+                  is-rightSide
+                "
+              >
+                <div class="card-header-toolbar">
+                  <button
+                    mat-icon-button
+                    matTooltip="More actions"
+                    class="is-moreMenu"
+                    [matMenuTriggerFor]="moreMenu"
+                    #trigger="matMenuTrigger"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item (click)="OnViewContact(list)">
+                      <mat-icon class="material-icons-filled"
+                        >visibility</mat-icon
+                      >
+                      <span>View Contact</span>
+                    </button>
+                    <button mat-menu-item (click)="OnEditContact(list)">
+                      <mat-icon class="material-icons-filled">edit</mat-icon>
+                      <span>Edit Contact</span>
+                    </button>
+                    <button mat-menu-item (click)="OnDelete(list.id)">
+                      <mat-icon class="material-icons-filled">delete</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-list>
+          <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+            <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+          </ion-col>
+        </ion-row>
+      <!-- </div>  -->
+    
+      </ion-content>
+    </div>
+    
+
+    <div *ngIf="listGroups">
+      <ion-content style="height: calc(100vh - 275px);overflow: auto;--ion-background-color: #ffff !important;">
+      <ion-row *ngIf="GroupListLength == 0 && showIcon">
+        <ion-col size="12">
+          <div class="text-center">
+            <div class=" is-d-flex is-align-items-center is-justify-content-center
+                is-flex-column is-fullwidth">
+              <mat-icon class="material-icons-outlined is-trashIcon">groups</mat-icon>
+              <h2 class="text-secondary">There are no groups yet</h2>
+              <p class="is-fontMedium text-secondary">
+                Create groups by clicking the button New Group
+              </p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <div *ngIf="fileGridView">
+      <ion-grid>
+      <ion-row class="my-2 animated fadeInLeft" style="margin-bottom: 1rem !important" *ngIf="GroupListLength != 0">
+        <ion-col size="12" size-sm="12" size-md="6" size-lg="4" size-xl="4" class="my-2"
+          *ngFor="let list of GroupList; let idx = index">
+          <mat-card class="cursor-pointer px-0 pt-0 pb-0 card1">
+            <div class="document-card image-thumb" [matTooltip]="list.title">
+              <button mat-icon-button  matTooltip="More actions" class="is-moreMenu"
+                [matMenuTriggerFor]="moreMenu" #trigger="matMenuTrigger">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="OnViewGroup(list.groupId)">
+                  <mat-icon class="material-icons-filled">visibility</mat-icon>
+                  <span>Group Details</span>
+                </button>
+                <!-- <button mat-menu-item (click)="OnEditGroup(list.groupId)">
+                  <mat-icon class="material-icons-filled">edit</mat-icon>
+                  <span>Edit Group</span>
+                </button> -->
+                <button mat-menu-item (click)="OnDeleteGroup(list.groupId)">
+                  <mat-icon class="material-icons-filled">delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+              <a class="is-documentSection" (dblclick)="OnViewGroup(list.groupId)">
+                <ion-row>
+                  <ion-col size="2" size-sm="2" size-md="2" size-lg="3" size-xl="3">
+                    <div class="is-header">
+                      <span class="is-position-relative _proText mt-4"
+                        *ngIf="list.contactImgSrc == 'data:image/png;base64,null' ||
+                        list.contactImgSrc == 'data:image/png;base64,' || list.groupIcon == null || list.groupIcon == '' || contactImgSrc == '' || contactImgSrc == 'null'">
+                        <button [matTooltip]="list.groupName | titlecase" class="mx-2 profile-btn"
+                          [ngClass]="list.groupName.substring(0, 1)| titlecase" mat-mini-fab>
+                          {{ list.groupName.substring(0, 1) | titlecase }}
+                        </button>
+                      </span>
+                      <div *ngIf="!(list.contactImgSrc == 'data:image/png;base64,null' ||
+                      list.contactImgSrc == 'data:image/png;base64,' || list.groupIcon == null || list.groupIcon == '' || contactImgSrc == '' || contactImgSrc == 'null')">
+                        <img [src]="list.groupIcon" class="_profileImage mt-4" onerror="this.src='assets/images/default-contact.png';" alt="{{ productName }}"/>
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-col size="10" size-sm="10" size-md="8" size-lg="8" size-xl="8">
+                    <span class="text-lightgray justify-align-center _GVnameAlign" style="margin-top: 15px;"
+                      matTooltip="{{ list.groupName }}"
+                      >{{ list.groupName }}</span><br />
+                    <span class="text-darkgray is-fontMedium _emailAlignn mb-4" *ngIf="list.contactCount == 1" style="margin-left: 8px;">{{ list.contactCount }} Contact</span>
+                    <span class="text-darkgray is-fontMedium _emailAlignn mb-4" *ngIf="list.contactCount > 1" style="margin-left: 8px;">{{ list.contactCount }} Contacts</span>
+                  </ion-col>
+                </ion-row>
+              </a>
+            </div>
+          </mat-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData1($event)">
+      <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    </div>
+
+      <div *ngIf="fileListView">
+        <ion-row class="my-2" *ngIf="fileListView">
+          <ion-col size="12" style="border: 0px solid #dcdddf; border-radius: 5px; margin-bottom: 20px;margin-top: -13PX;">
+            <ion-list>
+            <ion-row class="bg-white is-fileList animated fadeInLeft" *ngFor="let list of GroupList; let idx = index">
+              <ion-col size="2" size-sm="2" size-md="2" size-lg="2" size-xl="2"  style="margin-top: -6px;">
+                <div class="is-header">
+                  <span class="is-position-relative _proText mt-4"
+                    *ngIf="list.groupIcon == null || list.groupIcon == '' || contactImgSrc == '' || contactImgSrc == 'null'">
+                    <button
+                      [matTooltip]="list.groupName | titlecase"
+                      class="mx-2 profile-btn"
+                      [ngClass]="list['groupName'].substring(0, 1) | titlecase"
+                      mat-mini-fab>
+                      {{ list["groupName"].substring(0, 1) | titlecase }}
+                    </button>
+                  </span>
+                  <div  *ngIf="!(list.groupIcon == null || list.groupIcon == '' || contactImgSrc == '' || contactImgSrc == 'null')">
+                    <img [src]="list.groupIcon" class="_profileImage mt-4" onerror="this.src='assets/images/default-contact.png';" alt="{{ productName }}"/>
+                  </div>
+                </div>
+              </ion-col>
+              <ion-col size="5" size-sm="5" size-md="5" size-lg="6" size-xl="6"  style="margin-top: -14px;" (dblclick)="OnViewGroup(list.groupId)">
+                <span
+                  class="text-lightgray justify-align-center _nameAlign mt-4"
+                  matTooltip="{{ list.groupName }}"
+                  >{{ list.groupName}}</span
+                >
+                <br />
+                <span class="text-darkgray is-fontMedium _emailAlign mb-4" *ngIf="list.contactCount == 1">{{ list.contactCount }} Contact</span>
+                <span class="text-darkgray is-fontMedium _emailAlign mb-4" *ngIf="list.contactCount > 1">{{ list.contactCount }} Contacts</span>
+              </ion-col>
+              <ion-col size="3" size-sm="3" size-md="3" size-lg="3" size-xl="3" class="is-d-flex is-align-items-center">
+                
+              </ion-col>
+              <ion-col size="1" size-sm="1" size-md="1.5" size-lg="1" size-xl="1"  style="margin-top: -15px;"
+                class="is-d-flex is-justify-content-center is-align-items-center px-2 is-rightSide" style="margin-bottom: 15px;">
+                <div class="card-header-toolbar">
+                  <button
+                    mat-icon-button
+                    matTooltip="More actions"
+                    class="is-moreMenu"
+                    [matMenuTriggerFor]="moreMenu"
+                    #trigger="matMenuTrigger">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item (click)="OnViewGroup(list.groupId)">
+                      <mat-icon class="material-icons-filled">visibility</mat-icon>
+                      <span>Group Details</span>
+                    </button>
+                    <!-- <button mat-menu-item (click)="OnEditGroup(list.groupId)">
+                      <mat-icon class="material-icons-filled">edit</mat-icon>
+                      <span>Edit Group</span>
+                    </button> -->
+                    <button mat-menu-item (click)="OnDeleteGroup(list.groupId)">
+                      <mat-icon class="material-icons-filled">delete</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-list>
+          <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData1($event)">
+            <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+          </ion-col>
+        </ion-row>
+      </div>  
+      </ion-content>
+    </div>
+    
+  </div>
+
+
+
+  <ion-row class="mb-4" *ngIf="editContact">
+    <ion-col
+      class="is-d-flex is-justify-content-center"
+      size="12"
+      size-sm="12"
+      size-md="12"
+      size-lg="12"
+      size-xl="12"
+    >
+      <div class="card-size">
+        <div class="card-body bg-white">
+          <ion-row>
+            <ion-col size="10" size-sm="10" size-md="10" size-lg="10">
+              <div class="is-newcontactList">
+                <div class="is-newcontactItem">
+                  <div class="is-profile">
+                    <div
+                      *ngIf="
+                        contactImgSrc == 'data:image/png;base64,null' ||
+                        contactImgSrc == 'data:image/png;base64,' || contactImgSrc == '' || contactImgSrc == null
+                      "
+                    >
+                      <span class="is-position-relative _proText mt-4">
+                        <button
+                          [matTooltip]="firstName | titlecase"
+                          class="mx-2 _Updateprofile"
+                          [ngClass]="firstName.substring(0, 1) | titlecase"
+                          mat-mini-fab
+                        >
+                          {{ firstName.substring(0, 1) | titlecase }}
+                        </button>
+                      </span>
+                    </div>
+                    <div
+                      *ngIf="
+                        !(
+                          contactImgSrc == 'data:image/png;base64,null' ||
+                          contactImgSrc == 'data:image/png;base64,' || contactImgSrc == '' || contactImgSrc == null
+                        )
+                      "
+                    >
+                      <img
+                        class="_image"
+                        [src]="_d.bypassSecurityTrustUrl(contactImgSrc)"
+                        alt="{{ productName }}"
+                      />
+                    </div>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png"
+                      #fileInputUpload
+                      class="_uploadBtn"
+                      (change)="fileChangeUpdate($event)"
+                    />
+                    <button
+                      mat-icon-button
+                      (click)="fileInputUpload.click()"
+                      class="_Upload"
+                    >
+                      <span class="material-icons-outlined _uploadIcon"
+                        >image</span
+                      >
+                    </button>
+                  </div>
+                  <div class="is-heading">
+                    <p class="mb-0 contact">Update Contact</p>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size="2" size-sm="2" size-md="2" size-lg="2">
+              <button id="btn1"
+                mat-raised-button
+                matTooltip="Back"
+                class="updatebackbtn"
+                (click)="closepopup()"
+                color="primary"
+              >
+                <span class="material-icons-outlined mr-2">arrow_back</span>Back
+              </button>
+              <button id="btn2"
+              mat-raised-button
+              matTooltip="Back"
+              class="updatebackbtn"
+              (click)="closepopup()"
+              color="primary"
+            >
+              <span class="material-icons-outlined">arrow_back</span>
+            </button>
+            </ion-col>
+          </ion-row>
+
+          <div autocomplete="off" class="_contactForm">
+            <ion-row class="mb-2">
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="4"
+                size-lg="4"
+                size-xl="4"
+              >
+                <mat-form-field
+                  class="example-full-width is-contact"
+                  appearance="outline"
+                >
+                  <mat-label>First Name</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="First Name"
+                    [(ngModel)]="firstName"
+                    maxlength="50"
+                    #contactFname="ngModel"
+                    (keydown.enter)="OnUpdateContact()"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"
+                    required
+                  />
+                </mat-form-field>
+                <div
+                  class="md-errors-spacer"
+                  [hidden]="contactFname.valid || contactFname.untouched"
+                >
+                  <div
+                    class="_createError"
+                    *ngIf="contactFname.errors && contactFname.errors.required"
+                  >
+                    First Name is required
+                  </div>
+                </div>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="4"
+                size-lg="4"
+                size-xl="4"
+              >
+                <mat-form-field
+                  class="example-full-width is-contact"
+                  appearance="outline"
+                >
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Last Name"
+                    [(ngModel)]="lname"
+                    maxlength="50"
+                    #contactLname="ngModel"
+                    (keydown.enter)="OnUpdateContact()"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"
+                  />
+                </mat-form-field>
+                <!-- <div
+                  class="md-errors-spacer"
+                  [hidden]="contactLname.valid || contactLname.untouched"
+                >
+                  <div
+                    class="_createError"
+                    *ngIf="contactLname.errors && contactLname.errors.required"
+                  >
+                    Last Name is required
+                  </div>
+                </div> -->
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="4"
+                size-lg="4"
+                size-xl="4"
+              >
+                <mat-form-field class="expiry-date" appearance="outline">
+                  <mat-label>Date of Birth</mat-label>
+                  <input
+                    matInput
+                    id="date"
+                    [matDatepicker]="picker"
+                    [(ngModel)]="dob"
+                    [max]="maxDate"
+                    readonly
+                    (keydown.enter)="OnUpdateContact()"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="6"
+                size-lg="6"
+                size-xl="6"
+              >
+                <mat-form-field
+                  class="example-full-width is-contact"
+                  appearance="outline"
+                >
+                  <mat-label>Phone Number</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Phone Number"
+                    numbersOnly
+                    maxlength="50"
+                    [(ngModel)]="phone"
+                    (keydown.enter)="OnUpdateContact()"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9]|^ /g,'')"
+                  />
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="6"
+                size-lg="6"
+                size-xl="6"
+              >
+                <mat-form-field
+                  class="example-full-width is-contact"
+                  appearance="outline"
+                >
+                  <mat-label>Email</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Email"
+                    #contactemail="ngModel"
+                    maxlength="50"
+                    [(ngModel)]="email"
+                    (keydown.enter)="OnUpdateContact()"
+                    pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                  />
+                </mat-form-field>
+                <mat-error *ngIf="contactForm.get('email').hasError('email')">
+                  Email must be a valid!
+                </mat-error>
+                <div
+                  class="md-errors-spacer"
+                  [hidden]="contactemail.valid || contactemail.untouched"
+                >
+                  <!-- <div
+                    class="_createError"
+                    *ngIf="contactemail.errors && contactemail.errors.required"
+                  >
+                    Email is required
+                  </div> -->
+                  <div
+                    class="_createError"
+                    *ngIf="contactemail.errors && contactemail.errors.pattern"
+                  >
+                    Email is invalid
+                  </div>
+                </div>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="12"
+                size-lg="12"
+                class="ion-text-center mt-2"
+              >
+                <mat-form-field class="example-full" appearance="outline"  *ngIf="address == 'null,null,null,null,null'">
+                  <mat-label>Address (Area or Street)</mat-label> 
+                  <textarea
+                    matInput
+                    (keydown.enter)="OnUpdateContact()"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')"
+                  ></textarea>
+                </mat-form-field>
+                <mat-form-field class="example-full" appearance="outline"  *ngIf="address != 'null,null,null,null,null'">
+                  <mat-label>Address(Area or Street)</mat-label>
+                  <textarea
+                    matInput
+                    [(ngModel)]="address"
+                    (keydown.enter)="OnUpdateContact()"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')"
+                  ></textarea>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col size="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+                <mat-form-field class="example-full-width is-contact" appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input type="text" matInput placeholder="City" [(ngModel)]="city" maxlength="50"
+                    #contactLname="ngModel" (keydown.enter)="OnUpdateContact()"oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"/>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col size="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+                <mat-form-field class="example-full-width is-contact" appearance="outline">
+                  <mat-label>State</mat-label>
+                  <input type="text" matInput placeholder="State" [(ngModel)]="state" maxlength="50"
+                    #contactLname="ngModel" (keydown.enter)="OnUpdateContact()"oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"/>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col size="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+                <mat-form-field class="example-full-width is-contact" appearance="outline">
+                  <mat-label>Country</mat-label>
+                  <input type="text" matInput placeholder="Country" [(ngModel)]="country" maxlength="50"
+                    #contactLname="ngModel" (keydown.enter)="OnUpdateContact()"oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"/>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col size="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+                <mat-form-field class="example-full-width is-contact" appearance="outline">
+                  <mat-label>Postal Code</mat-label>
+                  <input type="text" matInput placeholder="Postal Code" [(ngModel)]="postcode" maxlength="50"
+                    #contactLname="ngModel" (keydown.enter)="OnUpdateContact()" oninput="this.value = this.value.replace(/[^0-9]|^ /g,'')"/>
+                </mat-form-field>
+              </ion-col>
+
+            </ion-row>
+            <ion-row>
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="12"
+                size-lg="12"
+                class="is-d-flex is-justify-content-center"
+              >
+                <button
+                  id="updatebtn"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="
+                  contactemail.errors && contactemail.errors.pattern
+                "
+                  (click)="OnUpdateContact()"
+                >
+                  Update
+                </button>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="is-viewDetails" *ngIf="viewDetails">
+    <ion-col>
+      <div>
+        <ion-row>
+          <div class="is-head">
+            <h3 class="mb-0 is-fileName px-1">Contact Details</h3>
+            <span
+              class="is-d-flex cursor-pointer"
+              (click)="viewDetails = !viewDetails"
+            >
+              <mat-icon class="material-icons-outlined text-dark"
+                >close</mat-icon
+              >
+            </span>
+          </div>
+          <ion-col size="4" class="ion-text-start">
+            <span
+              class="is-position-relative _proText mt-4"
+              *ngIf="
+                contactDetails.contactImgSrc == 'data:image/png;base64,null' ||
+                contactDetails.contactImgSrc == 'data:image/png;base64,'
+              "
+            >
+              <button
+                [matTooltip]="contactDetails['firstName'] | titlecase"
+                class="mx-2 _Updateprofile"
+                [ngClass]="
+                  contactDetails['firstName'].substring(0, 1) | titlecase
+                "
+                mat-mini-fab
+              >
+                {{ contactDetails["firstName"].substring(0, 1) | titlecase }}
+              </button>
+            </span>
+            <div
+              *ngIf="
+                !(
+                  contactDetails.contactImgSrc ==
+                    'data:image/png;base64,null' ||
+                  contactDetails.contactImgSrc == 'data:image/png;base64,'
+                )
+              "
+            >
+              <img
+                [src]="contactDetails.contactImgSrc"
+                class="_profileImageDetails mt-4" onerror="this.src='assets/images/default-contact.png';" alt="{{ productName }}" 
+              />
+            </div>
+          </ion-col>
+          <ion-col size="8" class="ion-text-start mt-3">
+            <span class="_title">Name</span><br />
+            <span class="_titleText" [matTooltip]="contactDetails['firstName']"
+              >{{ contactDetails["firstName"] }}
+              {{ contactDetails["lastName"] }}</span
+            >
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" class="mt-4">
+            <span class="_title" style="margin-left: 1rem">Email</span><br />
+            <span
+              class="_titleText"
+              style="margin-left: 1rem"
+              [matTooltip]="contactDetails.mailId"
+              >{{ contactDetails.mailId }}</span
+            >
+          </ion-col>
+          <ion-col size="12" class="">
+            <span class="_title" style="margin-left: 1rem">Phone</span><br />
+            <span
+              class="_titleText"
+              style="margin-left: 1rem"
+              [matTooltip]="contactDetails.mobileNumber"
+              >{{ contactDetails.mobileNumber }}</span
+            >
+          </ion-col>
+          <ion-col size="12" class="" *ngIf="contactDetails.dob == 'Invalid date'">
+            <span class="_title" style="margin-left: 1rem">Date of Birth</span><br />
+            <span
+              class="_titleText"
+              style="margin-left: 1rem"></span>
+          </ion-col>
+          <ion-col size="12" class="" *ngIf="contactDetails.dob != 'Invalid date'">
+            <span class="_title" style="margin-left: 1rem">Date of Birth</span><br />
+            <span
+              class="_titleText"
+              style="margin-left: 1rem"
+              [matTooltip]="contactDetails['dob']"
+              >{{ contactDetails["dob"] }}</span>
+          </ion-col>
+          <ion-col size="12" class="" *ngIf="contactDetails.address == 'null,null,null,null,null'">
+            <span class="_title" style="margin-left: 1rem">Address</span><br />
+            <span
+              class="_titleTextaddr"
+              style="margin-left: 1rem"
+              [matTooltip]="contactDetails['address']"
+              ></span>
+          </ion-col>
+          <ion-col size="12" class="" *ngIf="contactDetails.address != 'null,null,null,null,null'">
+            <span class="_title" style="margin-left: 1rem">Address</span><br />
+            <span
+              class="_titleTextaddr"
+              style="margin-left: 1rem"
+              [matTooltip]="contactDetails['address']"
+              >{{ contactDetails["address"] }}</span>
+          </ion-col>
+          <ion-col size="12" class="">
+            <span class="_title" style="margin-left: 1rem">City</span><br />
+            <span class="_titleText" style="margin-left: 1rem"
+              [matTooltip]="contactDetails.mobileNumber">{{ contactDetails.city }}</span>
+          </ion-col>
+          <ion-col size="12" class="">
+            <span class="_title" style="margin-left: 1rem">State</span><br />
+            <span class="_titleText" style="margin-left: 1rem"
+              [matTooltip]="contactDetails.mobileNumber">{{ contactDetails.state }}</span>
+          </ion-col>
+          <ion-col size="12" class="">
+            <span class="_title" style="margin-left: 1rem">Country</span><br />
+            <span class="_titleText" style="margin-left: 1rem"
+              [matTooltip]="contactDetails.mobileNumber">{{ contactDetails.country }}</span>
+          </ion-col>
+          <ion-col size="12" class="">
+            <span class="_title" style="margin-left: 1rem">Postal Code</span><br />
+            <span class="_titleText" style="margin-left: 1rem"
+              [matTooltip]="contactDetails.mobileNumber">{{ contactDetails.postcode }}</span>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

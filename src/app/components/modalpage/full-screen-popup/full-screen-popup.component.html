@@ -1,0 +1,15 @@
+<div class="modalbox">
+
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+  </div>
+
+  <iframe id="output_frame" referrerpolicy="no-referrer" name="my_iframe" allow="fullscreen; display-capture; autoplay" src="" style="height: 100%; width: 100%; border: 0px;" title=""></iframe>
+
+  <form #editor [action]="action" method="POST" target="my_iframe">
+    <input type="hidden" name="access_token" [value]="token" />
+    <input style="display: none" type="hidden" type="submit" [value]="btn" />
+  </form>
+</div>

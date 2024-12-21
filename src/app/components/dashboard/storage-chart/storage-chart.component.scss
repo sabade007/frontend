@@ -1,0 +1,147 @@
+@import "../../../../appVariable.scss";
+
+.card-body {
+  margin-right: 1rem;
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1.25rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+#chart {
+  width: 400px;
+  height: 400px;
+}
+
+._TitleUnderLine {
+  border-bottom: 2px solid rgb(126, 144, 230);
+  width: 60px;
+  margin-bottom: 1rem;
+}
+
+._storage {
+  display: block;
+  text-align: center;
+}
+._storage {
+  display: inline-block;
+  border: 1px solid green;
+  width: 10px;
+  height: 10px;
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+}
+._totalSpace {
+  margin-top: 2rem;
+  background: greenyellow;
+}
+
+._freeSpace {
+  background: #5400b8;
+}
+._usedSpace {
+  background: #fa4b53;
+}
+
+.is-widget {
+  margin-top: -0.3rem;
+  margin-bottom: 2.5rem;
+  .is-circle {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #fff;
+    border-radius: 50%;
+    margin: 0px;
+  }
+  .mat-icon {
+    background-repeat: no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    height: 20px;
+    width: 20px;
+  }
+  .material-icons-outlined {
+    font-size: 20px;
+  }
+}
+
+._countTitle {
+  color: #969494;
+  font-size: 1rem;
+}
+._countSub {
+  font-size: 0.9rem;
+}
+
+@-moz-document url-prefix() {
+  ._subText {
+    text-align: left;
+    margin-left: 0.3rem !important;
+  }
+  ._subQuotaText {
+    text-align: left;
+    margin-left: 0.5rem !important;
+  }
+}
+._storageInPercent {
+  font-size: 15px;
+  margin-top: 9px;
+}
+._progressbar {
+  height: 10px;
+  width: 98%;
+  border-radius: 10px;
+}
+.is-circle2 {
+  height: 28px;
+  width: 28px;
+  padding: 4px;
+  background: #568bb7 0% 0% no-repeat padding-box;
+  border-radius: 8px;
+  opacity: 0.68;
+  .material-icons {
+    font-size: 20px;
+  }
+}
+.is-circle3 {
+  height: 28px;
+  width: 27px;
+  padding: 4px;
+  background: #1D5686 0% 0% no-repeat padding-box;
+  border-radius: 8px;
+  opacity: 0.68;
+  .material-icons {
+    font-size: 20px;
+  }
+}
+.is-circle4 {
+  height: 28px;
+  width: 27px;
+  padding: 4px;
+  background: #cc6933 0% 0% no-repeat padding-box;
+
+  border-radius: 8px;
+  opacity: 0.68;
+  .material-icons {
+    font-size: 20px;
+  }
+}
+.font {
+  margin: 3px;
+  font: 400 16px/21px Roboto, "Helvetica Neue", sans-serif;
+}
+.font2 {
+  font: 400 14px/20px Roboto, "Helvetica Neue", sans-serif;
+  margin: 3px;
+  letter-spacing: 0px;
+  color: #6d6d6d;
+}

@@ -1,0 +1,116 @@
+<ion-app>
+  <ion-router-outlet></ion-router-outlet>
+  <!-- <ngx-ui-loader></ngx-ui-loader> -->
+  <!-- <ngx-ui-loader></ngx-ui-loader> -->
+  <div class="container-fluid">
+    <div>
+      <ion-row *ngIf="uploadLoader">
+        <ion-col class="is-d-flex is-justify-content-end">
+          <div class="is-uploadProgress">
+            <div class="is-head">
+              <h3
+                class="mb-0 px-1 text-white _header"
+                *ngIf="
+                  headerUploadcompleted && multiUploadedFiles.length > '1'
+                "
+              >
+                {{ multiUploadedFiles.length }} Files Upload Complete
+              </h3>
+              <h3
+                class="mb-0 px-1 text-white _header"
+                *ngIf="
+                  headerUploadcompleted && multiUploadedFiles.length == '1'
+                "
+              >
+                {{ multiUploadedFiles.length }} File Upload Complete
+              </h3>
+              <h3
+                class="mb-0 px-1 text-white _header"
+                *ngIf="
+                  headerUploadProgress && multiUploadedFiles.length == '1'
+                "
+              >
+                Uploading {{ multiUploadedFiles.length }} File
+              </h3>
+              <h3
+                class="mb-0 px-1 text-white _header"
+                *ngIf="
+                  headerUploadProgress && multiUploadedFiles.length > '1'
+                "
+              >
+                Uploading {{ multiUploadedFiles.length }} Files
+              </h3>
+              <div class="is-d-flex is-justify-content-end">
+                <button
+                  mat-mini-fab
+                  class="bg-white is-icon mx-1"
+                  *ngIf="OntogglePopup"
+                  (click)="OntoggleLoaderpopUp()"
+                  matTooltip="Minimize"
+                >
+                  <mat-icon class="material-icons-outlined text-black"
+                    >expand_more</mat-icon
+                  >
+                </button>
+                <button
+                  mat-mini-fab
+                  class="bg-white is-icon mx-1"
+                  (click)="OntoggleLoaderpopUp()"
+                  *ngIf="!OntogglePopup"
+                  matTooltip="Maximize"
+                >
+                  <mat-icon class="material-icons-outlined text-black"
+                    >expand_less</mat-icon
+                  >
+                </button>
+                <button
+                  mat-mini-fab
+                  class="bg-white is-icon mx-1"
+                  matTooltip="Close"
+                  (click)="OncancelUploadbox()"
+                >
+                  <mat-icon class="material-icons-outlined text-black"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+            </div>
+            <div class="is-body" id="toggle">
+              <div *ngFor="let files of multiUploadedFiles; index as i">
+                <div class="is-uploadItem">
+                  <span class="is-d-flex">
+                    <mat-icon class="material-icons-outlined text-darkgray"
+                      >image</mat-icon
+                    >
+                  </span>
+                  <p class="mb-0 is-fileName" matTooltip="{{ files.name }}">
+                    {{ files.name }}
+                  </p>
+                  <span class="percentDone">{{ files.percentDone }} %</span>
+                  <span
+                    *ngIf="files.Uploadcompleted"
+                    matTooltip="Uploaded successfully"
+                  >
+                    <button
+                      mat-mini-fab
+                      id="done"
+                      class="bg-success is-icon mx-1"
+                    >
+                      <mat-icon class="material-icons-outlined text-white"
+                        >done</mat-icon
+                      >
+                    </button>
+                  </span>
+                </div>
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="files.percentDone"
+                ></mat-progress-bar>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+</ion-app>

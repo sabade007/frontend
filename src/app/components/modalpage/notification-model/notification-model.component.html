@@ -1,0 +1,35 @@
+<div class="modalbox">
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()"> X</a>
+    <h1 class="heading mb-0 mt-1">Notification message</h1>
+  </div>
+
+  <!-- <ion-row>
+    <ion-col size="6" class="ion-text-center"> Notifications </ion-col>
+    <ion-col size="6" class="ion-text-center"> date </ion-col>
+  </ion-row> -->
+
+  <ion-row>
+    <ion-col size="2" class="is-d-flex is-justify-content-center">
+      <span class="material-icons is-trashIcon">notifications_active</span>
+    </ion-col>
+    <ion-col size="1"></ion-col>
+    <ion-col size="9" class="is-d-flex is-justify-content-center">
+      <div class="notify is-d-flex is-justify-content-center">
+        <p class="subject text-center">
+          {{ subject }}
+        </p>
+        <div class="parent text-center is-d-flex is-justify-content-center">
+          <span class="message px-2">
+            {{ message }}
+          </span>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-text-center mb-2">
+      <button mat-button class="is-btn bg-blue text-white" (click)="closepopup()">OK</button>
+    </ion-col>
+  </ion-row>
+</div>

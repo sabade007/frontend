@@ -1,0 +1,140 @@
+@mixin for-phone-only {
+  @media (min-width: 320px) and (max-width: 767px) {
+    @content;
+  }
+}
+@mixin for-tablet-only {
+  @media (min-width: 768px) and (max-width: 1199px) {
+    @content;
+  }
+}
+@mixin for-minilaptop-and-up {
+  @media (min-width: 1200px) and (max-width: 5000px) {
+    @content;
+  }
+}
+
+$text-primary: #173d1a;
+$text-info: #3dc2ff;
+$text-warning: #fad35f;
+$text-danger: #f25767;
+$text-darkgray: #8c9195;
+$text-pink: #ef9fc4;
+$text-lightgray: #f3f3f3;
+
+$bg-primary: #7fdd85;
+$bg-white: #fff;
+$bg-info: #3dc2ff;
+$bg-warning: #fad35f;
+$bg-danger: #f25767;
+$bg-darkgray: #8c9195;
+$bg-pink: #ef9fc4;
+$bg-lightgray: #f3f3f3;
+
+.modalbox {
+  width: 500px;
+  height: auto;
+  overflow: hidden;
+}
+.modalheader {
+  font-size: 18px;
+  font-weight: 500;
+  .clearicon {
+    ion-icon {
+      height: 28px;
+      width: 28px;
+      color: #636161;
+      margin: 10px 10px;
+    }
+  }
+}
+.modalbody {
+  padding: 15px 24px !important;
+}
+.msgbody {
+  font-size: 1rem;
+  text-align: center;
+  color: #424242;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.bottomText {
+  font-size: 0.875rem;
+  color: #8f8f8f;
+  margin-top: 1rem;
+}
+.is-btn {
+  font-weight: 500 !important;
+  margin-top: -8px;
+}
+.is-yes {
+  background-color: rgb(40, 167, 69);;
+  color: white;
+}
+// .is-no {
+//   background-color: $bg-danger;
+//   color: white;
+// }
+// .deleteText {
+//   margin-top: 1.5rem;
+// }
+// .checkbox {
+//   font-size: 1rem;
+// }
+// mat-form-field {
+//   width: 100%;
+//   margin-left: 0px;
+//   font-size: 13px;
+// }
+
+.notify {
+  // overflow: auto;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+.subject {
+  // font-size: large;
+  color: #3c39df !important;
+  // font-weight: 500;
+  // margin-bottom: 10px;
+}
+
+.message {
+  width: 300px;
+  color: #000 !important;
+  @include for-phone-only(){
+    width: 220px;
+  }
+  // overflow: auto;
+  // min-height: 150px;
+  // padding: 10px;
+  // margin: 0 10px;
+}
+
+.parent {
+  // width: 80%;
+  // margin-bottom: 10px;
+  // // border: 2px solid #323532;
+  // border-radius: 5px;
+}
+
+.is-trashIcon {
+  width: 10%;
+  height: 106px;
+  font-size: 98px;
+  color: #d2e3fc;
+  font-weight: 100;
+  @include for-phone-only() {
+    width: 100%;
+    height: 75px;
+    font-size: 75px;
+    color: #d2e3fc;
+    font-weight: 100;
+  }
+}

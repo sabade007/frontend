@@ -1,0 +1,24 @@
+<div class="modalbox">
+
+  <div class="modalheader">
+    Delete permanently?
+  </div>
+
+  <div class="modalbody">
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p class="logout">Deleting this workspace cannot be undone. Are you sure you want to delete this workspace?</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <button mat-raised-button class="bg-blue text-white mx-1" (click)="deleteWorkSpace()">Yes</button>
+        <button mat-raised-button class="mx-1 warm" (click)="closepopup()">No</button>
+      </ion-col>
+    </ion-row>
+
+  </div>
+
+</div>

@@ -1,0 +1,43 @@
+<div class="modalbox1">
+
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+    <p class="heading mb-0 mt-1">{{fileTitle}}</p>
+  </div>
+
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center" *ngIf="pdfDataResult == true">
+        <ngx-extended-pdf-viewer
+          [base64Src]="base64file"
+          backgroundColor="#ffffff"
+          [height]="'90vh'"
+          [useBrowserLocale]="true"
+          [handTool]="false"
+          [showHandToolButton]="true">
+        </ngx-extended-pdf-viewer>
+        <button mat-raised-button color="warn" class="mx-1" (click)="closepopup()">Close</button>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center" *ngIf="pdfDataResult == false">
+        <ngx-extended-pdf-viewer
+          [src]="base64file"
+          backgroundColor="#ffffff"
+          [height]="'90vh'"
+          [useBrowserLocale]="true"
+          [handTool]="false"
+          [showHandToolButton]="true">
+        </ngx-extended-pdf-viewer>
+        
+      </ion-col>
+    </ion-row>
+    <div class="actions is-d-flex justify-content-center">
+      <button mat-raised-button  class="mx-1" (click)="closepopup()">Close</button>
+    </div>
+
+  </div>
+
+
+
+</div>

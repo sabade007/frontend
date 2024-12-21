@@ -1,0 +1,157 @@
+@mixin for-phone-only {
+  @media (min-width: 320px) and (max-width: 767px) {
+    @content;
+  }
+}
+@mixin for-tablet-only {
+  @media (min-width: 768px) and (max-width: 1199px) {
+    @content;
+  }
+}
+@mixin for-minilaptop-and-up {
+  @media (min-width: 1200px) and (max-width: 5000px) {
+    @content;
+  }
+}
+
+$text-primary: #7fdd85;
+$text-info: #3dc2ff;
+$text-warning: #fad35f;
+$text-danger: #f25767;
+$text-darkgray: #8c9195;
+$text-pink: #ef9fc4;
+$text-lightgray: #f3f3f3;
+
+$bg-primary: #7fdd85;
+$bg-white: #fff;
+$bg-info: #3dc2ff;
+$bg-warning: #fad35f;
+$bg-danger: #f25767;
+$bg-darkgray: #8c9195;
+$bg-pink: #ef9fc4;
+$bg-lightgray: #f3f3f3;
+
+.photoviewer {
+  @include for-phone-only() {
+    background-color: black !important;
+  }
+  @include for-tablet-only() {
+    background-color: black !important;
+  }
+}
+
+.popup-body {
+  height: 600px !important;
+  // background-color: black !important;
+  padding: 10px !important;
+  border: 0;
+  @include for-phone-only() {
+    height: 250px !important;
+    width: 300px;
+    background-color: #000 !important;
+    padding: 15px !important;
+  }
+  @include for-tablet-only() {
+    background-color: #000 !important;
+    max-height: 350px !important;
+    width: 600px;
+  }
+}
+
+.photo {
+  width: 100%;
+  height: 550px;
+  @include for-phone-only() {
+    width: 250px;
+    height: 200px;
+  }
+  @include for-tablet-only() {
+    justify-content: center;
+    width: 520px;
+    height: 300px;
+  }
+}
+
+.modalheader {
+  font-size: 18px;
+  // background-color: #000 !important;
+  .clearicon {
+    right: 10px;
+    ion-icon {
+      height: 30px;
+      width: 30px;
+      color: #ffffff;
+      margin: 5px 5px;
+      border-radius: 50%;
+      // background: $bg-danger;
+      font-weight: 600;
+    }
+  }
+  .heading {
+    font-weight: 500;
+  }
+}
+::ng-deep {
+  // .popover-wrapper.sc-ion-popover-md {
+  //     @include for-tablet-only(){
+  //         margin-top: 1rem !important;
+  //     }
+  // }
+  .popover-content.sc-ion-popover-md {
+    border-radius: 10px !important;
+    @include for-tablet-only() {
+      background-color: #000 !important;
+    }
+  }
+}
+
+._prevBtn {
+  position: absolute;
+  top: 15rem;
+  background-color: #8a8585;
+  left: 0px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  @include for-phone-only() {
+    top: 4rem;
+  }
+  @include for-tablet-only() {
+    top: 8rem;
+    left: 4%;
+  }
+}
+
+._nextBtn {
+  position: absolute;
+  top: 15rem;
+  background-color: #8a8585;
+  right: 0px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  @include for-phone-only() {
+    top: 4rem;
+  }
+  @include for-tablet-only() {
+    top: 8rem;
+    right: 4%;
+  }
+}
+._disabled {
+  display: none;
+}
+.dimen{
+  height :600px;
+  width :800px;
+}

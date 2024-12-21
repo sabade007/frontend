@@ -1,0 +1,25 @@
+<div class="modalbox">
+
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+  </div>
+
+  <div class="modalbody popup-body1">
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center mt-1" *ngIf="minio == 'not minio'">
+        <audio controls autoplay>
+          <source [src]="url" type="audio/ogg">
+        </audio>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center mt-1" *ngIf="minio == 'minio/resource'">
+        <audio [src]="url" type="audio/ogg" controls autoplay>
+        </audio>
+      </ion-col>
+    </ion-row>
+
+  </div>
+
+</div>

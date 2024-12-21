@@ -1,0 +1,28 @@
+@import "./../../../appVariable.scss";
+
+.notfound1 {
+  width: 30%;
+  @include for-phone-only() {
+    width: 100%;
+  }
+}
+.logo {
+  width: 18%;
+  padding-left: 6px;
+  padding-top: 7px;
+  @include for-phone-only() {
+    width: 40%;
+  }
+}
+.text {
+  font-size: 35px;
+  color: red;
+  font-weight: 600;
+}
+.signinbtn {
+  padding: 15px;
+  @include for-phone-only() {
+    padding: 8px;
+    margin-left: -51px !important;
+  }
+}

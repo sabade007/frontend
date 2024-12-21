@@ -1,0 +1,1485 @@
+<div class="bg-white h-100 uploadingWindow">
+<div class="is-topHeader" *ngIf="publicSharedData.passwordProtected == false || showfolders">
+  <mat-toolbar color="" class="example-toolbar">
+    <div class="is-header">
+      <h1 class="example-app-name text-primary is-d-flex">
+        <img
+          alt={{productName}}
+          class="is-logo"
+          src="assets/images/logocmp.png"
+        />
+      </h1>
+    </div>
+
+    <!-- <ion-col class="is-d-flex is-justify-content-end is-align-items-center">
+      <button
+        id="step7"
+        mat-raised-button
+        color="primary"
+        matTooltip="Create Account"
+        class="mx-2 is-topActionBtn"
+        routerLink="/create-account"
+      >
+       Create Account
+      </button>
+    </ion-col> -->
+  </mat-toolbar>
+</div>
+<ion-row *ngIf="publicSharedData.passwordProtected == false && !(folderPermission == 'CAN_UPLOAD_ONLY' && allowUpload) ">
+  <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="bg-white">
+    <ion-grid>
+      <ion-row class="breadcrumbDesign">
+        <ion-col
+          size="10"
+          size-sm="10"
+          size-md="10"
+          size-lg="10"
+          size-xl="10"
+          class="mt-1"
+        >
+        </ion-col>
+        <ion-col
+          size="1"
+          class="is-d-flex is-justify-content-end is-align-items-center"
+        >
+          <span
+            class="mx-2 cursor-pointer is-d-flex"
+            matTooltip="List View"
+            *ngIf="fileGridView"
+            (click)="fileListViewShow()"
+          >
+            <mat-icon
+              class="material-icons-outlined text-darkgray"
+              [ngClass]="fileListView ? 'text-blue' : 'text-dark'"
+            >
+              format_list_bulleted</mat-icon
+            >
+          </span>
+          <span
+            class="mx-2 cursor-pointer is-d-flex"
+            matTooltip="Grid View"
+            *ngIf="fileListView"
+            (click)="fileGridViewShow()"
+          >
+            <mat-icon
+              class="material-icons-outlined text-darkgray"
+              [ngClass]="fileGridView ? 'text-blue' : 'text-dark'"
+            >
+              grid_view</mat-icon
+            >
+          </span>
+        </ion-col>
+        <ion-col size="1" class="is-d-flex is-justify-content-start is-align-items-center">
+          <span class="mx-2 cursor-pointer is-d-flex" matTooltip="Details"
+            (click)="viewDetails()">
+            <mat-icon class="material-icons-outlined text-darkgray">info</mat-icon>
+          </span>
+        </ion-col>
+      </ion-row>
+      <mat-divider></mat-divider>
+
+      <div *ngIf = "isLoadingPublicShare" class="d-flex justify-content-center">
+        <img class="img-center" src="assets/images/icons/loader1.gif" alt= "{{productName}}">
+      </div>
+      <!-- File List View  -->
+      <ion-row class="my-2 internalShared" *ngIf="fileListView">
+        <ion-col
+          size="12"
+          style="border: 0px solid #dcdddf; border-radius: 5px;"
+        >
+          <ion-row class="bg-white is-fileList">
+            <ion-col
+              size="3"
+              size-sm="3"
+              size-md="1.5"
+              size-lg="1"
+              size-xl="1"
+              class="is-leftSide"
+            >
+              <span class="is-selectFile"></span>
+              <span class="is-docImage">
+                <img
+                  [src]="
+                    mimes[files.mimeType] != '' ||
+                    mimes[files.mimeType] != undefined
+                      ? mimes[files.mimeType].icon === 'src'
+                        ? files.icon
+                        : mimes[files.mimeType].icon
+                      : 'assets/images/otherDocument.png'
+                  "
+                  class="img-fluid"
+                  alt="exza cloud"
+                />
+              </span>
+            </ion-col>
+            <!-- Mobile Screen -->
+            <ion-col *ngIf="isMobile"
+              size="6"
+              size-sm="6"
+              size-md="6"
+              size-lg="6"
+              size-xl="6"
+              class="px-2"
+              (click)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)"
+            >
+              <h1 class="is-fileName">{{ files.title }}</h1>
+              <p class="mb-0">
+                <span class="is-label">Size: </span>
+                <span class="is-fileSize text-blue">{{ files.size }}</span>
+                <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+                  <span class="is-label px-1"> Files: </span>
+                  <span class="is-fileSize text-danger"
+                    >{{ files.itemCount }} files</span
+                  >
+                </label>
+              </p>
+            </ion-col>
+            <!-- Desktop Screen -->
+            <ion-col *ngIf="!isMobile" [ngClass]="disable ? 'colDisable' : 'notDisable'"
+            size="6"
+            size-sm="6"
+            size-md="6"
+            size-lg="6"
+            size-xl="6"
+            class="px-2"
+            (dblclick)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)"
+          >
+            <h1 class="is-fileName">{{ files.title }}</h1>
+            <p class="mb-0">
+              <span class="is-label">Size: </span>
+              <span class="is-fileSize text-blue">{{ files.size }}</span>
+              <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+                <span class="is-label px-1"> Files: </span>
+                <span class="is-fileSize text-danger"
+                  >{{ files.itemCount }} files</span
+                >
+              </label>
+            </p>
+          </ion-col>
+            <ion-col
+              size="12"
+              size-sm="12"
+              size-md="2"
+              size-lg="3"
+              size-xl="3"
+              class="px-2 is-dateTime"
+            >
+              <div class="">
+                <h2 class="is-createdAt">
+                  <mat-icon class="material-icons-outlined text-pink mx-0"
+                    >schedule</mat-icon
+                  >
+                  {{ publicSharedData.modifiedAt }}
+                </h2>
+              </div>
+            </ion-col>
+            <ion-col
+              size="1"
+              size-sm="1"
+              size-md="1.5"
+              size-lg="2"
+              size-xl="2"
+              class="is-d-flex is-justify-content-center is-align-items-center px-2 is-rightSide"
+            >
+              <div class="card-header-toolbar">
+                <button
+                  matTooltip="More actions"
+                  mat-icon-button
+                  class="is-moreMenu text-blue"
+                  [matMenuTriggerFor]="moreMenu"
+                  aria-label="Example icon-button with a menu"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #moreMenu="matMenu">
+                  <button mat-menu-item (click)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)">
+                    <mat-icon class="material-icons-outlined"
+                      >remove_red_eye</mat-icon
+                    >
+                    <span>Preview</span>
+                  </button>
+                  <button mat-menu-item *ngIf="publicSharedData.hiddenDownload == false" (click)="OnDownloadDoc(files.id, files.id)">
+                    <mat-icon class="material-icons-outlined"
+                      >download</mat-icon
+                    >
+                    <span>Download</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <!-- Folders & Files Grid View  -->
+      <div class="is-fullwidth" *ngIf="fileGridView">
+        <ion-row class="ion-justify-content-start internalShared">
+          <ion-col
+            size="12"
+            size-sm="12"
+            size-md="6"
+            size-lg="2.4"
+            size-xl="2.4"
+            class="my-2"
+          >
+            <mat-card class="cursor-pointer px-2 pt-0 pb-2">
+              <div class="card-body1 is-folder">
+                <div class="is-header">
+                  <button
+                    mat-icon-button
+                    matTooltip="More actions"
+                    class="is-moreMenu"
+                    [matMenuTriggerFor]="moreMenu"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item (click)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)">
+                      <mat-icon class="material-icons-outlined"
+                        >remove_red_eye</mat-icon
+                      >
+                      <span>Preview</span>
+                    </button>
+
+                    <button mat-menu-item *ngIf="publicSharedData.hiddenDownload == false" (click)="OnDownloadDoc(files.id, files.id)">
+                      <mat-icon class="material-icons-outlined"
+                        >download</mat-icon
+                      >
+                      <span>Download</span>
+                    </button>
+                  </mat-menu>
+                </div>
+
+                <!-- Mobile Screen -->
+                <div *ngIf="files.mimeType == 'httpd/unix-directory' && isMobile" (click)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)">
+                  <div>
+                    <div class="is-d-flex is-justify-content-between mt-2">
+                      <a>
+                        <div>
+                          <img
+                            alt={{productName}}
+                            src="assets/images/foldericon.png"
+                            width="35px"
+                            height="35px"
+                            class="text-center is-docThumb d-flex justify-align-center folder-fluid"
+                          />
+                        </div>
+                      </a>
+                    </div>
+                    <a class="folder">
+                      <h5 class="mb-2 is-fileName">
+                        {{ publicSharedData["fileFolderStructure"]["title"] }}
+                      </h5>
+                      <p class="mb-1 is-d-flex is-align-items-center">
+                        <mat-icon class="material-icons-outlined text-pink"
+                          >schedule</mat-icon
+                        >
+                        <span class="is-folderDetails">{{
+                          publicSharedData["modifiedAt"]
+                        }}</span>
+                      </p>
+                      <p class="mb-0 is-d-flex is-align-items-center">
+                        <mat-icon class="material-icons-outlined text-success"
+                          >text_snippet</mat-icon
+                        >
+                        <span class="is-folderDetails"
+                          >{{ files["itemCount"] }} Files</span
+                        >
+                      </p>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Desktop Screen -->
+                <div [ngClass]="disable ? 'colDisable' : 'notDisable'" *ngIf="files.mimeType == 'httpd/unix-directory' && !isMobile" (dblclick)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)">
+                  <div>
+                    <div class="is-d-flex is-justify-content-between mt-2">
+                      <a>
+                        <div>
+                          <img
+                            alt={{productName}}
+                            src="assets/images/foldericon.png"
+                            width="35px"
+                            height="35px"
+                            class="text-center is-docThumb d-flex justify-align-center folder-fluid"
+                          />
+                        </div>
+                      </a>
+                    </div>
+                    <a class="folder">
+                      <h5 class="mb-2 is-fileName">
+                        {{ publicSharedData["fileFolderStructure"]["title"] }}
+                      </h5>
+                      <p class="mb-1 is-d-flex is-align-items-center">
+                        <mat-icon class="material-icons-outlined text-pink"
+                          >schedule</mat-icon
+                        >
+                        <span class="is-folderDetails">{{
+                          publicSharedData["modifiedAt"]
+                        }}</span>
+                      </p>
+                      <p class="mb-0 is-d-flex is-align-items-center">
+                        <mat-icon class="material-icons-outlined text-success"
+                          >text_snippet</mat-icon
+                        >
+                        <span class="is-folderDetails"
+                          >{{ files["itemCount"] }} Files</span
+                        >
+                      </p>
+                    </a>
+                  </div>
+                </div>
+                <!-- Mobile Screen -->
+                <div *ngIf="isMobile"
+                  class="document-card image-thumb"
+                  [title]="files.title"
+                  (click)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)"
+                >
+                  <div
+                    class="is-documentSection"
+                    *ngIf="files.mimeType != 'httpd/unix-directory'"
+                  >
+                    <div class="text-center is-docThumb">
+                      <img
+                        [src]="
+                          mimes[files.mimeType] != '' ||
+                          mimes[files.mimeType] != undefined
+                            ? mimes[files.mimeType].icon === 'src'
+                              ? files.icon
+                              : mimes[files.mimeType].icon
+                            : 'assets/images/otherDocument.png'
+                        "
+                        class="img-fluid"
+                        alt="exza cloud"
+                      />
+                    </div>
+                    <h6 class="is-fileName">{{ files.title }}</h6>
+                  </div>
+                </div>
+                <!-- Desktop Screen -->
+                <div *ngIf="!isMobile" [ngClass]="disable ? 'colDisable' : 'notDisable'"
+                class="document-card image-thumb"
+                [title]="files.title"
+                (dblclick)="OnopenFile(files.mimeType, files.id, files.id, files.title, files.versionId)"
+              >
+                <div
+                  class="is-documentSection"
+                  *ngIf="files.mimeType != 'httpd/unix-directory'"
+                >
+                  <div class="text-center is-docThumb">
+                    <img
+                      [src]="
+                        mimes[files.mimeType] != '' ||
+                        mimes[files.mimeType] != undefined
+                          ? mimes[files.mimeType].icon === 'src'
+                            ? files.icon
+                            : mimes[files.mimeType].icon
+                          : 'assets/images/otherDocument.png'
+                      "
+                      class="img-fluid"
+                      alt="exza cloud"
+                    />
+                  </div>
+                  <h6 class="is-fileName">{{ files.title }}</h6>
+                </div>
+              </div>
+              </div>
+            </mat-card>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div class="footer_text">
+        <app-footer></app-footer>
+      </div>
+    </ion-grid>
+  </ion-col>
+  <!-- <ion-col
+  size="5.5"
+  size-sm="5.5"
+  size-md="4"
+  size-lg="3"
+  size-xl="3"
+  class="_sidebar"
+>
+  <ion-row class="mt-3">
+    <ion-row>
+      <ion-col size="2.5" class="px-0 is-sharedSection">
+        <div
+          class="is-d-flex is-justify-content-center is-align-items-center is-shared _shared"
+        >
+          <span class="is-circle bg-blue-6">{{
+            newowner | titlecase | slice: 0:1
+          }}</span>
+        </div>
+      </ion-col>
+      <ion-col size="9.5">
+        <span class="_titleText">{{ newowner | titlecase }}</span
+        ><br />
+        <span class="_title">Owner</span>
+      </ion-col>
+    </ion-row>
+    <ion-col size="12" class="mt-3">
+      <span class="_title">Filename</span><br />
+      <span class="_titleText">{{
+        publicSharedData["fileFolderStructure"]["title"]
+      }}</span>
+    </ion-col>
+    <ion-col size="12" class="mt-3">
+      <span class="_title">Type</span><br />
+      <span class="_titleText" *ngIf="files.mimeType == 'httpd/unix-directory'">Folder</span>
+      <span class="_titleText" *ngIf="files.mimeType != 'httpd/unix-directory'">{{ files.mimeType }}</span>
+    </ion-col>
+    <ion-col size="12" class="mt-3">
+      <span class="_title">Size</span><br />
+      <span class="_titleText">{{ files.size }}</span>
+    </ion-col>
+    <ion-col size="12" class="mt-3">
+      <span class="_title">Shared time</span><br />
+      <span class="_titleText">{{ publicSharedData["modifiedAt"] }}</span>
+    </ion-col>
+  </ion-row>
+</ion-col> -->
+<ion-col>
+  <tui-root>
+    <ng-template #preview let-preview>
+      <tui-preview [rotatable]="false">
+        <tui-preview-title>{{ pic_title }}</tui-preview-title>
+        <button
+          tuiPreviewAction
+          tuiIconButton
+          icon="tuiIconCloseLarge"
+          title="Close"
+          (click)="preview.complete()"
+        ></button>
+        <div polymorpheus-outlet [content]="previewContent">
+          <ng-template let-src>
+            <img alt="" [src]="uploadedPhoto" />
+          </ng-template>
+        </div>
+      </tui-preview>
+    </ng-template>
+  </tui-root>
+  <tui-root>
+    <ng-template #content let-content>
+      <tui-preview [rotatable]="false" [zoomable]="false">
+        <iframe
+          [src]="url"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          class="content"
+          title=""
+        ></iframe>
+        <button
+          tuiIconButton
+          tuiPreviewAction
+          icon="tuiIconCloseLarge"
+          title="Close"
+          (click)="content.complete()"
+        ></button>
+      </tui-preview>
+    </ng-template>
+  </tui-root>
+</ion-col>
+ 
+</ion-row>
+
+<ion-grid
+  class="is-fullwidth is-mainSide p-0"
+  *ngIf="publicSharedData.passwordProtected == true"
+>
+  <ion-row justify-content-center class="p-0">
+    <!-- <ion-col size="12" class="is-topRightSide p-0">
+      <img src="assets/images/blob.svg" class="is-topBlob" />
+    </ion-col> -->
+
+    <ion-col
+      size="12"
+      class="is-d-flex is-justify-content-center px-3 py-3 is-topLogo"
+    >
+      <img src="assets/images/logocmp.png" style="width: 175px" alt= "{{productName}}"/>
+    </ion-col>
+
+    <ion-col size="12" class="is-loginContainer">
+      <h1 class="text-center login-title">
+        This File is Password Protected,<br />Please Enter the Password
+      </h1>
+      <mat-form-field class="example-full-width is-signIn" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          [type]="hide ? 'password' : 'text'"
+          matInput
+          placeholder="Password"
+          (keyup.enter)="OnsubmitPassword()"
+          (change)="OnPasswordValue($event)"
+        />
+        <span
+          class="password-icon"
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon class="eyeicon text-blue">{{
+            hide ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </span>
+      </mat-form-field>
+
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="OnsubmitPassword()"
+          >
+            Verify
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+
+    <div class="footer-text text-center">
+      <app-footer></app-footer>
+    </div>
+
+    <!-- <ion-col size="12" class="is-bottomSide p-0">
+      <img src="assets/images/wave.svg" class="is-mainBanner1" />
+    </ion-col> -->
+  </ion-row>
+
+</ion-grid>
+
+
+<ion-row *ngIf="showfolders && folderPermission != 'CAN_UPLOAD_ONLY'">
+  <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12">
+    <ion-grid>
+      <ion-row>
+        <ion-col
+          size="8"
+          size-sm="8"
+          size-md="8"
+          size-lg="8"
+          size-xl="8"
+          class="mt-1" (click)="OncloseMenu()">
+          <!-- <span class="material-icons-outlined text-darkgray" style="cursor: pointer;" (click)="OnhomeFiles()">home</span>
+            <span class="material-icons-outlined is-fontExtraLarge text-darkgray" 
+              *ngIf="breadcrumbfiles.length > 0">arrow_forward_ios</span>
+
+          <span *ngFor="let breadcrumb of breadcrumbfiles; index as i">
+            <span  class="breadcrumbTitle"  style="cursor: pointer;" (click)="Onbackbreadcrumb(breadcrumb.SharedFileID, breadcrumb.id)">{{ breadcrumb.title }}</span>
+            <span class="material-icons-outlined is-fontExtraLarge text-darkgray" *ngIf="breadcrumbfiles.length > 0">arrow_forward_ios</span>
+          </span> -->
+          <nav class="breadcrumbsListnav">
+            <ol class="breadcrumb1">
+              <li class="homeicons" style="cursor: pointer;" (click)="OnhomeFiles()">
+                <a class="homeicon" [ngClass]="imagePreview ? 'homeicon1' : 'homeicon' ">
+                  <span>
+                    <mat-icon itemprop="name" class="material-icons-outlined is-close text-darkgray">home</mat-icon>
+                  </span>
+                </a>
+              </li>
+              
+              <li class="breadcrumblist" style="cursor: pointer;" *ngFor="let breadcrumb of breadcrumbfiles; index as i" (click)="Onbackbreadcrumb(breadcrumb.SharedFileID, breadcrumb.id)">
+                <a *ngIf="breadcrumbfiles.length > 0">
+                  <span class="breadcrumbtitle">{{ breadcrumb.title }}</span>
+                </a>
+              </li>
+          
+            </ol>
+          </nav>
+        </ion-col>
+        <ion-col size="2" class="is-d-flex is-justify-content-end is-align-items-center">
+          <button *ngIf="allowUpload" id="step7" (click)="OnopenMenu()" mat-raised-button color="primary" matTooltip="Upload File/Folder" class="mx-2 is-topActionBtn panel-menu">
+            Upload
+          </button>
+          <!-- <ion-button *ngIf="allowUpload" mat-raised-button style="width: 115px;" class="bg-blue ionBtn mx-1" (click)="fileInput.click()">
+            <input #fileInput type="file" class="FileUploads" accept="all" (change)="uploadNewFile($event)"/>
+            <span>Upload File</span>
+          </ion-button> -->
+        </ion-col>
+        <div *ngIf="openMenu" class="_menu"> 
+          <button class="matMenuItem1" mat-menu-item id="upload" (click)="fileInput.click()">
+            <mat-icon class="material-icons-outlined">file_upload</mat-icon>
+            <span>Upload File</span>
+            <input class="FileUploads" #fileInput type="file" multiple accept="all"
+              (change)="uploadNewFile($event)"/>
+          </button>
+
+          <button class="matMenuItem1" mat-menu-item (click)="fileInput1.click()">
+            <mat-icon class="material-icons-outlined">drive_folder_upload</mat-icon>
+            <span>Upload Folder</span>
+            <input class="FileUploads" #fileInput1 type="file" multiple (change)="uploadNewFile($event)"
+              webkitdirectory />
+          </button>
+        </div>
+        <ion-col size="1" class="is-d-flex is-justify-content-end is-align-items-center" (click)="OncloseMenu()">
+          <span
+            class="mx-2 cursor-pointer is-d-flex"
+            matTooltip="List View"
+            *ngIf="fileGridView"
+            (click)="fileListViewShow()"
+          >
+            <mat-icon
+              class="material-icons-outlined text-darkgray"
+              [ngClass]="fileListView ? 'text-blue' : 'text-dark'"
+            >
+              format_list_bulleted</mat-icon
+            >
+          </span>
+          <span
+            class="mx-2 cursor-pointer is-d-flex"
+            matTooltip="Grid View"
+            *ngIf="fileListView"
+            (click)="fileGridViewShow()"
+          >
+            <mat-icon
+              class="material-icons-outlined text-darkgray"
+              [ngClass]="fileGridView ? 'text-blue' : 'text-dark'"
+            >
+              grid_view</mat-icon
+            >
+          </span>
+        </ion-col>
+        <ion-col size="1" class="is-d-flex is-justify-content-start is-align-items-center">
+          <span class="mx-2 cursor-pointer is-d-flex" matTooltip="Details"
+            (click)="viewDetails()">
+            <mat-icon class="material-icons-outlined text-darkgray">info</mat-icon>
+          </span>
+        </ion-col>
+      </ion-row>
+      <mat-divider></mat-divider>
+
+      <div *ngIf = "isLoadingPublicShare" class="d-flex justify-content-center">
+        <img class="img-center" src="assets/images/icons/loader1.gif" alt= "{{productName}}">
+      </div>
+
+      <!-- File List View  -->
+      <ion-content style="height: calc(100vh - 185px);overflow: auto;--ion-background-color: #ffff !important;">
+      <ion-row class="my-2 internalShared" *ngIf="fileListView" (click)="OncloseMenu()">
+        <ion-col size="12" style="border: 0px solid #dcdddf; border-radius: 5px; overflow: auto;height: 85%;">
+          <div
+          *ngIf="showIcon && SharedData.length == 0"
+          class="text-center">
+          <div
+            class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+            <!-- <mat-icon class="material-icons-outlined is-trashIcon">share</mat-icon> -->
+            <h2 class="text-secondary ion-text-center" style="margin-top: 10rem;">
+              No files in here
+            </h2>
+          </div>
+         </div>
+         <ion-list>
+            <!-- <ion-item  *ngFor="let files of SharedData; let i = index"> -->
+          <ion-row size="12" style="width:100%;" *ngFor="let files of SharedData; let i = index"
+            class="bg-white is-fileList animated fadeInUp">
+            <ion-col
+              size="3"
+              size-sm="3"
+              size-md="1.5"
+              size-lg="1"
+              size-xl="1"
+              class="is-leftSide"
+            >
+              <span class="is-selectFile"></span>
+              <span class="is-docImage">
+                <img
+                  width="34px"
+                  height="34px"
+                  [src]="
+                    mimes[files.fileFolderStructure.mimeType] != '' ||
+                    mimes[files.fileFolderStructure.mimeType] != undefined
+                      ? mimes[files.fileFolderStructure.mimeType].icon === 'src'
+                        ? files.fileFolderStructure.icon
+                        : mimes[files.fileFolderStructure.mimeType].icon
+                      : 'assets/images/otherDocument.png'
+                  "
+                  class="img-fluid"
+                  alt={{productName}}
+                />
+              </span>
+            </ion-col>
+            <ion-col *ngIf="isMobile"
+              size="6"
+              size-sm="6"
+              size-md="3"
+              size-lg="6"
+              size-xl="6"
+              class="px-2"
+              (click)="OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id, files.fileFolderStructure.title, files.fileFolderStructure.versionId)">
+              <h1
+                class="is-fileName"
+                [matTooltip]="files.fileFolderStructure.title"
+              >
+                {{ files.fileFolderStructure.title }}
+              </h1>
+              <p class="mb-0">
+                <span class="is-label">Size: </span>
+                <span class="is-fileSize text-blue">{{
+                  files.fileFolderStructure.sizeRead
+                }}</span>
+                <label
+                  *ngIf="
+                    files.fileFolderStructure.mimeType == 'httpd/unix-directory'
+                  "
+                >
+                  <span class="is-label px-1"> Files: </span>
+                  <span
+                    class="is-fileSize text-danger"
+                    *ngIf="
+                      files.fileFolderStructure.itemCount == '1' ||
+                      files.fileFolderStructure.itemCount == '0'
+                    "
+                    >{{ files.fileFolderStructure.itemCount }} file</span
+                  >
+                  <span
+                    class="is-fileSize text-danger"
+                    *ngIf="
+                      files.fileFolderStructure.itemCount != '1' &&
+                      files.fileFolderStructure.itemCount != '0'
+                    "
+                    >{{ files.fileFolderStructure.itemCount }} files</span
+                  >
+                </label>
+              </p>
+            </ion-col>
+            <ion-col *ngIf="!isMobile" [ngClass]="disable ? 'colDisable' : 'notDisable'"
+            size="6"
+            size-sm="6"
+            size-md="3"
+            size-lg="6"
+            size-xl="6"
+            class="px-2"
+            (dblclick)="OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id, files.fileFolderStructure.title, files.fileFolderStructure.versionId)">
+            <h1
+              class="is-fileName"
+              [matTooltip]="files.fileFolderStructure.title"
+            >
+              {{ files.fileFolderStructure.title }}
+            </h1>
+            <p class="mb-0">
+              <span class="is-label">Size: </span>
+              <span class="is-fileSize text-blue">{{
+                files.fileFolderStructure.sizeRead
+              }}</span>
+              <label
+                *ngIf="
+                  files.fileFolderStructure.mimeType == 'httpd/unix-directory'
+                "
+              >
+                <span class="is-label px-1"> Files: </span>
+                <span
+                  class="is-fileSize text-danger"
+                  *ngIf="
+                    files.fileFolderStructure.itemCount == '1' ||
+                    files.fileFolderStructure.itemCount == '0'
+                  "
+                  >{{ files.fileFolderStructure.itemCount }} file</span
+                >
+                <span
+                  class="is-fileSize text-danger"
+                  *ngIf="
+                    files.fileFolderStructure.itemCount != '1' &&
+                    files.fileFolderStructure.itemCount != '0'
+                  "
+                  >{{ files.fileFolderStructure.itemCount }} files</span
+                >
+              </label>
+            </p>
+          </ion-col>
+
+            <ion-col
+              size="12"
+              size-sm="12"
+              size-md="2"
+              size-lg="3"
+              size-xl="3"
+              class="px-2 is-dateTime"
+            >
+              <div class="">
+                <h2 class="is-createdAt">
+                  <mat-icon class="material-icons-outlined text-pink mx-0"
+                    >schedule</mat-icon
+                  >
+                  {{ files.sharedTimeRead }}
+                </h2>
+              </div>
+            </ion-col>
+            <ion-col
+              size="1"
+              size-sm="1"
+              size-md="1.5"
+              size-lg="2"
+              size-xl="2"
+              class="is-d-flex is-justify-content-center is-align-items-center px-2 is-rightSide"
+            >
+              <div class="card-header-toolbar">
+                <button
+                  matTooltip="More actions"
+                  id="moreactions"
+                  mat-icon-button
+                  class="is-moreMenu text-blue"
+                  [matMenuTriggerFor]="moreMenu"
+                  aria-label="Example icon-button with a menu"
+                  #trigger="matMenuTrigger"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #moreMenu="matMenu">
+                  <div (mouseleave)="trigger.closeMenu()">
+                    <button
+                      mat-menu-item
+                      id="download"
+                      (click)="OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id,files.fileFolderStructure.title, files.fileFolderStructure.versionId)"
+                    >
+                      <mat-icon class="material-icons-outlined">remove_red_eye</mat-icon>
+                      <span>Preview</span>
+                    </button>
+                    <button *ngIf="showDownload"
+                      mat-menu-item
+                      id="download"
+                      (click)="OnDownloadDoc(files.objectId, files.fileFolderStructure.id)"
+                    >
+                      <mat-icon class="material-icons-outlined">download</mat-icon>
+                      <span>Download</span>
+                    </button>
+                  </div>
+                </mat-menu>
+              </div>
+            </ion-col>
+          </ion-row>
+          <!-- </ion-item> -->
+         </ion-list>
+         <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+          <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+          <!-- <ion-row *ngIf="SharedData.length != 0" id="btn1">
+            <ion-col class="px-0">
+              <mat-paginator
+                class="media-table-paginator"
+                [length]="sharedCount"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+                (page)="pageEvent = $event; onPageChange($event)"
+                showFirstLastButtons
+              >
+              </mat-paginator>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="SharedData.length != 0" id="btn2">
+            <ion-col class="px-0">
+              <mat-paginator
+                hidePageSize
+                class="media-table-paginator"
+                [length]="sharedCount"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+                (page)="pageEvent = $event; onPageChange($event)"
+                showFirstLastButtons
+              >
+              </mat-paginator>
+            </ion-col>
+          </ion-row> -->
+        </ion-col>
+      </ion-row>
+    
+
+      <!-- Folders & Files Grid View  -->
+      <div class="is-fullwidth internalShared" *ngIf="fileGridView" (click)="OncloseMenu()">
+        <div *ngIf="showIcon && SharedData.length == 0" class="text-center">
+          <div
+            class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+            <!-- <mat-icon class="material-icons-outlined is-trashIcon">share</mat-icon> -->
+            <h2 class="text-secondary ion-text-center" style="margin-top: 10rem;">
+              No files in here
+            </h2>
+          </div>
+        </div>
+        <ion-grid>
+        <ion-row class="ion-justify-content-start internalShared1">
+          <ion-col
+            size="6"
+            size-sm="6"
+            size-md="3"
+            size-lg="2.4"
+            size-xl="2.4"
+            class="my-2 animated fadeInUp"
+            *ngFor="let files of SharedData; let i = index"
+          >
+          <mat-card class="cursor-pointer px-2 pt-0 pb-2">
+              <div class="card-body1 is-folder">
+                <div class="is-header">
+                  <button
+                    mat-icon-button
+                    id="moreaction"
+                    matTooltip="More actions"
+                    class="is-moreMenu"
+                    [matMenuTriggerFor]="moreMenu"
+                    #trigger="matMenuTrigger"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #moreMenu="matMenu">
+                    <div (mouseleave)="trigger.closeMenu()">
+                     <button
+                      mat-menu-item
+                      id="download"
+                      (click)="OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id,files.fileFolderStructure.title, files.fileFolderStructure.versionId)"
+                    >
+                      <mat-icon class="material-icons-outlined">remove_red_eye</mat-icon>
+                      <span>Preview</span>
+                    </button>
+                    <button
+                      mat-menu-item *ngIf="showDownload"
+                      id="download"
+                      (click)="OnDownloadDoc(files.objectId,files.fileFolderStructure.id)"
+                    >
+                      <mat-icon class="material-icons-outlined">download</mat-icon>
+                      <span>Download</span>
+                    </button>
+                    </div>
+                  </mat-menu>
+                </div>
+                <!-- Folders Grid view -->
+                <!-- Mobile Screen -->
+                <div
+                  *ngIf="files.fileFolderStructure.mimeType == 'httpd/unix-directory' && isMobile">
+                  <div
+                    (click)="
+                    OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id, files.fileFolderStructure.title, files.fileFolderStructure.versionId)">
+                    <div class="is-d-flex is-justify-content-between mt-2">
+                      <a>
+                        <div>
+                          <img
+                            alt={{productName}}
+                            src="assets/images/foldericon.png"
+                            width="35px"
+                            height="35px"
+                            class="text-center is-docThumb d-flex justify-align-center folder-fluid"
+                          />
+                        </div>
+                      </a>
+                    </div>
+                    <a class="folder">
+                      <h5
+                        class="mb-2 is-fileName"
+                        [matTooltip]="files.fileFolderStructure.title"
+                      >
+                        {{ files["fileFolderStructure"]["title"] }}
+                      </h5>
+                      <p class="mb-0">
+                        <span
+                          class="is-folderDetails"
+                          *ngIf="
+                            files.fileFolderStructure.itemCount == '1' ||
+                            files.fileFolderStructure.itemCount == '0'
+                          "
+                          >{{ files.fileFolderStructure.itemCount }} file,</span
+                        >
+                        <span
+                          class="is-folderDetails"
+                          *ngIf="
+                            files.fileFolderStructure.itemCount != '1' &&
+                            files.fileFolderStructure.itemCount != '0'
+                          "
+                          >{{ files.fileFolderStructure.itemCount }} files,</span
+                        >
+                        <span class="is-folderDetails">{{
+                          files.sharedTimeRead
+                        }}</span>
+                      </p>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Desktop Screen -->
+                <div
+                *ngIf="files.fileFolderStructure.mimeType == 'httpd/unix-directory' && !isMobile">
+                <div [ngClass]="disable ? 'colDisable' : 'notDisable'"
+                  (dblclick)="
+                  OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id, files.fileFolderStructure.title,  files.fileFolderStructure.versionId)">
+                  <div class="is-d-flex is-justify-content-between mt-2">
+                    <a>
+                      <div>
+                        <img
+                          alt={{productName}}
+                          src="assets/images/foldericon.png"
+                          width="80px"
+                          height="80px"
+                          class="text-center is-docThumb d-flex justify-align-center folder-fluid1"
+                        />
+                      </div>
+                    </a>
+                  </div>
+                  <a class="folder">
+                    <h5
+                      class="mb-2 is-fileName"
+                      [matTooltip]="files.fileFolderStructure.title"
+                    >
+                      {{ files["fileFolderStructure"]["title"] }}
+                    </h5>
+                    <p class="mb-0">
+                      <span
+                        class="is-folderDetails"
+                        *ngIf="
+                          files.fileFolderStructure.itemCount == '1' ||
+                          files.fileFolderStructure.itemCount == '0'
+                        "
+                        >{{ files.fileFolderStructure.itemCount }} file,</span
+                      >
+                      <span
+                        class="is-folderDetails"
+                        *ngIf="
+                          files.fileFolderStructure.itemCount != '1' &&
+                          files.fileFolderStructure.itemCount != '0'
+                        "
+                        >{{ files.fileFolderStructure.itemCount }} files,</span
+                      >
+                      <span class="is-folderDetails">{{
+                        files.sharedTimeRead
+                      }}</span>
+                    </p>
+                  </a>
+                </div>
+              </div>
+                <!-- Files Grid view -->
+                <!-- Mobile Screen -->
+                <div *ngIf="isMobile"
+                  class="document-card image-thumb"
+                  [title]="files.fileFolderStructure.title"
+                  (click)="
+                  OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id, files.fileFolderStructure.title, files.fileFolderStructure.versionId)">
+                  <div
+                    class="is-documentSection"
+                    *ngIf="
+                      files.fileFolderStructure.mimeType != 'httpd/unix-directory'
+                    "
+                  >
+                    <div class="text-center is-docThumb">
+                      <img
+                        width="95"
+                        height="82"
+                        [src]="
+                          mimes[files.fileFolderStructure.mimeType] != '' ||
+                          mimes[files.fileFolderStructure.mimeType] != undefined
+                            ? mimes[files.fileFolderStructure.mimeType].icon ===
+                              'src'
+                              ? files.fileFolderStructure.icon
+                              : mimes[files.fileFolderStructure.mimeType].icon
+                            : 'assets/images/otherDocument.png'
+                        "
+                        class="img-fluid"
+                        alt="exza cloud"
+                      />
+                    </div>
+                    <h6
+                      class="is-fileName"
+                      [matTooltip]="files.fileFolderStructure.title"
+                    >
+                      {{ files.fileFolderStructure.title }}
+                    </h6>
+                    <p class="mb-1 mt-2">
+                      <span class="is-folderDetails">{{
+                        files.sharedTimeRead
+                      }}</span>
+                    </p>
+                  </div>
+                </div>
+                <!-- Desktop Screen -->
+                <div *ngIf="!isMobile" [ngClass]="disable ? 'colDisable' : 'notDisable'"
+                  class="document-card image-thumb"
+                  [title]="files.fileFolderStructure.title"
+                  (dblclick)="
+                  OnopenFile(files.fileFolderStructure.mimeType,files.objectId, files.fileFolderStructure.id, files.fileFolderStructure.title, files.fileFolderStructure.versionId)">
+                  <div
+                    class="is-documentSection"
+                    *ngIf="
+                      files.fileFolderStructure.mimeType != 'httpd/unix-directory'
+                    "
+                  >
+                    <div class="text-center is-docThumb1">
+                      <img
+                        width="100px"
+                        height="100px"
+                        [src]="
+                          mimes[files.fileFolderStructure.mimeType] != '' ||
+                          mimes[files.fileFolderStructure.mimeType] != undefined
+                            ? mimes[files.fileFolderStructure.mimeType].icon ===
+                              'src'
+                              ? files.fileFolderStructure.icon
+                              : mimes[files.fileFolderStructure.mimeType].icon
+                            : 'assets/images/otherDocument.png'
+                        "
+                        class="img-fluid1"
+                        alt="exza cloud"
+                      />
+                    </div>
+                    <h6
+                      class="is-fileName"
+                      [matTooltip]="files.fileFolderStructure.title"
+                    >
+                      {{ files.fileFolderStructure.title }}
+                    </h6>
+                    <p class="mb-1 mt-2">
+                      <span class="is-folderDetails">{{
+                        files.sharedTimeRead
+                      }}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+      </div>
+    </ion-content>
+      <!-- <div class="footer_text"> -->
+      <div class="footer_text" (click)="OncloseMenu()">
+        <!-- <ion-row *ngIf="SharedData.length != 0" id="btn1">
+          <ion-col class="px-0">
+            <mat-paginator
+              class="media-table-paginator"
+              [length]="sharedCount"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+              (page)="pageEvent = $event; onPageChange($event)"
+              showFirstLastButtons
+            >
+            </mat-paginator>
+          </ion-col>
+        </ion-row>  -->
+        <!-- <ion-row *ngIf="SharedData.length != 0" id="btn2">
+          <ion-col class="px-0">
+            <mat-paginator
+              hidePageSize
+              class="media-table-paginator"
+              [length]="sharedCount"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+              (page)="pageEvent = $event; onPageChange($event)"
+              showFirstLastButtons
+            >
+            </mat-paginator>
+          </ion-col>
+        </ion-row> -->
+        <app-footer></app-footer>
+      </div> 
+    </ion-grid>
+  </ion-col>
+   <!-- <ion-col (click)="OncloseMenu()"
+    size="5.5"
+    size-sm="5.5"
+    size-md="4"
+    size-lg="3"
+    size-xl="3"
+    class="_sidebar"
+  >
+    <ion-row class="mt-3">
+      <ion-row>
+        <ion-col size="2.5" class="px-0 is-sharedSection">
+          <div
+            class="is-d-flex is-justify-content-center is-align-items-center is-shared _shared"
+          >
+            <span class="is-circle bg-blue-6">{{
+              newowner | titlecase | slice: 0:1
+            }}</span>
+          </div>
+        </ion-col>
+        <ion-col size="9.5">
+          <span class="_titleText">{{ newowner | titlecase }}</span
+          ><br />
+          <span class="_title">Owner</span>
+        </ion-col>
+      </ion-row>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Filename</span><br />
+        <span class="_titleText">{{title}}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Type</span><br />
+        <span class="_titleText" *ngIf="files.mimeType == 'httpd/unix-directory'">Folder</span>
+        <span class="_titleText" *ngIf="files.mimeType != 'httpd/unix-directory'">{{ files.mimeType }}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Size</span><br />
+        <span class="_titleText">{{ files.size }}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Shared time</span><br />
+        <span class="_titleText">{{ modifiedTime }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-col> -->
+  <tui-root *ngIf="imagePreview">
+    <ng-template #preview let-preview>
+      <tui-preview [rotatable]="false">
+        <tui-preview-title>{{ pic_title }}</tui-preview-title>
+        <button
+          tuiPreviewAction
+          tuiIconButton
+          icon="tuiIconCloseLarge"
+          title="Close"
+          (click)="preview.complete();closePreview()"
+        ></button>
+        <div polymorpheus-outlet [content]="previewContent">
+          <ng-template let-src>
+            <img alt="" [src]="uploadedPhoto" />
+          </ng-template>
+        </div>
+      </tui-preview>
+    </ng-template>
+  </tui-root>
+  <tui-root>
+    <ng-template #content let-content>
+      <tui-preview [rotatable]="false" [zoomable]="false">
+        <iframe
+          [src]="url"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          class="content"
+          title=""
+        ></iframe>
+        <button
+          tuiIconButton
+          tuiPreviewAction
+          icon="tuiIconCloseLarge"
+          title="Close"
+          (click)="content.complete()"
+        ></button>
+      </tui-preview>
+    </ng-template>
+  </tui-root>
+</ion-row>
+<ion-row *ngIf="folderPermission == 'CAN_UPLOAD_ONLY' && allowUpload">
+  <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12">
+    <ion-row>
+      <ion-col size="0.2" (click)="OncloseMenu()"></ion-col>
+      <ion-col size="0.5" (click)="OncloseMenu()">
+        <img alt={{productName}} src="assets/images/foldericon.png"
+        width="30px"
+        height="30px"
+        class="text-center is-docThumb d-flex justify-align-center folder-fluid1"/>
+      </ion-col>
+      <ion-col size="9" size-sm="9" size-md="9" size-lg="9" size-xl="9" (click)="OncloseMenu()">
+        <p class="folderTitle px-1 d-flex justify-align-center">{{title}}</p>
+      </ion-col>
+      <ion-col size="2" class="is-d-flex is-justify-content-end is-align-items-center">
+        <button *ngIf="!uploadbtn" id="step7" (click)="OnopenMenu1()" mat-raised-button color="primary" matTooltip="Upload File/Folder" class="mx-2 is-topActionBtn panel-menu">
+          Upload
+        </button>
+        <span class="mx-2 cursor-pointer is-d-flex" matTooltip="Details"
+          (click)="viewDetails()">
+          <mat-icon class="material-icons-outlined text-darkgray">info</mat-icon>
+        </span>
+      </ion-col>
+      <div *ngIf="openMenu1" class="_menu2"> 
+        <button style="width: 100%;height: 50%;" class="matMenuItem1" mat-menu-item id="upload" (click)="fileInput.click()">
+          <mat-icon class="material-icons-outlined fileUploadIcon">file_upload</mat-icon>
+          <span class="uploadName">Upload File</span>
+          <input class="FileUploads" #fileInput type="file" multiple accept="all"
+            (change)="uploadNewFile($event)"/>
+        </button>
+  
+        <button style="width: 100%;height: 50%;" class="matMenuItem1" mat-menu-item (click)="fileInput1.click()">
+          <mat-icon class="material-icons-outlined fileUploadIcon1">drive_folder_upload</mat-icon>
+          <span class="uploadName1">Upload Folder</span>
+          <input class="FileUploads" #fileInput1 type="file" multiple (change)="uploadNewFile($event)"
+            webkitdirectory />
+        </button>
+      </div>
+    </ion-row>
+    <mat-divider></mat-divider>
+    <!-- Upload File -->
+    <div class="text-center" *ngIf="uploadbtn" (click)="closeViewDetails()">
+      <div class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+        <mat-icon class="material-icons-outlined is-trashIcon1">file_upload</mat-icon>
+        <div style="margin-top: -65px;">
+          <h2 class="text-secondary">Upload files or folders</h2>
+          <p class="is-fontMedium text-secondary">
+            Click here to<a (click)="OnopenMenu()" class="panel-menu" style="color: #1d5686;padding: 0px 5px !important;cursor: pointer;">UPLOAD</a>the files or folders
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="openMenu" class="_menu1"> 
+      <button style="width: 100%;height: 50%;" class="matMenuItem1" mat-menu-item id="upload" (click)="fileInput.click()">
+        <mat-icon class="material-icons-outlined fileUploadIcon">file_upload</mat-icon>
+        <span class="uploadName">Upload File</span>
+        <input class="FileUploads" #fileInput type="file" multiple accept="all"
+          (change)="uploadNewFile($event)"/>
+      </button>
+
+      <button style="width: 100%;height: 50%;" class="matMenuItem1" mat-menu-item (click)="fileInput1.click()">
+        <mat-icon class="material-icons-outlined fileUploadIcon1">drive_folder_upload</mat-icon>
+        <span class="uploadName1">Upload Folder</span>
+        <input class="FileUploads" #fileInput1 type="file" multiple (change)="uploadNewFile($event)"
+          webkitdirectory />
+      </button>
+    </div>
+    <!-- List of uploaded files -->
+    <ion-row class="my-2 uploadedList" *ngIf="!uploadbtn" (click)="OncloseMenu();closeViewDetails()">
+      <ion-col size="12" style="border: 0px solid #dcdddf;border-radius: 5px;margin-bottom: 15px;">
+        <ion-row class="bg-white is-fileList animated fadeInUp" *ngFor="let files of uploadedFolderList">
+          <ion-col size="3" size-sm="3" size-md="1" size-lg="1" size-xl="1" class="is-leftSide" *ngIf="files != ''">
+            <span class="is-docImage">
+              <img width="34px" height="34px" src="assets/images/folder.png"
+                class="img-fluid" alt={{productName}} onerror="this.src='assets/images/otherDocument.png'">
+            </span>
+          </ion-col>
+          <ion-col size="8" size-sm="8" size-md="11" size-lg="11" size-xl="11"  *ngIf="files != ''" class="px-2">
+            <h1 class="is-fileName1 mt-4" [matTooltip]="uploadedFolderName">
+              {{ files }}
+            </h1>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bg-white is-fileList animated fadeInUp"
+          *ngFor="let files of publicUploadedFiles; let i = index">
+          <ion-col size="3" size-sm="3" size-md="1" size-lg="1" size-xl="1" class="is-leftSide">
+            <span class="is-docImage">
+              <img width="34px" height="34px"
+                [src]="(files.type == 'application/pdf') ? 'assets/images/pdf.png' 
+                                : (files.type == 'application/msword') ? 'assets/images/doc.png' 
+                                : (files.type == 'xlsx') ? 'assets/images/xlsx.png' 
+                                : (files.type == 'ppt') ? 'assets/images/ppt.png'
+                                : (files.type == 'text/plain') ? 'assets/images/txt.png'
+                                : (files.type == 'audio/mpeg') ? 'assets/images/mp3.png'
+                                : (files.type == 'audio/mp3') ? 'assets/images/mp3.png'
+                                : (files.type == 'video/mp4') ? 'assets/images/mp4.png'
+                                : (files.type == 'other')|| (files.icon == 'data:image/png;base64,null') ? 'assets/images/otherDocument.png'
+                                : (files.type == 'httpd/unix-directory') ? 'assets/images/folder.png'
+                                : (files.type == 'image/gif') ? 'assets/images/image.png'
+                                : (files.type == 'text/plain') ? 'assets/images/image.png'
+                                : (files.type == 'text/x-chdr') ? 'assets/images/txt.png'
+                                : (files.type == 'application/x-sh') ? 'assets/images/txt.png'
+                                : (files.type == 'text/x-python') ? 'assets/images/txt.png'
+                                : (files.type == 'text/x-c++src') ? 'assets/images/txt.png'
+                                : (files.type == 'application/java-vm') ? 'assets/images/txt.png'
+                                : (files.type == 'text/x-csh') ? 'assets/images/txt.png'
+                                : (files.type == 'text/x-csrc') ? 'assets/images/txt.png'
+                                : (files.type == 'text/x-c++hdr') ? 'assets/images/txt.png'
+                                : (files.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') ? 'assets/images/word.png'
+                                : (files.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ? 'assets/images/excel.png'
+                                : (files.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ? 'assets/images/ppt.png'
+                                : (files.type == 'application/vnd.ms-excel') ? 'assets/images/excel.png'
+                                : (files.type == 'application/vnd.ms-powerpoint') ? 'assets/images/ppt.png'
+                                : (files.type == 'application/vnd.openxmlformats-officedocument.presentationml.slideshow') ? 'assets/images/ppt.png'
+                                : (files.type == 'application/zip') ? 'assets/images/zip.png'
+                                : (files.type == 'text/html') ? 'assets/images/txt.png'
+                                : (files.type == 'text/csv') ? 'assets/images/txt.png'
+                                : (files.type == 'image/png') ? 'assets/images/image.png'
+                                : (files.type == 'image/jpeg') ? 'assets/images/image.png'
+                                : (files.type == 'image/jpg') ? 'assets/images/image.png'
+                                : (files.type == ('image/png') || ('image/jpeg') || ('image/jpg')) ? files.icon : 'assets/images/image.png'"
+                class="img-fluid" alt={{productName}} onerror="this.src='assets/images/otherDocument.png'">
+            </span>
+          </ion-col>
+          <ion-col size="8" size-sm="8" size-md="11" size-lg="11" size-xl="11" class="px-2">
+            <h1 class="is-fileName1" [matTooltip]="files.name">
+              {{ files.name }}
+            </h1>
+            <p class="mb-0">
+              <span class="is-label">Size:</span>
+              <span class="is-fileSize text-blue">{{ files.sizeRead }}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-col>
+  <!-- <ion-col (click)="OncloseMenu()" size="5.5" size-sm="5.5" size-md="4"
+    size-lg="3" size-xl="3" class="_sidebar">
+    <ion-row class="mt-3">
+      <ion-row>
+        <ion-col size="2.5" class="px-0 is-sharedSection">
+          <div
+            class="is-d-flex is-justify-content-center is-align-items-center is-shared _shared"
+          >
+            <span class="is-circle bg-blue-6">{{
+              newowner | titlecase | slice: 0:1
+            }}</span>
+          </div>
+        </ion-col>
+        <ion-col size="9.5">
+          <span class="_titleText">{{ newowner | titlecase }}</span
+          ><br />
+          <span class="_title">Owner</span>
+        </ion-col>
+      </ion-row>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Filename</span><br />
+        <span class="_titleText">{{title}}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Type</span><br />
+        <span class="_titleText" *ngIf="files.mimeType === 'httpd/unix-directory'">Folder</span>
+        <span class="_titleText" *ngIf="files.mimeType != 'httpd/unix-directory'">{{ files.mimeType }}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Size</span><br />
+        <span class="_titleText">{{ files.size }}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Shared Time</span><br />
+        <span class="_titleText">{{ modifiedTime }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-col> -->
+  <div class="footer_text">
+    <app-footer></app-footer>
+  </div>
+</ion-row>
+<div>
+  <ion-row class="is-viewDetails" *ngIf="viewinfo">
+    <ion-col class="_sidebar">
+    <ion-row>
+      <ion-col size="11"></ion-col>
+      <ion-col size="1">
+        <mat-icon class="material-icons-outlined text-dark close-ViewDetails" style="cursor: pointer;"
+          (click)="closeViewDetails()">close</mat-icon>
+      </ion-col>
+      <ion-row style="margin-top: -20px;">
+        <ion-col size="2.5" class="px-0 is-sharedSection">
+          <div
+            class="is-d-flex is-justify-content-center is-align-items-center is-shared _shared"
+          >
+            <span class="is-circle bg-blue-6">{{
+              newowner | titlecase | slice: 0:1
+            }}</span>
+          </div>
+        </ion-col>
+        <ion-col size="9.5">
+          <span class="_titleText">{{ newowner | titlecase }}</span
+          ><br />
+          <span class="_title">Owner</span>
+        </ion-col>
+      </ion-row>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Filename</span><br />
+        <span class="_titleText">{{title}}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Type</span><br />
+        <span class="_titleText" *ngIf="files.mimeType === 'httpd/unix-directory'">Folder</span>
+        <span class="_titleText" *ngIf="files.mimeType != 'httpd/unix-directory'">{{ files.mimeType }}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Size</span><br />
+        <span class="_titleText">{{ files.size }}</span>
+      </ion-col>
+      <ion-col size="12" class="mt-3">
+        <span class="_title">Shared Time</span><br />
+        <span class="_titleText">{{ modifiedTime }}</span>
+      </ion-col>
+    </ion-row>
+  </ion-col>
+  </ion-row>
+</div>
+
+</div>

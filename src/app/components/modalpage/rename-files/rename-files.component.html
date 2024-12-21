@@ -1,0 +1,32 @@
+<div class="modalbox">
+
+  <div class="modalheader">
+  </div>
+
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p class="heading">Rename</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-col size="12" class="ion-text-center">
+          <mat-form-field class="example-full-width is-profile" appearance="outline">
+            <mat-label>Title</mat-label>
+            <input type="text" matInput placeholder="Title" [(ngModel)]="title" (focusin)="onFocusInEvent()" class="text-color"
+            (change)="OnCreateNewName($event)" oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_() .]|^ /g,'')" autocomplete="off" />
+          </mat-form-field>
+          <div *ngIf="nameError" class="error">Title is Required!</div>
+        </ion-col>
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <button mat-raised-button class="mx-1" (click)="closepopup()">Cancel</button>
+            <button mat-raised-button class="bg-blue text-white mx-1" (click)="OnreNameFiles()">Update</button>
+          </ion-col>          
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+
+</div>

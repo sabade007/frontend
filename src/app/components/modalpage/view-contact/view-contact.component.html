@@ -1,0 +1,83 @@
+<div class="modalbox1">
+  <ion-row>
+    <ion-col size="10" class="ion-text-start heading">
+      <!-- <p class="header">New Contact</p> -->
+    </ion-col>
+    <ion-col size="2">
+      <a class="clearicon" mat-icon-button (click)="closepopup()">
+        <ion-icon name="close-outline"></ion-icon>
+      </a>
+    </ion-col>
+  </ion-row>
+  <div class="modalbody">
+    <ion-row class="profileicons">
+      <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-center profileimg1">
+        <span class="is-position-relative _proText mt-4" *ngIf="contactDetails.contactImgSrc == 'data:image/png;base64,null' ||
+          contactDetails.contactImgSrc == 'data:image/png;base64,' || contactDetails.contactImgSrc == '' || contactDetails.contactImgSrc == null ">
+          <button [matTooltip]="contactDetails['firstName'] | titlecase" class="mx-2 _Updateprofile"
+            [ngClass]="contactDetails['firstName'].substring(0, 1) | titlecase"mat-mini-fab>
+            {{ contactDetails["firstName"].substring(0, 1) | titlecase }}
+          </button>
+        </span>
+        <div class="profileimg" *ngIf="!(contactDetails.contactImgSrc =='data:image/png;base64,null' ||
+          contactDetails.contactImgSrc == 'data:image/png;base64,' || contactDetails.contactImgSrc == '' || contactDetails.contactImgSrc == null)">
+          <img [src]="contactDetails.contactImgSrc" class="_profileImageDetails mt-4" alt="{{ productName }}"/>
+        </div>
+      </ion-col>
+      <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-center">
+        <p class="header text-center">{{ contactDetails["firstName"] }}
+          {{ contactDetails["lastName"] }}</p>
+      </ion-col>
+    <ion-row>
+      <ion-col class="ul px-0 py-2 m-0">
+        <!-- <ion-row class="li">
+          <ion-col size="4" class="detailstext">
+            <span class="is-label">Name</span>
+            <span class="is-data">{{ contactDetails["firstName"] }}
+              {{ contactDetails["lastName"] }}</span>
+          </ion-col>
+        </ion-row> -->
+        <ion-row class="li">
+          <ion-col size="12" class="detailstext">
+            <div class="is-label">Email</div>
+            <div *ngIf="contactDetails.mailId == '' || contactDetails.mailId == null" class="is-data"> - </div>
+            <div *ngIf="!(contactDetails.mailId == '' || contactDetails.mailId == null)" class="is-data">:   {{ contactDetails.mailId }}</div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="li">
+          <ion-col size="12" class="detailstext">
+            <div class="is-label">Phone</div>
+            <div *ngIf="contactDetails.mobileNumber == '' || contactDetails.mobileNumber == null" class="is-data"> - </div>
+            <div *ngIf="!(contactDetails.mobileNumber == '' || contactDetails.mobileNumber == null)" class="is-data">:   {{ contactDetails.mobileNumber }}</div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="li">
+          <ion-col size="12" class="detailstext">
+            <div class="is-label">Date of Birth</div>
+            <div class="is-data" *ngIf="contactDetails.dob == 'Invalid date' || contactDetails.dob == null"> - </div>
+            <div class="is-data" *ngIf="contactDetails.dob != 'Invalid date'|| contactDetails.dob == null">:   {{ contactDetails["dob"] }}</div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="li">
+          <ion-col size="12" class="detailstext">
+            <div class="is-label">Address</div>
+            <div class="is-data" *ngIf="(contactDetails.address == '' && contactDetails.city == '' && contactDetails.state == '' 
+              && contactDetails.country == '' && contactDetails.postalCode == '') || (contactDetails.address == null && contactDetails.city == null && contactDetails.state == null 
+              && contactDetails.country == null && contactDetails.postalCode == null)"> - </div>
+            <div class="is-data addrsfield" *ngIf="!((contactDetails.address == '' && contactDetails.city == '' && contactDetails.state == '' 
+            && contactDetails.country == '' && contactDetails.postalCode == '') || (contactDetails.address == null && contactDetails.city == null && contactDetails.state == null 
+            && contactDetails.country == null && contactDetails.postalCode == null))">:   {{ contactDetails["address"] }} 
+              {{contactDetails.city}}  {{contactDetails.state}} {{contactDetails.country}} {{contactDetails.postalCode}}</div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-row>
+  </div>
+  <!-- <ion-row>
+    <ion-col size="12" class="ion-text-center">
+      <button mat-button class="is-btn text-white is-yes mx-1" (click)="closepopup()">OK</button>
+    </ion-col>
+  </ion-row> -->
+
+</div>

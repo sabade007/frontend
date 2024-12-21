@@ -1,0 +1,61 @@
+<tui-root>
+  <button
+      tuiButton
+      size="m"
+      type="button"
+      class="tui-space_bottom-4"
+      (click)="show()"
+  >
+      Show simple preview
+  </button>
+  
+  <ng-template #preview let-preview>
+      <tui-preview [rotatable]="false" [zoomable]="false">
+          <iframe
+              [src]="url"
+              frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              class="content"
+              title=""
+          ></iframe>
+  
+          <button
+              tuiIconButton
+              tuiPreviewAction
+              icon="tuiIconCloseLarge"
+              title="Close"
+              (click)="preview.complete()"
+          ></button>
+      </tui-preview>
+  </ng-template>
+  </tui-root>
+<!-- <div class="videoplayer">
+
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+  </div>
+
+  <div class="popup-body">
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center" *ngIf="minio == 'not minio'">
+      <video #videoplayer width="500" height="500" autoplay="autoplay" class="videoplayer"
+      data-setup='{ "aspectRatio":"700:400", "playbackRates": [1, 1.5, 2] }'
+      controls>
+        <source [src]="url" type="video/mp4">
+      </video>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center" *ngIf="minio == 'minio/resource'">
+        <video #videoplayer width="500" height="500" autoplay="autoplay" class="videoplayer"
+        data-setup='{ "aspectRatio":"700:400", "playbackRates": [1, 1.5, 2] }' [src]="url" type="video/mp4"
+        controls>
+        </video>
+        </ion-col>
+    </ion-row>
+
+  </div>
+
+</div> -->

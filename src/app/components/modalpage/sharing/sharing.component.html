@@ -1,0 +1,322 @@
+<div class="modalbox" *ngIf="Accesstype == 'internal'">
+  <div class="modalheader mt-2">
+    <div *ngIf="sharedType == 'shares'">
+      <a class="clearicon" mat-icon-button (click)="closepopup()">
+        <ion-icon name="close-outline"></ion-icon>
+      </a>
+      <p class="heading mb-0 mt-1">Share with Others</p>
+    </div>
+    <div *ngIf="sharedType == 'files'">
+      <!-- <span class="material-icons text-blue mr-2">person_add_alt_1</span> -->
+      <p class="heading mb-0 mt-1">Share with Indryve users and groups</p>
+    </div>
+  </div>
+  <div class="modalbody">
+    <div *ngIf="sharedType == 'files'">
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="8" size-lg="8" size-xl="10" class="ion-text-center">
+          <mat-form-field class="example" appearance="outline">
+            <mat-label>Add people and groups</mat-label>
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let user of selecteduser" (removed)="remove(user)">
+                {{user.firstName}} {{user.groupName}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input class="input" id="userName" [matAutocomplete]="auto" [matChipInputFor]="chipList" #username
+                (keyup)="setInputField(username.value)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let option of userDatas" [value]="[option,'user']">
+                <ion-row>
+                  <ion-col size="1" class="px-0 is-sharedSection">
+                    <div class="is-d-flex is-justify-content-start is-align-items-center is-shared _shared">
+                      <span class="is-circle bg-blue-6">{{option.firstName | titlecase | slice:0:1}}</span>
+                    </div>
+                  </ion-col>
+                  <ion-col size="9">
+                    <span class="_optionsName">{{option.firstName | titlecase}} <span style="color: #979292;font-size: 12px;">({{option.userName}})</span></span>
+                    <span class="_optionsEmail">{{option.mailId}}</span>
+                  </ion-col>
+                  <ion-col *ngIf="option.inContact == true" size="2">
+                    <span class="inContact">In Contact</span>
+                  </ion-col>
+                </ion-row>
+              </mat-option>
+              <mat-option *ngFor="let option of groupDatas" [value]="[option,'group']">
+                <ion-row>
+                  <ion-col size="1" class="px-0 is-sharedSection">
+                    <div class="is-d-flex is-justify-content-start is-align-items-center is-shared _shared">
+                      <span class="is-circle bg-blue-6">{{option.groupName | titlecase | slice:0:1}}</span>
+                    </div>
+                  </ion-col>
+                  <ion-col size="11">
+                    <span class="_optionsName">{{option.groupName | titlecase}}</span>
+                    <span class="_optionsEmail">Group</span>
+                  </ion-col>
+                </ion-row>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="2" class="ion-text-center">
+          <div class="is-footer">
+            <mat-form-field appearance="outline">
+              <mat-select [(ngModel)]="selectedOption">
+                <mat-option *ngFor="let permission of permission" (click)="OnselectPermission(permission.value)"
+                  [value]="permission.value">
+                  {{permission.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col *ngIf="sendmail == true" size="12" size-sm="12" size-md="12" size-lg="12" class="ion-text-center mt-2">
+          <div *ngIf="selecteduser.length > 0 || userLists.length == 0">
+            <mat-form-field class="example-full" appearance="outline">
+              <mat-label>Message</mat-label>
+              <textarea matInput  class="input" maxlength="200" [(ngModel)]="message"></textarea>
+            </mat-form-field>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div *ngIf="selecteduser.length == 0 || sharedType == 'shares'" class="_list">
+      <div *ngFor="let list of sharedlist?.userLists; index as i" class="_userList">
+        <ion-row>
+          <ion-col size="1" class="px-0 is-sharedSection">
+            <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+              <span class="is-circle bg-blue-6">{{list.userName | titlecase | slice:0:1}}</span>
+            </div>
+          </ion-col>
+          <ion-col size="8" class="text-left">
+            <span class="_userName">{{list.userName | titlecase}}</span>
+            <span class="_userEmail">{{list.email}}</span>
+          </ion-col>
+          <ion-col size="3" *ngIf="list.permissions == 'CAN_DO_ANYTHING'">
+            <span class="_userEmail px-2">Owner</span>
+          </ion-col>
+          <ion-col size="3" *ngIf="list.permissions != 'CAN_DO_ANYTHING'">
+            <mat-form-field appearance="outline">
+              <mat-select [(value)]="list.permissions">
+                <!-- <mat-option [value]="list.permissions" *ngIf="expression" [hidden]="true">
+                  {{list.viewValue}}
+                </mat-option> -->
+              <mat-option *ngFor="let permission of Userpermission"
+                  (click)="OnupdatePermissions(permission.value , list.userName, '', list.permissions)" [value]="permission.value">
+                  {{permission.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngFor="let list of sharedlist?.groupLists; index as i" class="_userList">
+        <ion-row>
+          <ion-col size="1" class="px-0 is-sharedSection">
+            <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+              <span class="is-circle bg-blue-6">{{list.groupName | titlecase | slice:0:1}}</span>
+              <!-- <span class="bg-blue-2"><mat-icon class="material-icons-filled">groups</mat-icon></span> -->
+            </div>
+          </ion-col>
+          <ion-col size="8" class="text-left">
+            <span class="_userName" [stickyPopover]="popTemplate" (mouseover)="getGroupInfo(list.groupId, list.permissions)" placement="bottom" triggers="manual">{{list.groupName | titlecase}}
+              <span class="badge badge-primary" style="margin-left: 10px;background-color: #0062cc !important;" *ngIf="list.contactCount == 1">{{list.contactCount}} Contact</span>
+              <span *ngIf="list.contactCount != 1" style="margin-left: 10px;background-color: #0062cc !important;" class="badge badge-primary">{{list.contactCount}} Contacts</span>
+            </span>
+            <span class="_userEmail">Group</span>
+          </ion-col>
+          <ion-col (click)="updateTempPermission(list.permissions)" size="3">
+            <mat-form-field appearance="outline">
+              <mat-select  [(value)]="list.permissions">
+                <!-- <mat-option  [hidden]="true">
+                  {{list.viewValue}}
+                </mat-option> -->
+                <mat-option *ngFor="let permission of Userpermission" [value]="permission.value"
+                  (click)="OnupdatePermissions(permission.value ,'', list.groupId, list.permissions)">
+                  {{permission.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+    <ion-row *ngIf="sharedType == 'files'">
+      <ion-col size="3" size-sm="3" size-md="3" size-lg="3" class="togglebtn">
+        <mat-slide-toggle class="example-margin" color="primary" (click)="OnSendMail(isEnable)" [(ngModel)]="isEnable"></mat-slide-toggle>
+        <span class="heading1">Send mail</span>
+      </ion-col>
+      <ion-col size="9" size-sm="9" size-md="9" size-lg="9" class="is-d-flex is-justify-content-end">
+        <button mat-raised-button class="is-btn text-black bg-lightgray mx-2" (click)="closepopup()">Cancel</button>
+        <button mat-raised-button class="bg-blue text-white" (click)="OnShareDoc()">Share</button>
+      </ion-col>
+    </ion-row>
+    <div *ngIf="title != ''">
+      <mat-divider></mat-divider>
+      <ion-row>
+        <ion-col size="12" class="is-d-flex is-justify-content-start">
+          <p matTooltip="{{title}}" class="_title">{{title}}</p>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+</div>
+
+<div class="modalbox getLink" *ngIf="Accesstype == 'public'">
+  <div>
+    <ion-row class="modalheader mt-2">
+      <ion-col size="12">
+        <a class="clearicon" mat-icon-button (click)="closepopup()">
+          <ion-icon name="close-outline"></ion-icon>
+        </a>
+        <div class="is-d-flex is-justify-content-center is-align-items-center">
+          <ion-toggle color="primary" (click)="OnUpdateStatus(getLinkAccess)" [(ngModel)]="getLinkAccess"></ion-toggle>
+          <span class="heading">Get Link Access</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div class="modalbody">
+    <div *ngIf="getLinkAccess == true">
+      <p class="pubText">This file can be accessed by anyone with the link.</p>
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="10" size-lg="10" size-xl="10">
+          <input class="input" [(ngModel)]="getLink" name="getLink" class="_linkText" readonly>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="2" size-lg="2" size-xl="2" class="">
+          <button [cdkCopyToClipboard]="getLink" mat-button class="bg-blue text-white">Copy link</button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="mt-2 mb-2">
+        <ion-col size="12">
+          <mat-checkbox #Restrictedbox class="input" #checkbox="matCheckbox" (click)="OnRestricted(checkbox)"
+            class="example-margin" color="primary">
+            Restricted</mat-checkbox>
+        </ion-col>
+      </ion-row>
+      <div *ngIf="showRestricted">
+        <ion-row>
+          <ion-col size="12" size-sm="9" size-md="9" size-lg="9" size-xl="9">
+            <mat-form-field class="example-full-width is-signUp public" appearance="outline">
+              <mat-label>Password</mat-label>
+              <!-- <span class="material-icons icon" *ngIf="openLock">lock_open</span>
+              <span class="material-icons icon" *ngIf="closeLock">lock</span> -->
+              <input class="input" id="password" #userpassword [type]="hide ? 'password' : 'text'" matInput placeholder="Password"
+                style="width: 146px;overflow: auto;" (change)="OnPasswordValue($event)" maxlength="15"
+                (focusin)="onFocusInEvent($event)" (focusout)="onFocusOutEvent($event)"
+                (keyup.enter)="updatePublicPermission()" value="{{newPassword}}">
+              <span class="password-icon" mat-icon-button matSuffix (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon class="eyeicon text-blue">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </span>
+              <button (click)="copyInputMessage(userpassword)">
+                <span class="material-icons-outlined icon" matTooltip="Copy Password">content_copy</span>
+              </button>
+              
+            </mat-form-field>
+            </ion-col>
+            <ion-col size="12" size-sm="3" size-md="3" size-lg="3" size-xl="3">
+              <button (click)="generatePassword()" mat-button class="bg-blue text-white is-button">Generate Password</button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" size-sm="12" size-md="5" size-lg="5" size-xl="5">
+            <mat-form-field class="expiry-date" appearance="outline">
+              <mat-label>Expiry Date</mat-label>
+              <input class="input" matInput id="date" [matDatepicker]="picker" [(ngModel)]="dt" [min]="minDate"
+                (dateInput)="getExpiryTime($event.value)" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <!-- <p class="helpertxt">Public link will be disabled after time has</p> -->
+            <p *ngIf="endTime" class="_expiryText">Expiry Date is {{endTime}}</p>
+          </ion-col>
+          <!-- <ion-col size="12" size-sm="12" size-md="2" size-lg="2" size-xl="2">
+            <div class="is-footer">
+              <mat-form-field class="permission" appearance="outline">
+                <mat-select [(ngModel)]="pubselectedOption">
+                  <mat-option *ngFor="let permission of permission" (click)="OnselectPermission(permission.value)"
+                    [value]="permission.value">
+                    {{permission.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </ion-col> -->
+        </ion-row>
+      </div>
+      <ion-row>
+        <ion-col size="2">
+          <mat-checkbox class="example-margin mb-2" color="primary" #emailcheckbox="matCheckbox"
+            (click)="OnEmailSend(emailcheckbox)">Send link by Email</mat-checkbox>
+        </ion-col>
+        <ion-col size="12" *ngIf="showEmail">
+          <form [formGroup]="restrictedForm" autocomplete="off">
+            <mat-form-field appearance="outline">
+              <mat-label>User email</mat-label>
+              <mat-chip-list #chipList formArrayName="emails">
+                <mat-chip [color]="(item.invalid)?'warn':''" selected *ngFor="let item of emailList; let i=index"
+                  [selectable]="true" [removable]="removable" (removed)="removeEmail(item)" required name="chips">
+                  {{item.value}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input class="input" id="useremail" placeholder="User email" [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes " [matChipInputAddOnBlur]="true "
+                  (matChipInputTokenEnd)="addEmails($event) " />
+              </mat-chip-list>
+            </mat-form-field>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center">
+                <button (click)="OnsendPublicLink()" mat-raised-button class="bg-blue text-white">Send</button>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-col>
+      </ion-row>
+    </div>
+    <div *ngIf="getLinkAccess == false">
+      <!-- <p class="_pubText"> will only be accessible to
+        you and users you have shared with</p> -->
+      <p class="_pubSubText">Use the toggle switch to enable this link to share with anyone.</p>
+    </div>
+    <div *ngIf="title != ''">
+      <mat-divider></mat-divider>
+      <ion-row>
+        <ion-col size="12" class="is-d-flex is-justify-content-start">
+          <p matTooltip="{{title}}" class="_title">{{title}}</p>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+</div>
+<ng-template #popTemplate id="commentPopover">
+  <div style="height: auto;overflow: auto;width: 20em;max-height: 15em;padding-right: 20px;" id="divPopover">
+    <ion-row>
+      <ion-col size="2" class="px-0 is-sharedSection">
+        <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+          <!-- <span class="is-circle bg-blue-6">{{groupName | titlecase | slice:0:1}}</span> -->
+          <span class="bg-blue-2"><mat-icon class="material-icons-filled groupicon">groups</mat-icon></span>
+        </div>
+      </ion-col>
+      <ion-col size="10" class="text-left px-4">
+        <span class="_userName groupnames">{{groupName | titlecase}}</span>
+        <span class="_userEmail" *ngIf="contactCount == 1">{{contactCount}} Contact</span>
+        <span class="_userEmail" *ngIf="contactCount != 1">{{contactCount}} Contacts</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" size-sm="12" size-md="6" size-lg="6" size-xl="6"
+        *ngFor="let list of contactsList">
+        <ion-row>
+          <mat-icon class="material-icons-filled personIcon">person</mat-icon>
+          <span class="_Names px-2">{{list.firstName}} {{list.lastName}}</span>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </div>
+</ng-template>

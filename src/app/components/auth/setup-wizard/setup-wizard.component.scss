@@ -1,0 +1,138 @@
+@import "../../../../appVariable.scss";
+
+.is-fullwidth {
+  height: 100%;
+  overflow: auto;
+  overflow-x: initial;
+  margin-bottom: 1rem;
+}
+.is-panel {
+  padding: 15px 10px !important;
+  width: 100%;
+  height: 100%;
+  background-color: #fff !important;
+  @include for-phone-only {
+    padding: 0px !important;
+  }
+  @include for-tablet-only {
+  }
+  .is-left {
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
+    @include for-phone-only {
+      margin-bottom: 20px;
+      height: 100% !important;
+    }
+    @include for-tablet-only {
+      height: 100% !important;
+    }
+  }
+  .is-right {
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
+    @include for-phone-only {
+      margin: 0px !important;
+    }
+  }
+}
+.leftimg{
+  margin-left: 35px;
+  margin-top: 15%;
+}
+.rightside{
+  margin-left: 7% !important;
+}
+.login-title {
+  font-size: 24px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  color: #1d5686;
+  text-align: left;
+  padding: 10px 10px;
+  @include for-phone-only() {
+    padding-left: 1rem;
+  }
+}
+.title {
+  font-size: 20px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  color: #1d5686;
+  text-align: left;
+  padding: 10px 10px;
+  @include for-phone-only() {
+    padding-left: 1rem;
+  }
+}
+.example-full-width {
+  width: 60%;
+  margin-left: 0px;
+  font-size: 0.875rem;
+}
+.example-full {
+  width: 100%;
+  margin-left: 0px;
+  font-size: 0.875rem;
+}
+.is-d-none {
+  display: none;
+}
+.is-agreeError {
+  color: red;
+  font-size: 12px;
+  margin-left: 0.6rem;
+}
+.radioinputs{
+  margin-left: 54px;
+}
+// ::ng-deep {
+//   .is-signUp.mat-form-field {
+//     width: 60%;
+//     font-family: "Poppins" !important;
+//   }
+//   .is-signUp.mat-form-field-appearance-outline.is-signUp
+//     .mat-form-field-wrapper {
+//     padding-bottom: 1.25em !important;
+//     @include for-phone-only() {
+//       padding: 5px 1.25em !important;
+//     }
+//   }
+//   .mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
+//     padding: 0px 0em !important;
+//     @include for-phone-only() {
+//       padding: 10px 0em !important;
+//     }
+//   }
+//   .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+//     color: #7c7c7c !important;
+//     background: #fff !important;
+//   }
+//   .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline-gap {
+//     border: 0px solid currentColor !important;
+//   }
+//   .is-signUp.mat-form-field-appearance-outline
+//     .mat-form-field-outline-thick
+//     .mat-form-field-outline-start,
+//   .mat-form-field-appearance-outline
+//     .mat-form-field-outline-thick
+//     .mat-form-field-outline-end,
+//   .mat-form-field-appearance-outline
+//     .mat-form-field-outline-thick
+//     .mat-form-field-outline-gap {
+//     border-width: 0px !important;
+//   }
+//   .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline {
+//     border-bottom: 1px solid #1d5686 !important;
+//   }
+//   .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline-start,
+//   .mat-form-field-appearance-outline .mat-form-field-outline-end {
+//     border: 0px solid currentColor !important;
+//   }
+//   .is-signUp.mat-form-field-appearance-outline .mat-form-field-flex {
+//     padding: 0em 0 0em !important;
+//   }
+// }

@@ -1,0 +1,532 @@
+<ion-grid class="is-fullwidth is-paddingMain search-results">
+  <div *ngIf="!showWorkSpaceFiles">
+    <div class="is-topStickyHeader">
+      <!-- File Breadcrumbs  -->
+      <ion-row class="breadcrumbDesign">
+        <ion-col size="4" size-sm="4" size-md="2" size-lg="2" size-xl="2" class="mb-4">
+          <span class="is-d-flex is-justify-content-start text-blue heading">Workspace</span>
+        </ion-col>
+        <ion-col size="8" size-sm="8" size-md="7" size-lg="7" size-xl="7"
+          class="is-d-flex is-justify-content-start is-align-items-start">
+          <mat-form-field class="example-form-field" appearance="outline">
+            <mat-label>Search Workspace</mat-label>
+            <input matInput type="text" [(ngModel)]="searchValue" (keyup)="OnSearchValue(searchValue)" autocomplete="off"/>
+            <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear"(click)="OncancelSearch(); searchValue = ''">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="3" size-lg="3" class="mb-4 is-d-flex is-justify-content-end">
+          <div class="px-4 fabbtn">
+            <ion-fab-button size="small" class="is-flatAddDocsBtn panel-menu"
+            matTooltip="Add Workspaces" (click)="createWorkSpace()">
+            <ion-icon name="add-outline" class="is-addDocss"></ion-icon>
+          </ion-fab-button>
+          </div>
+          <div>
+            <button class="mt-3" id="btn1"
+              mat-raised-button
+              matTooltip="Back"
+              (click)="goToDashboard()"
+              color="primary">
+              <span class="material-icons-outlined mr-2">arrow_back</span>Back
+            </button>
+          </div>
+          <div>
+            <button id="btn2" class="backbtn"
+              mat-raised-button
+              matTooltip="Back"
+              (click)="goToDashboard()"
+              color="primary"
+            >
+              <span class="material-icons-outlined">arrow_back</span>
+            </button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <ion-col size="12" size-sm="12" size-md="8" size-lg="8" size-xl="8"
+      class="px-1 is-d-flex is-align-items-center workspaceTab">
+      <tui-tabs>
+        <button tuiTab class="shared" [ngClass]="{ 'text-blue': yourWorkSpace }"
+          (click)="OnCreatedOrder('you')">My Workspace
+          <span *ngIf="yourWorkSpace" class="badges">{{workSpaceCount}}</span>
+        </button>
+        <button tuiTab class="mx-4 shared" [ngClass]="{ 'text-blue': sharedWorkspace }"
+          (click)="OnCreatedOrder('others')">Shared Workspace 
+          <span *ngIf="sharedWorkspace" class="badges">{{workSpaceCount}}</span>
+        </button>
+      </tui-tabs>
+    </ion-col>
+
+
+    <!-- Workspace list -->
+    <ion-row class="ion-justify-content-start">
+      <ion-col size="12" class="col-lg-12">
+        <div *ngIf="workSpaceCount == 0 && sharedWorkspace == true" class="text-center">
+          <div class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+            <mat-icon class="material-icons-outlined is-trashIcon">group_work</mat-icon>
+            <h2 class="text-secondary">No shared workspace in here</h2>
+            <!-- <p class="is-fontMedium text-secondary">
+              Drag files to upload or use the '+' button to upload any
+              content.
+            </p> -->
+          </div>
+        </div>
+        <div *ngIf="workSpaceCount == 0 && yourWorkSpace == true" class="text-center">
+          <div class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+            <mat-icon class="material-icons-outlined is-trashIcon">group_work</mat-icon>
+            <h2 class="text-secondary">No workspace in here</h2>
+            <!-- <p class="is-fontMedium text-secondary">
+              Drag files to upload or use the '+' button to upload any
+              content.
+            </p> -->
+          </div>
+        </div>
+      </ion-col>
+      <ion-col size="6" size-sm="6" size-md="3" size-lg="3" size-xl="3"
+        class="my-2 animated fadeInUp" *ngFor="let item of workSpaceList">
+        <div class="cclr card cursor-pointer px-2 pt-0 pb-2 _selectedFile">
+          <div class="card-body1 is-folder">
+            <div class="is-header">
+              <button mat-icon-button id="moreaction" matTooltip="More actions" class="is-moreMenu"
+                [matMenuTriggerFor]="moreMenu" #trigger="matMenuTrigger">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <div (mouseleave)="trigger.closeMenu()">
+                  <button *ngIf="sharedWorkspace == false" mat-menu-item id="download" (click)="onEdit(item.workSpaceId)">
+                    <mat-icon class="material-icons-outlined">edit</mat-icon>
+                    <span>Edit</span>
+                  </button>
+                  <button mat-menu-item id="download" (click)="onView(item.workSpaceId)">
+                    <mat-icon class="material-icons-outlined">info</mat-icon>
+                    <span>Info</span>
+                  </button>
+                  <button mat-menu-item id="download" (click)="onDelete(item.workSpaceId)">
+                    <mat-icon class="material-icons-outlined">delete</mat-icon>
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </mat-menu>
+            </div>
+            <div >
+              <div (dblclick)="onOpenWorkSpace(item.workSpaceId, item.workSpaceName, item.parentId)">
+                <div class="is-d-flex is-justify-content-between mt-2">
+                  <button [matTooltip]="item.workSpaceName | titlecase" class="mx-2 profile-btn"
+                    [ngClass]="item['workSpaceName'].substring(0, 1) | titlecase" mat-mini-fab >
+                    {{ item["workSpaceName"].substring(0, 2) | titlecase }}
+                  </button>
+                </div>
+                <a class="folder">
+                  <h5 class="mt-4 is-fileName">{{item.workSpaceName | titlecase}}</h5>
+                  <p>
+                    <span class="is-folderDetails" *ngIf="userName == item.workSpaceOwner">Created by you</span>
+                    <span class="is-folderDetails" *ngIf="userName != item.workSpaceOwner">Created by {{item.workSpaceOwner}}</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- Workspace list shared workspace -->
+    <!-- <ion-row class="ion-justify-content-start" *ngIf="sharedWorkspace">
+      <ion-col size="6" size-sm="6" size-md="3" size-lg="3" size-xl="3"
+        class="my-2 animated fadeInUp" *ngFor="let item of workSpaceListByOthers">
+        <div class="cclr card cursor-pointer px-2 pt-0 pb-2 _selectedFile">
+          <div class="card-body1 is-folder">
+            <div class="is-header">
+              <button mat-icon-button id="moreaction" matTooltip="More actions" class="is-moreMenu"
+                [matMenuTriggerFor]="moreMenu" #trigger="matMenuTrigger">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <div (mouseleave)="trigger.closeMenu()">
+                  <button mat-menu-item id="download" (click)="onView(item.workSpaceId)">
+                    <mat-icon class="material-icons-outlined">info</mat-icon>
+                    <span>Info</span>
+                  </button>
+                  <button mat-menu-item id="download" (click)="onDelete(item.workSpaceId)">
+                    <mat-icon class="material-icons-outlined">delete</mat-icon>
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </mat-menu>
+            </div>
+            <div>
+              <div (dblclick)="onOpenWorkSpace(item.workSpaceId,item.workSpaceName,item.parentId)">
+                <div class="is-d-flex is-justify-content-between mt-2">
+                  <button [matTooltip]="item.workSpaceName | titlecase" class="mx-2 profile-btn"
+                    [ngClass]="item['workSpaceName'].substring(0, 1) | titlecase" mat-mini-fab >
+                    {{ item["workSpaceName"].substring(0, 2) | titlecase }}
+                  </button>
+                </div>
+                <a class="folder">
+                  <h5 class="mt-4 is-fileName">{{item.workSpaceName | titlecase}}</h5>
+                  <p>
+                    <span class="is-folderDetails">Created by {{item.workSpaceOwner | titlecase}}</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row> -->
+
+    <ion-row *ngIf="workSpaceCount != 0" id="btn1">
+      <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="px-0">
+        <mat-paginator class="media-table-paginator" [length]="workSpaceCount" [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]" (page)="pageEvent = $event; onPageChange($event)"showFirstLastButtons>
+        </mat-paginator>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="workSpaceCount != 0" id="btn2">
+      <ion-col hidePageSize size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="px-0">
+        <mat-paginator hidePageSize class="media-table-paginator" [length]="workSpaceCount" [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]" (page)="pageEvent = $event; onPageChange($event)" showFirstLastButtons>
+        </mat-paginator>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <!-- On Open Workspace -->
+  <div *ngIf="showWorkSpaceFiles">
+    <!-- Breadcrumbs -->
+    <ion-row>
+      <ion-col size="7" size-sm="8" size-md="8" size-lg="8" size-xl="8">
+        <nav class="breadcrumbsListnav">
+          <ol class="breadcrumb1">
+            <li style="cursor: pointer" (click)="OnhomeFiles()">
+              <a class="homeicon">
+                <mat-icon itemprop="name" class="material-icons-outlined is-close text-darkgray">home</mat-icon>
+              </a>
+            </li>
+            <li class="breadcrumblist" style="cursor: pointer"
+              (click)="OnhomeFiles()">
+              <a>
+                <span style="cursor: pointer" class="breadcrumbtitle">{{openWorkspaceName}}</span>
+              </a>
+            </li>
+            <!-- <li class="breadcrumblist" style="cursor: pointer" *ngFor="let breadcrumb of breadcrumbfiles; index as i"
+              (click)="Onbackbreadcrumb(breadcrumb.id, breadcrumb.title)">
+              <a *ngIf="breadcrumbfiles.length > 0">
+                <span class="breadcrumbtitle">{{breadcrumb.title}}</span>
+              </a>
+            </li> -->
+          </ol>
+        </nav>
+      </ion-col>
+      <ion-col size="3" size-sm="5" size-md="4" size-lg="4" size-xl="4"
+        class="is-d-flex is-justify-content-end is-align-items-center filesicon">
+        <div class="px-4 fabbtn">
+          <ion-fab-button size="large" style="width: 50px; height: 50px" class="is-flatAddDocsBtn panel-menu"
+            matTooltip="Add New File / Folder" (click)="OnopenMenu()">
+            <ion-icon name="add-outline" class="is-addDocs" style="width: 25px; height: 25px"></ion-icon>
+          </ion-fab-button>
+        <div *ngIf="openMenu" class="_menu">
+          <button mat-menu-item id="upload" (click)="fileInput.click()">
+            <mat-icon class="material-icons-outlined">file_upload</mat-icon>
+            <span>Upload File</span>
+            <input class="FileUploads" #fileInput type="file" accept="all" (change)="uploadFile($event)"/>
+          </button>
+          <button mat-menu-item id="folder" #toggleButton>
+            <mat-icon class="material-icons-outlined">create_new_folder</mat-icon>
+            <span *ngIf="!newFolder" (click)="createNewFile(); $event.stopPropagation()">New Folder</span>
+            <span *ngIf="newFolder" #menu class="Inputinner-align Inputright-align">
+              <span class="material-icons icon" style="width: 30px" type="submit"
+                (click)="OnNewFolder()">arrow_forward</span>
+              <input id="newfolder" type="text" (keyup.enter)="OnNewFolder()" class="inputAlign"
+                (change)="OncreateFolder($event)" (click)="$event.stopPropagation()" placeholder="New Folder"
+                oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ]|^ /g,'')"
+                autocomplete="off"(focusin)="onFocusInNewFolder()"/>
+            </span>
+          </button>
+          <p class="_createError" *ngIf="errorFolder">{{ errorFolder }}</p>
+          <button mat-menu-item id="import" (click)="importFile()">
+            <mat-icon class="material-icons-outlined">import_export</mat-icon>
+            <span>Import File</span>
+          </button>
+        </div>
+        </div>
+        <span matRipple id="step14" class="mx-2 cursor-pointer is-d-flex" matTooltip="List View"
+          *ngIf="fileGridView" (click)="fileListViewShow()">
+          <mat-icon class="material-icons-outlined text-darkgray"
+            [ngClass]="fileListView ? 'text-blue' : 'text-dark'">format_list_bulleted
+          </mat-icon>
+        </span>
+        <span matRipple id="step14" class="mx-2 cursor-pointer is-d-flex" matTooltip="Grid View"
+          *ngIf="fileListView" (click)="fileGridViewShow()">
+          <mat-icon class="material-icons-outlined text-darkgray"
+            [ngClass]="fileGridView ? 'text-blue' : 'text-dark'">grid_view
+          </mat-icon>
+        </span>
+      </ion-col>
+    </ion-row>
+    <mat-divider></mat-divider>
+    <!-- Files List view -->
+    <div *ngIf="fileListView">
+      <ion-row class="my-2">
+        <ion-col size="12" class="col-lg-12">
+          <div *ngIf="workSpaceFilesCount == 0" class="text-center">
+            <div class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+              <mat-icon class="material-icons-outlined is-trashIcon">folder</mat-icon>
+              <h2 class="text-secondary">No files in here</h2>
+              <!-- <p class="is-fontMedium text-secondary">
+                Drag files to upload or use the '+' button to upload any
+                content.
+              </p> -->
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="bg-white is-fileList animated fadeInUp" *ngFor="let files of workSpaceFiles; let i = index"
+        [class.active]="i == HighlightRow" (window:mouseup)="mouseUp()">
+        <ion-col size="3" size-sm="3" size-md="1.5" size-lg="1" size-xl="1" class="is-leftSide">
+          <span class="is-selectFile"></span>
+          <span class="is-docImage">
+            <img width="34px" height="34px" class="img-fluid" alt="{{ productName }}"
+              [src]="mimes[files.mimeType] != '' ||
+                mimes[files.mimeType] != undefined
+                ? mimes[files.mimeType].icon === 'src'
+                  ? files.icon
+                  : mimes[files.mimeType].icon
+                : 'assets/images/otherDocument.png'"/>
+          </span>
+        </ion-col>
+        <ion-col size="6" size-sm="6" size-md="6" size-lg="6"  size-xl="6" class="px-2">
+          <h1  *ngIf="reNameFile" class="is-fileName">{{files.title}}</h1>
+          <h1 *ngIf="!reNameFile && !(reNameId == files.id)" (window:mouseup)="mouseUp()"
+            class="is-fileName" [matTooltip]="files.title">
+            {{ files.title }}
+          </h1>
+          <span *ngIf="!reNameFile && reNameId == files.id" (window:mouseup)="mouseUp()"
+            class="reNameInputinner-align Inputright-align">
+            <span class="material-icons icon" type="submit" (click)="OnreNameFiles(reNameId)">
+              arrow_forward</span>
+            <input [(ngModel)]="strname" id="reNameFile" type="text" (keyup.enter)="OnreNameFiles(reNameId)"
+              class="inputAlign" (change)="OnCreateNewName($event)" (focusin)="onFocusInEvent($event)"
+              maxlength="25" oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ().]|^ /g,'')"/>
+          </span>
+          <p class="mb-0">
+            <span class="is-label">Size: </span>
+            <span class="is-fileSize text-blue">{{files.size}}</span>
+            <!-- <label *ngIf="
+                files.fileFolderStructure.mimeType == 'httpd/unix-directory'
+              "
+            >
+              <span class="is-label"> Files: </span>
+              <span
+                class="is-fileSize text-danger"
+                *ngIf="
+                  files.fileFolderStructure.itemCount == '1' ||
+                  files.fileFolderStructure.itemCount == '0'
+                "
+                >{{ files.fileFolderStructure.itemCount }} file</span
+              >
+              <span
+                class="is-fileSize text-danger"
+                *ngIf="
+                  files.fileFolderStructure.itemCount != '1' &&
+                  files.fileFolderStructure.itemCount != '0'
+                "
+                >{{ files.fileFolderStructure.itemCount }} files</span
+              >
+            </label> -->
+          </p>
+        </ion-col>
+
+        <ion-col size="12" size-sm="12" size-md="2" size-lg="2" size-xl="2" class="px-0 is-sharedSection">
+          <!-- <div
+            class="is-d-flex is-justify-content-start is-align-items-center is-shared"
+          >
+            <span
+              (click)="
+                documentShare(
+                  files.fileFolderStructure.id,
+                  files.fileFolderStructure.itemCount,
+                  files.fileFolderStructure.title
+                )
+              "
+              *ngIf="sharedType == 'others'"
+              [matTooltip]="files.fullName[0]"
+              class="is-circle bg-blue-6"
+              >{{ files.fullName[0] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="
+                documentShare(
+                  files.fileFolderStructure.id,
+                  files.fileFolderStructure.itemCount,
+                  files.fileFolderStructure.title
+                )
+              "
+              [matTooltip]="files.fullName[0]"
+              *ngIf="files.fullName.length >= 1 && sharedType == 'self'"
+              class="is-circle bg-blue-6"
+              >{{ files.fullName[0] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="
+                documentShare(
+                  files.fileFolderStructure.id,
+                  files.fileFolderStructure.itemCount,
+                  files.fileFolderStructure.title
+                )
+              "
+              [matTooltip]="files.fullName[1]"
+              *ngIf="files.fullName.length >= 2 && sharedType == 'self'"
+              class="is-circle bg-orange-6"
+              >{{ files.fullName[1] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="
+                documentShare(
+                  files.fileFolderStructure.id,
+                  files.fileFolderStructure.itemCount,
+                  files.fileFolderStructure.title
+                )
+              "
+              [matTooltip]="files.fullName[2]"
+              *ngIf="files.fullName.length >= 3 && sharedType == 'self'"
+              class="is-circle bg-danger-6"
+              >{{ files.fullName[2] | titlecase | slice: 0:1 }}</span
+            >
+            <span
+              (click)="
+                documentShare(
+                  files.fileFolderStructure.id,
+                  files.fileFolderStructure.itemCount,
+                  files.fileFolderStructure.title
+                )
+              "
+              class="is-circle bg-success text-white"
+              *ngIf="files.fullName.length > 3 && sharedType == 'self'"
+              >+{{ files.fullName.length - 3 }}</span
+            >
+          </div> -->
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="2" size-lg="2" size-xl="2" class="px-2 is-dateTime">
+          <div class="">
+            <h2 class="is-createdAt">
+              <mat-icon class="material-icons-outlined text-pink mx-0">schedule</mat-icon>
+              {{files.modifiedAt}}
+            </h2>
+          </div>
+        </ion-col>
+        <ion-col size="1" size-sm="1" size-md="1.5" size-lg="1" size-xl="1"
+          class="is-d-flex is-justify-content-center is-align-items-center px-2 is-rightSide">
+          <div class="card-header-toolbar">
+            <button matTooltip="More actions" id="moreactions" mat-icon-button class="is-moreMenu text-blue"
+              [matMenuTriggerFor]="moreMenu"  aria-label="Example icon-button with a menu" #trigger="matMenuTrigger">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #moreMenu="matMenu">
+              <div (mouseleave)="trigger.closeMenu()">
+                <button mat-menu-item id="download" (click)="OnRename(files.id, files.title, files.mimeType)">
+                  <mat-icon class="material-icons-outlined">edit</mat-icon>
+                  <span>Rename</span>
+                </button>
+                <button mat-menu-item id="download">
+                  <mat-icon class="material-icons-outlined">download</mat-icon>
+                  <span>Download</span>
+                </button>
+              </div>
+            </mat-menu>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+    <!--Grid View  -->
+    <div class="is-fullwidth" *ngIf="fileGridView">
+      <ion-row class="my-2">
+        <ion-col size="12" class="col-lg-12">
+          <div *ngIf="workSpaceFilesCount == 0" class="text-center">
+            <div class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+              <mat-icon class="material-icons-outlined is-trashIcon">folder</mat-icon>
+              <h2 class="text-secondary">No files in here</h2>
+              <!-- <p class="is-fontMedium text-secondary">
+                Drag files to upload or use the '+' button to upload any
+                content.
+              </p> -->
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    
+      <ion-row class="ion-justify-content-start">
+        <ion-col size="6" size-sm="6" size-md="3" size-lg="2.4" size-xl="2.4"
+          class="my-2 animated fadeInUp" *ngFor="let files of workSpaceFiles; let i = index">
+          <div class="cclr card cursor-pointer px-2 pt-0 pb-2 _selectedFile" (window:mouseup)="mouseUp()" [class.active]="i == HighlightRow">
+            <div class="card-body1 is-folder">
+              <div class="is-header">
+                <button mat-icon-button id="moreaction" matTooltip="More actions" class="is-moreMenu"
+                  [matMenuTriggerFor]="moreMenu" #trigger="matMenuTrigger">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #moreMenu="matMenu">
+                  <div (mouseleave)="trigger.closeMenu()">
+                    <button mat-menu-item id="download" (click)="OnRename(files.id, files.title, files.mimeType)">
+                      <mat-icon class="material-icons-outlined">edit</mat-icon>
+                      <span>Rename</span>
+                    </button>
+                    <button mat-menu-item id="download">
+                      <mat-icon class="material-icons-outlined">download</mat-icon>
+                      <span>Download</span>
+                    </button>
+                  </div>
+                </mat-menu>
+              </div>
+              <div class="document-card image-thumb">
+                <div class="is-documentSection">
+                  <div class="text-center is-docThumb">
+                    <img width="90" height="82" class="img-fluid" alt="exza cloud"
+                      [src]="mimes[files.mimeType] != '' || mimes[files.mimeType] != undefined
+                        ? mimes[files.mimeType].icon === 'src'? files.icon: mimes[files.mimeType].icon
+                        : 'assets/images/otherDocument.png'"/>
+                  </div>
+                  <h5 *ngIf="reNameFile" class="is-fileName">{{files.title}}</h5>
+                  <h5 *ngIf="!reNameFile && !(reNameId == files['id'])" (window:mouseup)="mouseUp()"
+                    class="is-fileName" [matTooltip]="files.title">
+                    {{ files["title"] }}
+                  </h5>
+                  <span *ngIf="!reNameFile && reNameId == files['id']" (window:mouseup)="mouseUp()"
+                    class="reNameInputinner-align Inputright-align">
+                    <span class="material-icons icon" type="submit" (click)="OnreNameFiles(reNameId)">arrow_forward</span>
+                    <input  id="reNameFile" type="text" (keyup.enter)="OnreNameFiles(reNameId)" class="inputAlign"
+                      (change)="OnCreateNewName($event)" [(ngModel)]="strname" (focusin)="onFocusInEvent($event)"
+                      maxlength="25" oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_() .]|^ /g,'')"/>
+                  </span>
+                    <p class="mb-1 mt-2">
+                      <span class="is-folderDetails">{{files["modifiedAt"]}}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+      </ion-row>
+    </div>
+    <ion-row *ngIf="workSpaceFilesCount != 0" id="btn1">
+      <ion-col class="px-0">
+        <mat-paginator class="media-table-paginator" [length]="workSpaceFilesCount" [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+          (page)="pageEvent = $event; onPageChange($event)" showFirstLastButtons>
+        </mat-paginator>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="workSpaceFilesCount != 0" id="btn2">
+        <ion-col class="px-0">
+          <mat-paginator hidePageSize class="media-table-paginator" [length]="workSpaceFilesCount" [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+            (page)="pageEvent = $event; onPageChange($event)" showFirstLastButtons>
+          </mat-paginator>
+        </ion-col>
+    </ion-row>
+  </div>
+
+</ion-grid>

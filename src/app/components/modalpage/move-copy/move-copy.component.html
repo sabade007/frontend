@@ -1,0 +1,447 @@
+<div class="modalbox">
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+    <h1 class="heading mb-0 mt-1">Choose target folder</h1>
+  </div>
+
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-grid class="is-fullwidth">
+          <ion-row class="ion-justify-content-between">
+            <ion-fab-button
+              size="large"
+              style="width: 50px; height: 50px"
+              class="is-flatAddDocsBtn panel-menu"
+              matTooltip="Add New Folder"
+              (click)="OnopenMenu()"
+            >
+              <ion-icon
+                name="add-outline"
+                class="is-addDocs"
+                style="width: 25px; height: 25px"
+              ></ion-icon>
+            </ion-fab-button>
+            <div *ngIf="openMenu" class="_menu">
+              <button mat-menu-item id="folder" class="matMenuItem" #toggleButton>
+                <mat-icon class="material-icons-outlined"
+                  >create_new_folder</mat-icon
+                >
+                <span
+                  *ngIf="!newFolder"
+                  (click)="createNewFile(); $event.stopPropagation()"
+                  >New Folder</span
+                >
+
+                <span
+                  *ngIf="newFolder"
+                  #menu
+                  class="Inputinner-align Inputright-align"
+                >
+                  <span
+                    class="material-icons icon"
+                    style="width: 30px"
+                    type="submit"
+                    (click)="OnNewFolder()"
+                    >arrow_forward</span
+                  >
+                  <input
+                    id="newfolder"
+                    type="text"
+                    (keyup.enter)="OnNewFolder()"
+                    class="inputAlign"
+                    (change)="OncreateFolder($event)"
+                    (click)="$event.stopPropagation()"
+                    placeholder="New Folder"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ]|^ /g,'')"
+                    autocomplete="off"
+                    (focusin)="onFocusInNewFolder()"
+                  />
+                </span>
+              </button>
+              <p class="_createError" *ngIf="errorFolder">{{ errorFolder }}</p>
+            </div>
+          </ion-row>
+
+          <!-- File Breadcrumbs  -->
+          <ion-row>
+            <ion-col
+              size="6"
+              size-sm="6"
+              size-md="6"
+              size-lg="6"
+              size-xl="6"
+              class="mt-1 text-left"
+            >
+              <!-- <ol>
+                <li matRipple class="cursor-pointer" (click)="OnhomeFiles()">
+                  <span class="material-icons-outlined text-darkgray"
+                    >home</span
+                  >
+                </li>
+                <span
+                  class="material-icons-outlined is-fontExtraLarge text-darkgray"
+                  *ngIf="breadcrumbfiles.length > 0"
+                  >arrow_forward_ios</span
+                >
+              </ol>
+              <ol id="list">
+                <li
+                  class="cursor-pointer"
+                  *ngFor="let breadcrumb of breadcrumbfiles; index as i"
+                >
+                  <span>
+                    <span
+                      class="breadcrumbTitle"
+                      (click)="
+                        Onbackbreadcrumb(breadcrumb.id, breadcrumb.title)
+                      "
+                      >{{ breadcrumb.title }}</span
+                    >
+                    <span
+                      class="material-icons-outlined is-fontExtraLarge text-darkgray"
+                      >arrow_forward_ios</span
+                    >
+                  </span>
+                </li>
+              </ol> -->
+              <nav class="breadcrumbsListnav">
+                <ol class="breadcrumb1">
+                  <li style="cursor: pointer" (click)="OnhomeFiles()">
+                    <a class="homeicon">
+                      <span>
+                        <mat-icon
+                          itemprop="name"
+                          class="material-icons-outlined is-close text-darkgray"
+                          >home</mat-icon
+                        >
+                      </span>
+                    </a>
+                  </li>
+
+                  <li
+                    class="breadcrumblist"
+                    style="cursor: pointer"
+                    *ngFor="let breadcrumb of breadcrumbfiles; index as i"
+                    (click)="Onbackbreadcrumb(breadcrumb.id, breadcrumb.title)"
+                  >
+                    <a *ngIf="breadcrumbfiles.length > 0">
+                      <span class="breadcrumbtitle">{{
+                        breadcrumb.title
+                      }}</span>
+                    </a>
+                  </li>
+                </ol>
+              </nav>
+            </ion-col>
+            <ion-col
+              size="6"
+              class="is-d-flex is-justify-content-end is-align-items-center"
+            >
+              <span
+                matRipple
+                id="step14"
+                class="mx-2 cursor-pointer is-d-flex"
+                matTooltip="List View"
+                *ngIf="fileGridView"
+                (click)="fileListViewShow()"
+              >
+                <mat-icon
+                  class="material-icons-outlined text-darkgray"
+                  [ngClass]="fileListView ? 'text-blue' : 'text-dark'"
+                >
+                  format_list_bulleted</mat-icon
+                >
+              </span>
+              <span
+                matRipple
+                id="step14"
+                class="mx-2 cursor-pointer is-d-flex"
+                matTooltip="Grid View"
+                *ngIf="fileListView"
+                (click)="fileGridViewShow()"
+              >
+                <mat-icon
+                  class="material-icons-outlined text-darkgray"
+                  [ngClass]="fileGridView ? 'text-blue' : 'text-dark'"
+                >
+                  grid_view</mat-icon
+                >
+              </span>
+            </ion-col>
+          </ion-row>
+
+          <mat-divider></mat-divider>
+
+          <!-- Folder List View  -->
+          <ion-row class="my-0" *ngIf="fileListView">
+            <ion-col
+              size="12"
+              style="border: 0px solid #dcdddf; border-radius: 5px"
+            >
+              <div *ngIf="uploadedFile.length == 0" class="text-center">
+                <div
+                  class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth"
+                >
+                  <mat-icon class="material-icons-outlined is-trashIcon"
+                    >folder</mat-icon
+                  >
+                  <h2>No files in here</h2>
+                  <p class="is-fontMedium">
+                    Upload some content or sync with your devices!
+                  </p>
+                </div>
+              </div>
+              <ion-row
+                class="bg-white is-fileList"
+                *ngFor="let files of uploadedFile; index as i"
+              >
+                <ion-col
+                  size="3"
+                  size-sm="3"
+                  size-md="1.5"
+                  size-lg="1"
+                  size-xl="1"
+                  class="is-leftSide"
+                >
+                  <span class="is-docImage">
+                    <img
+                      alt="{{ productName }}"
+                      src="assets/images/folder.png"
+                      width="35px"
+                      height="35px"
+                    />
+                  </span>
+                </ion-col>
+                <ion-col *ngIf="isMobile"
+                  size="8"
+                  size-sm="8"
+                  size-md="6"
+                  size-lg="7"
+                  size-xl="7"
+                  class="px-2"
+                  (click)="OnopenFile(files.id, files.mimeType, files.title,files.versionId)"
+                  class="text-left"
+                >
+                  <h1 class="is-fileName">{{ files.title }}</h1>
+                  <p class="mb-0">
+                    <span class="is-label">Size: </span>
+                    <span class="is-fileSize text-blue">{{ files.size }}</span>
+                    <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+                      <span class="is-label"> Files: </span>
+                      <span class="is-fileSize text-danger" *ngIf="files.itemCount == '1' || files.itemCount == '0' ">{{ files.itemCount }} file</span>
+                      <span class="is-fileSize text-danger" *ngIf="files.itemCount != '1' && files.itemCount != '0' ">{{ files.itemCount }} files</span>
+                    </label>
+                  </p>
+                </ion-col>
+                <ion-col *ngIf="!isMobile" [ngClass]="disable ? 'colDisable' : 'notDisable'"
+                  size="8"
+                  size-sm="8"
+                  size-md="6"
+                  size-lg="7"
+                  size-xl="7"
+                  class="px-2"
+                  (dblclick)="
+                    OnopenFile(
+                      files.id,
+                      files.mimeType,
+                      files.title,
+                      files.versionId
+                    )
+                  "
+                  class="text-left"
+                >
+                  <h1 class="is-fileName">{{ files.title }}</h1>
+                  <p class="mb-0">
+                    <span class="is-label">Size: </span>
+                    <span class="is-fileSize text-blue">{{ files.size }}</span>
+                    <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+                      <span class="is-label"> Files: </span>
+                      <span
+                        class="is-fileSize text-danger"
+                        *ngIf="files.itemCount == '1' || files.itemCount == '0'"
+                        >{{ files.itemCount }} file</span
+                      >
+                      <span
+                        class="is-fileSize text-danger"
+                        *ngIf="files.itemCount != '1' && files.itemCount != '0'"
+                        >{{ files.itemCount }} files</span
+                      >
+                    </label>
+                  </p>
+                </ion-col>
+                <ion-col
+                  size="12"
+                  size-sm="12"
+                  size-md="3"
+                  size-lg="3"
+                  size-xl="3"
+                  class="px-2 is-dateTime"
+                >
+                  <div class="">
+                    <h2 class="is-createdAt">
+                      <mat-icon class="material-icons-outlined text-pink mx-0"
+                        >schedule</mat-icon
+                      >
+                      {{ files.modifiedAt }}
+                    </h2>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+
+          <!-- Folders Grid View  -->
+          <div class="is-fullwidth" *ngIf="fileGridView">
+            <ion-row class="my-0">
+              <ion-col size="12" class="col-lg-12">
+                <div *ngIf="uploadedFile == 0" class="text-center">
+                  <div
+                    class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth"
+                  >
+                    <mat-icon class="material-icons-outlined is-trashIcon"
+                      >folder</mat-icon
+                    >
+                    <h2>No files in here</h2>
+                    <p class="is-fontMedium">
+                      Drag files to upload or use the '+' button to upload any
+                      content.
+                    </p>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <!--Grid View  -->
+            <ion-row class="ion-justify-content-start">
+              <ion-col
+                size="6"
+                size-sm="6"
+                size-md="6"
+                size-lg="2.4"
+                size-xl="3"
+                class="my-2"
+                *ngFor="let files of uploadedFile; index as i"
+              >
+                <mat-card class="cursor-pointer px-2 pt-0 pb-2">
+                  <div class="card-body1 is-folder">
+                    <!-- Folders Grid view -->
+                    <div *ngIf="files.mimeType == 'httpd/unix-directory'">
+                      <div *ngIf="isMobile"
+                        (click)="
+                          OnopenFile(files.id, files.mimeType, files.title, files.versionId)
+                        "
+                      >
+                        <div class="is-d-flex is-justify-content-between mt-2">
+                          <a class="folder">
+                            <div class="icon-small bg-white mt-3">
+                              <img
+                                alt="{{ productName }}"
+                                src="assets/images/folder.png"
+                                width="35px"
+                                height="35px"
+                              />
+                            </div>
+                          </a>
+                        </div>
+                        <a class="folder text-left">
+                          <h5 class="mb-2 is-fileName">{{ files["title"] }}</h5>
+                          <p class="mb-1 is-d-flex is-align-items-center">
+                            <mat-icon class="material-icons-outlined text-pink"
+                              >schedule</mat-icon
+                            >
+                            <span class="is-folderDetails">{{
+                              files["modifiedAt"]
+                            }}</span>
+                          </p>
+                          <p class="mb-0 is-d-flex is-align-items-center">
+                            <mat-icon
+                              class="material-icons-outlined text-success"
+                              >description</mat-icon
+                            >
+                            <span
+                              class="is-folderDetails"
+                              *ngIf="
+                                files.itemCount == '1' || files.itemCount == '0'
+                              "
+                              >{{ files.itemCount }} file</span
+                            >
+                            <span
+                              class="is-folderDetails"
+                              *ngIf="
+                                files.itemCount != '1' && files.itemCount != '0'
+                              "
+                              >{{ files.itemCount }} files</span
+                            >
+                          </p>
+                        </a>
+                      </div>
+
+                      <div *ngIf="!isMobile" [ngClass]="disable ? 'colDisable' : 'notDisable'"
+                      (dblclick)="
+                        OnopenFile(files.id, files.mimeType, files.title, files.versionId)
+                      "
+                    >
+                      <div class="is-d-flex is-justify-content-between mt-2">
+                        <a class="folder">
+                          <div class="icon-small bg-white mt-3">
+                            <img
+                              alt={{productName}}
+                              src="assets/images/folder.png"
+                              width="35px"
+                              height="35px"
+                            />
+                          </div>
+                        </a>
+                      </div>
+                      <a class="folder text-left">
+                        <h5 class="mb-2 is-fileName">{{ files["title"] }}</h5>
+                        <p class="mb-1 is-d-flex is-align-items-center">
+                          <mat-icon class="material-icons-outlined text-pink"
+                            >schedule</mat-icon
+                          >
+                          <span class="is-folderDetails">{{
+                            files["modifiedAt"]
+                          }}</span>
+                        </p>
+                        <p class="mb-0 is-d-flex is-align-items-center">
+                          <mat-icon
+                            class="material-icons-outlined text-success"
+                            >description</mat-icon
+                          >
+                          <span class="is-folderDetails" *ngIf="files.itemCount == '1' || files.itemCount == '0' ">{{ files.itemCount }} file</span>
+                          <span class="is-folderDetails" *ngIf="files.itemCount != '1' && files.itemCount != '0' ">{{ files.itemCount }} files</span>
+                        </p>
+                      </a>
+                    </div>
+                    </div>
+                  </div>
+                </mat-card>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-row>
+    <ion-col class="mt-3 is-d-flex is-justify-content-end">
+      <button mat-raised-button color="primary" (click)="OnMovenCopy(false)">
+        <p class="folderTitle" matTooltip="Move {{ folderTitle }}">
+          Move {{ folderTitle }}
+        </p>
+      </button>
+      <button
+        mat-raised-button
+        class="mx-5 bg-lightgray"
+        (click)="OnMovenCopy(true)"
+      >
+        <p class="folderTitle" matTooltip="Copy {{ folderTitle }}">
+          Copy {{ folderTitle }}
+        </p>
+      </button>
+    </ion-col>
+  </ion-row>
+</div>

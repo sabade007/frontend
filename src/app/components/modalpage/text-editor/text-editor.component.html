@@ -1,0 +1,86 @@
+<div class="texteditors">
+  <div class="modalheader">
+    <a id="btn1" class="clearicon" matTooltip="Save"  *ngIf="permission == undefined || permission == 'CAN_DO_ANYTHING' || permission == 'CAN_EDIT'"
+      (click)="getdata()">
+      <span class="material-icons saveicon">save</span>
+    </a>
+    <a class="clearicon" mat-icon-button (click)="closepopup()" matTooltip="Close">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+    <p class="heading mb-0 mt-1">
+      Text editor for file {{ fileTitle }}
+      <span class="text-blue">{{ changed }}</span>
+    </p>
+  </div>
+  <!-- <div class="is-d-flex is-justify-content-end savebtn" id="btn1">
+    <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        *ngIf="
+          (permission == undefined ||
+            permission == 'CAN_DO_ANYTHING' ||
+            permission == 'CAN_EDIT') &&
+          !this.token
+        "
+        (click)="getdata()"
+      >
+        save
+      </button>
+  </div> -->
+
+  <div class="popup-body" *ngIf="permission == undefined || permission == 'CAN_DO_ANYTHING' || permission == 'CAN_EDIT'">
+            <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <textarea
+          autocorrect="on"
+          class="texteditor"
+          (keyup)="edited($event)"
+          [(ngModel)]="textEditor"
+        ></textarea>
+        <button id="btn2"
+          mat-raised-button          
+          class="is-d-flex bg-blue text-white is-justify-content-center"
+          type="button"
+          *ngIf="
+            (permission == undefined ||
+              permission == 'CAN_DO_ANYTHING' ||
+              permission == 'CAN_EDIT') &&
+            !this.token
+          "
+          (click)="getdata()"
+        >
+          save
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div class="popup-body" *ngIf="!(permission == undefined || permission == 'CAN_DO_ANYTHING' || permission == 'CAN_EDIT')">
+    <ion-row>
+<ion-col size="12" class="ion-text-center">
+<textarea
+  autocorrect="on"
+  class="texteditor"
+  (keyup)="edited($event)"
+  [(ngModel)]="textEditor"
+  readonly
+></textarea>
+<button id="btn2"
+  mat-raised-button          
+  class="is-d-flex bg-blue text-white is-justify-content-center"
+  type="button"
+  *ngIf="
+    (permission == undefined ||
+      permission == 'CAN_DO_ANYTHING' ||
+      permission == 'CAN_EDIT') &&
+    !this.token
+  "
+  (click)="getdata()"
+>
+  save
+</button>
+</ion-col>
+</ion-row>
+</div>
+</div>
+

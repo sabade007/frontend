@@ -1,0 +1,43 @@
+<div class="modalbox">
+
+  <div class="modalbody">
+    <div class="ion-text-center">
+      <img src="assets/images/message.png" width="80" height="80" alt="{{ productName }}">
+      <h2 class="verifyHeading">Please verify your email</h2>
+    </div>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <!-- <p class="deleteText mb-1">email verification is necessary, please verify your email ID</p> -->
+        <p class="mb-0 emailid"><strong>{{ emailID }}</strong> </p>
+      </ion-col>
+    </ion-row>
+    <form [formGroup]="emailUpdateForm" autocomplete="off">
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <mat-checkbox color="primary" #AllselectCheckbox id="changemail" class="checkbox"   #checkbox="matCheckbox" (click)="OnSelect(checkbox)" value="check">Change Email ID</mat-checkbox>
+            <mat-form-field *ngIf="showMe" class="example-full-width is-signIn" appearance="outline">
+              <mat-label >email</mat-label>
+              <input  matInput class="input" type="email" placeholder="Enter email" formControlName="newEmail">
+              <mat-error *ngIf="emailUpdateFormControls.newEmail.touched && emailUpdateFormControls.newEmail.errors">
+                <span *ngIf="emailUpdateFormControls.newEmail.errors.required">email is required</span>
+                <span *ngIf="emailUpdateFormControls.newEmail.errors.email">email is Invalid</span>
+              </mat-error>
+            </mat-form-field>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row>
+        <ion-col  size="12" class="ion-text-center">
+          <button *ngIf="showMe" mat-raised-button  class=" bg-blue text-white mx-1" (click)="changeEmail()">Send</button>
+          <button *ngIf="resendbtn" mat-raised-button color="" class="mx-1" (click)="sendEmail()">Resend email</button>
+          <button *ngIf="sentbtn " [disabled]="true" mat-raised-button color="" class="mx-1">Mail sent</button>
+          <button *ngIf="!showMe" mat-raised-button class="bg-blue text-white mx-1 verifiedbtn" (click)="checkverify()">Already verified</button>
+          <button *ngIf="showMe" mat-raised-button color="" class="mx-1" (click)="back()">No</button>
+          <button *ngIf="!showMe" mat-raised-button  class="bg-blue text-white mx-1 exitbtn" (click)="logout()">Logout</button>
+        </ion-col>
+      </ion-row>
+    </form>
+
+  </div>
+
+</div>

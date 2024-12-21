@@ -1,0 +1,42 @@
+<div class="photoviewer">
+  <div class="modalheader">
+    <a
+      class="clearicon"
+      mat-icon-button
+      (click)="closepopup()"
+    >
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+  </div>
+
+  <div class="photoviewer">
+    <div class="modalheader">
+      <a class="clearicon" mat-icon-button (click)="closepopup()" matTooltip="Close">
+        <ion-icon name="close-outline"></ion-icon>
+      </a>
+    </div>
+
+    <div class="popup-body">
+      <ion-row *ngIf="sharedType != 'files'">
+        <ion-col size="12" class="ion-text-center">
+          <img class="photo" [src]="uploadedPhoto" alt={{productName}} />
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="page == 'files'">
+        <ion-col size="12" class="ion-text-center">
+          <img class="photo" [src]="uploadedPhoto" alt={{productName}} />
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="page == 'photo'">
+        <ion-col size="12" class="ion-text-center" *ngIf="page == 'photo'">
+          <img class="photo" [src]="uploadedPhoto" alt="productName" />
+          <span class="material-icons-outlined _prevBtn" *ngIf="previousBtn" matTooltip="Previous"
+            (click)="onPrevImage()">arrow_back_ios</span>
+          <span class="material-icons-outlined _nextBtn" *ngIf="nextBtn" matTooltip="Next"
+            (click)="onNextImage()">arrow_forward_ios</span>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>

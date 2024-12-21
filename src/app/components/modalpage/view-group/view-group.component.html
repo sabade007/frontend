@@ -1,0 +1,195 @@
+<div id="searchDiv" class="modalbox1">
+
+  <div class="modalbody" *ngIf="groupDetails">
+    <!-- <ion-row class="profileicons"> -->
+      <ion-row class="is-topStickyHeader">
+        <ion-col size="2" size-sm="2" size-md="1" size-lg="1" size-xl="1">
+          <div class="is-header">
+            <span class="is-position-relative _proText mt-4"
+            *ngIf="contactImg == null || contactImg == '' || contactImgSrc == '' || contactImgSrc == 'null'">
+              <button class="mx-2 _Updateprofile"
+                [ngClass]="gName | titlecase | slice: 0:1"mat-mini-fab>
+                {{ gName | titlecase | slice: 0:1 }}
+              </button>
+            </span>
+            <div *ngIf="!(contactImg == null || contactImg == '' || contactImgSrc == '' || contactImgSrc == 'null')">
+              <img [src]="contactImg" class="_profileImage" onerror="this.src='assets/images/default-contact.png';"  style="border-radius: 50%;" alt="{{ productName }}"/>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="10" size-sm="10" size-md="9" size-lg="9" size-xl="9" class="is-d-flex is-justify-content-start">
+          <p class="header">{{gName}}</p>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="2" size-lg="2" size-xl="2" class="ion-text-end">
+          <button mat-stroked-button color="primary" class="is-btn mx-1 mb-4" (click)="onEditGroup()">Edit</button>
+          <button mat-button class="is-btn text-white is-yes mx-1" (click)="closepopup()">OK</button>
+        </ion-col>
+        <!-- <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-center">
+          <p class="header1">Group - {{contactCount}} participants</p>
+        </ion-col> -->
+      </ion-row>
+    <!-- </ion-row> -->
+        <!-- <div class="profileimg" *ngIf="!(contactDetails.contactImgSrc =='data:image/png;base64,null' ||
+          contactDetails.contactImgSrc == 'data:image/png;base64,')">
+          <img [src]="contactDetails.contactImgSrc" class="_profileImageDetails mt-4"/>
+        </div> -->
+
+    <ion-row size="12">
+      <ion-col size="12" size-sm="12" size-md="6" size-lg="4" size-xl="4" class="my-2"
+        *ngFor="let list of contactsList; index as i" >
+        <mat-card>
+          <div class="_userList">
+            <ion-row size="12">
+              <ion-col size="2" class="px-0 is-sharedSection">
+                <!-- <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+                  <span class="is-circle bg-blue-6">{{list.firstName | titlecase | slice:0:1}}</span>
+                </div> -->
+                <span class="is-position-relative _proText mt-4"
+                  *ngIf="list.contactImgSrc == 'data:image/png;base64,null' ||
+                  list.contactImgSrc == 'data:image/png;base64,' || list.contactImgSrc == null || list.contactImgSrc == '' || contactImgSrc == 'null'">
+                  <button [matTooltip]="list.firstName | titlecase" class="mx-2 profile-btn"
+                    [ngClass]="list.firstName.substring(0, 1)| titlecase" mat-mini-fab>
+                    {{ list.firstName | titlecase | slice:0:1 }}
+                  </button>
+                </span>
+                <div *ngIf="!(list.contactImgSrc == 'data:image/png;base64,null' ||
+                  list.contactImgSrc == 'data:image/png;base64,' || list.contactImgSrc == null || list.contactImgSrc == '' || contactImgSrc == 'null')">
+                  <img [src]="list.contactImgSrc" onerror="this.src='assets/images/default-contact.png';" class="_profileImage" alt="{{ productName }}"/>
+                </div>
+              </ion-col>
+              <ion-col size="10" class="text-left">
+                <span class="_userName">{{list.firstName | titlecase}} {{list.lastName | titlecase}}</span>
+                <span class="_userEmail">{{list.mailId}}</span>
+              </ion-col>
+            </ion-row>
+          </div>
+        </mat-card>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-row>
+      <ion-col size="12" class="ion-text-end">
+        <button mat-stroked-button color="primary" class="is-btn mx-1 mb-4" (click)="onEditGroup()">Edit</button>
+        <button mat-button class="is-btn text-white is-yes mx-1" (click)="closepopup()">OK</button>
+      </ion-col>
+    </ion-row> -->
+  </div>
+
+  <div class="modalbody" *ngIf="editGroup">
+    <ion-row>
+      <ion-col  size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-end">
+        <button mat-button type="submit" class="is-btn text-white is-yes mx-1" (click)="AddParticipants()">Add contacts</button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="profileicons">
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="4" size-lg="4" size-xl="4">
+          <div>
+            <div class="is-profile text-center">
+              <span class="is-position-relative _proText mt-4"
+                *ngIf="contactImg == null || contactImg == '' || contactImgSrc == '' || contactImgSrc == 'null'">
+                  <button class="mx-2 _Updateprofile"
+                    [ngClass]="gName | titlecase | slice: 0:1"mat-mini-fab>
+                    {{ gName | titlecase | slice: 0:1 }}
+                  </button>
+              </span>
+              <div *ngIf="!(contactImg == null || contactImg == '' || contactImgSrc == '' || contactImgSrc == 'null')">
+                <img class="_image" [src]="_d.bypassSecurityTrustUrl(contactImg)" alt="{{ productName }}"/>
+              </div>
+              <input type="file" accept=".jpg,.jpeg,.png" #fileInputUpload class="_uploadBtn" (change)="fileChangeUpdate($event)"/>
+              <button mat-icon-button (click)="fileInputUpload.click()" class="_Upload">
+                <span class="material-icons-outlined _uploadIcon">image</span>
+              </button>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="8" size-lg="8" size-xl="8" class="is-d-flex is-justify-content-end groupInput">
+          <form [formGroup]="groupForm" class="groupform headers">
+            <ion-row>
+              <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-center">
+                <mat-form-field class="example-full-width is-change" appearance="outline">
+                  <mat-label>Group Name</mat-label>
+                  <input matInput class="inputfield" placeholder="Group Name" maxlength="25" formControlName="gname" class="inputfields"
+                  oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ''.,?/:;{}+!@#$%^&*()=]|^ /g,'')" [(ngModel)]="groupName" autocomplete="off">
+                  <mat-error *ngIf="groupForm.controls['gname'].invalid">Group name is required
+                  </mat-error>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-col>
+      </ion-row>
+    </ion-row>
+    <ion-row *ngIf="addParticipants">
+      <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="ion-text-center">
+        <mat-form-field class="example" appearance="outline">
+          <mat-label>Search your contacts</mat-label>
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let user of selecteduser" (removed)="remove(user)">
+              {{user.firstName}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input #autoCompleteInput class="inputField" id="userName" [matAutocomplete]="auto" [matChipInputFor]="chipList" #username
+              (keyup)="setInputField(username.value)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let option of userDatas" [value]="option">
+              <ion-row>
+                <ion-col size="1" class="px-0 is-sharedSection">
+                  <div class="is-d-flex is-justify-content-start is-align-items-center is-shared _shared">
+                    <span class="is-circle bg-blue-6">{{option.firstName | titlecase | slice:0:1}}</span>
+                  </div>
+                </ion-col>
+                <ion-col size="11">
+                  <span class="_optionsName">{{option.firstName | titlecase}} {{option.lastName | titlecase}}</span>
+                  <span class="_optionsEmail">{{option.mailId}}</span>
+                </ion-col>
+              </ion-row>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </ion-col>
+    </ion-row>
+
+    <ion-row size="12">
+      <ion-col size="12" size-sm="12" size-md="6" size-lg="4" size-xl="4" class="my-2"
+        *ngFor="let list of contactsList; index as i" >
+        <mat-card>
+          <button mat-icon-button  matTooltip="Remove Contact" class="is-moreMenu" (click)="removeContacts(list.id)">
+            <mat-icon>close</mat-icon>
+          </button>
+          <div class="_userList">
+            <ion-row size="12">
+              <ion-col size="2" class="px-0 is-sharedSection">
+                <!-- <div class="is-d-flex is-justify-content-center is-align-items-center is-shared">
+                  <span class="is-circle bg-blue-6">{{list.firstName | titlecase | slice:0:1}}</span>
+                </div> -->
+                <span class="is-position-relative _proText mt-4"
+                  *ngIf="list.contactImgSrc == 'data:image/png;base64,null' ||
+                  list.contactImgSrc == 'data:image/png;base64,' || list.contactImgSrc == null || list.contactImgSrc == '' || contactImgSrc == 'null'">
+                  <button [matTooltip]="list.firstName | titlecase" class="mx-2 profile-btn"
+                    [ngClass]="list.firstName.substring(0, 1)| titlecase" mat-mini-fab>
+                    {{ list.firstName | titlecase | slice:0:1 }}
+                  </button>
+                </span>
+                <div *ngIf="!(list.contactImgSrc == 'data:image/png;base64,null' ||
+                  list.contactImgSrc == 'data:image/png;base64,' || list.contactImgSrc == null || list.contactImgSrc == '' || contactImgSrc == 'null')">
+                  <img [src]="list.contactImgSrc" onerror="this.src='assets/images/default-contact.png';" class="_profileImage" alt="{{ productName }}"/>
+                </div>
+              </ion-col>
+              <ion-col size="10" class="text-left px-3">
+                <span class="_userName">{{list.firstName | titlecase}} {{list.lastName | titlecase}}</span>
+                <span class="_userEmail">{{list.mailId}}</span>
+              </ion-col>
+            </ion-row>
+          </div>
+        </mat-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-text-end">
+        <button mat-stroked-button color="primary" class="is-btn mx-1 mb-4" (click)="closepopup()">Cancel  </button>
+        <button mat-button class="is-btn text-white is-yes mx-1" (click)="onUpdateGroup()">Update</button>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

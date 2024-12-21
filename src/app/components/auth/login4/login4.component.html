@@ -1,0 +1,561 @@
+<div>
+  <!-- server maintenance banner  -->
+  <div class="banner" *ngIf="showBanner">
+    <div class="banner-content">
+      <ion-row>
+        <ion-col size="11" size-sm="8">
+          <div class="banner-text">
+            <strong>{{ serverMaintenanceData?.description }}</strong>
+          </div>
+          <div class="banner-text">
+            <!-- From {{ (serverMaintenanceData?.fromDateTime | date:'full').replace('GMT+05:30','') }} to {{ (serverMaintenanceData?.toDateTime | date:'full').replace('GMT+05:30','') }} -->
+            From {{ formatDate(serverMaintenanceData?.fromDateTime) }} to
+            {{ formatDate(serverMaintenanceData?.toDateTime) }}
+          </div>
+        </ion-col>
+        <ion-col size="1" size-sm="4">
+          <div
+            class="text-right mr-3 banner-close-icon"
+            (click)="closeBanner()"
+          >
+            <mat-icon (click)="closeBanner()" class="material-icons-outlined"
+              >close</mat-icon
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+  <!-- server maintenance banner end -->
+</div>
+<div>
+  <ion-grid
+    class="p-0"
+    [ngClass]="showBanner ? 'is-mainSideWithBanner' : 'is-mainSide'"
+  >
+    <!-- mbileview -->
+    <div class="smobile" *ngIf="mobile" style="background-color: white">
+      <div
+        style="display: flex; flex-direction: row; width: 100%; height: 100%"
+      >
+        <div
+          style="
+            width: 5%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div
+            style="
+              width: 100%;
+              height: 50%;
+              border-top-right-radius: 16px;
+              box-shadow: inset 0 0 0 1px #e0e0e0;
+              clip-path: polygon(0 0, 100% 15%, 100% 85%, 0 100%);
+              background-color: #1d5686;
+            "
+          ></div>
+        </div>
+        <div style="width: 90%; height: 100%; overflow-y: scroll">
+          <div
+            class="mmarea"
+            style="
+              display: flex;
+              flex-direction: column;
+              margin-top: 20px;
+              width: 100%;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <div>
+              <img
+                src="assets/images/logocmp.png"
+                style="max-height: 40px; margin-bottom: 8px"
+              />
+            </div>
+
+            <smalltypo style="font-family: ttnorms"
+              >Drive your business</smalltypo
+            >
+            <hr
+              style="
+                background-color: black;
+                height: 1px;
+                width: 100%;
+                margin-top: 16px;
+              "
+            />
+            <div
+              style="
+                width: 350px;
+                max-width: fit-content;
+
+                margin-top: 16px;
+                padding: 16px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                "
+              >
+                <smalltypo
+                  style="
+                    margin-bottom: 8px;
+                    color: #ff6600;
+                    font-family: ttnorms;
+                  "
+                  >Login</smalltypo
+                >
+              </div>
+
+              <form
+                [formGroup]="loginForm"
+                autocomplete="off"
+                (ngSubmit)="submit()"
+              >
+                <mat-form-field
+                  class="example-full-width is-signIn"
+                  appearance="outline"
+                >
+                  <mat-label>Username or Email</mat-label>
+                  <input
+                    class="inputfield"
+                    type="email"
+                    matInput
+                    autocomplete="off"
+                    placeholder="Username or Email"
+                    formControlName="username"
+                  />
+                  <!-- <mat-error *ngIf="loginForm.controls['username'].invalid">Username or Email is required</mat-error> -->
+                </mat-form-field>
+
+                <mat-form-field
+                  class="example-full-width is-signIn"
+                  appearance="outline"
+                >
+                  <mat-label>Password</mat-label>
+                  <input
+                    class="inputfield"
+                    id="password"
+                    [type]="hide ? 'password' : 'text'"
+                    matInput
+                    placeholder="Password"
+                    (keyup.enter)="submit()"
+                    formControlName="password"
+                  />
+                  <span
+                    class="password-icon"
+                    mat-icon-button
+                    matSuffix
+                    (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide"
+                  >
+                    <mat-icon class="eyeicon is-blue">{{
+                      hide ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </span>
+                  <!-- <mat-error *ngIf="loginForm.controls['password'].invalid">Password is required</mat-error> -->
+                </mat-form-field>
+                <ion-row>
+                  <ion-col
+                    size="12"
+                    size-sm="12"
+                    size-md="6"
+                    size-lg="6"
+                    size-xl="6"
+                  >
+                    <mat-form-field
+                      class="example-full-width is-signIn"
+                      appearance="outline"
+                    >
+                      <mat-label>Enter Captcha</mat-label>
+                      <input
+                        class="inputfield"
+                        type="text"
+                        matInput
+                        autocomplete="off"
+                        placeholder="Enter captcha"
+                        formControlName="captcha"
+                      />
+                      <!-- <mat-error *ngIf="loginForm.controls['captcha'].invalid">Captcha is required</mat-error> -->
+                    </mat-form-field>
+                  </ion-col>
+
+                  <ion-col
+                    size="12"
+                    size-sm="12"
+                    size-md="6"
+                    size-lg="6"
+                    size-xl="6"
+                  >
+                    <img
+                      class="captcha"
+                      [src]="images"
+                      onerror="this.src='assets/images/loader.gif';"
+                      width="80%"
+                      height="80%"
+                      alt="{{ productName }}"
+                    />
+                    <span
+                      class="material-icons cursor-pointer recaptcha"
+                      (click)="getcaptcha()"
+                      >refresh</span
+                    >
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="6" class="">
+                    <button
+                      mat-raised-button
+                      type="submit"
+                      id="signin"
+                      color="primary"
+                    >
+                      Sign In
+                    </button>
+                  </ion-col>
+                  <ion-col size="6">
+                    <span
+                      *ngIf="showSignup"
+                      class="forgot-password"
+                      id="forgotpass"
+                      (click)="forgetPassword()"
+                      >Forgot Password?</span
+                    >
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="4">
+                    <hr
+                      style="
+                        width: 100%;
+                        height: 1px;
+                        background-color: black;
+                        margin-top: 16px;
+                      "
+                    />
+                  </ion-col>
+                </ion-row>
+
+                <ion-row
+                  style="
+                    margin-top: 8px;
+                    margin-left: 0px;
+                    background-color: white;
+                  "
+                >
+                  <ion-col size="12">
+                    <span>Don't have an account? Create one!</span>
+                  </ion-col>
+                  <ion-col size="6" class="ion-text-start">
+                    <p *ngIf="showSignup">
+                      <span
+                        class="is-signUpText"
+                        id="signup"
+                        (click)="gotoSignUp()"
+                        >Create Account</span
+                      >
+                    </p>
+                  </ion-col>
+                </ion-row>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div
+          style="
+            width: 5%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div
+            style="
+              width: 100%;
+              height: 50%;
+              border-top-right-radius: 16px;
+              box-shadow: inset 0 0 0 1px #e0e0e0;
+              clip-path: polygon(100% 2%, 0 15%, 1% 85%, 100% 100%);
+              background-color: #1d5686;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+    <div class="sdesktop" *ngIf="!mobile" style="background-color: white">
+      <div style="display: flex; flex-direction: row; height: 100%">
+        <div
+          style="
+            width: 50%;
+            height: 100vh;
+            display: flex;
+            background-image: url(../../../../assets/sruvi/cloudbg.png);
+          "
+        >
+          <div style="width: 100%; height: 100%">
+            <div
+              style="
+                height: 10%;
+
+                justify-content: space-between;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+              "
+            >
+              <div style="padding: 16px">
+                <img
+                  src="assets/sruvi/whited.png"
+                  style="
+                    height: 36px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                  "
+                />
+              </div>
+              <div style="padding: 16px">
+                <p style="color: white; align-self: center">Support</p>
+              </div>
+            </div>
+            <div
+              style="
+                height: 80%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <div style="padding: 16px">
+                <large style="color: white">
+                  Revolutionise Enterprise Collaboration with Indryve
+                </large>
+                <h4 style="color: white; margin-top: 16px">
+                  Empower your enterprise teams with Indryve: Secure, Scalable,
+                  Superior
+                </h4>
+                <smalltypo style="color: white"
+                  >Explore our other products</smalltypo
+                >
+                <hr style="width: 40%" />
+              </div>
+            </div>
+            <div
+              style="
+                height: 10%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+              "
+            >
+              <small style="color: white"
+                >Copyright © 2024 Indryve Inc., All rights reserved</small
+              >
+            </div>
+          </div>
+        </div>
+        <div style="width: 50%; height: 100%">
+          <div
+            style="
+              width: 100%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              box-shadow: inset 0 0 0 1px #e0e0e0;
+            "
+          >
+            <img
+              src="assets/images/logocmp.png"
+              style="max-height: 60px; margin-bottom: 8px"
+            />
+            <smalltypo>Drive your business(Tagline)</smalltypo>
+            <div
+              style="
+                width: 400px;
+                max-width: fit-content;
+
+                margin-top: 16px;
+                padding: 16px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                "
+              >
+                <smalltypo style="margin-bottom: 8px">Login</smalltypo>
+              </div>
+
+              <form
+                [formGroup]="loginForm"
+                autocomplete="off"
+                (ngSubmit)="submit()"
+              >
+                <mat-form-field
+                  class="example-full-width is-signIn"
+                  appearance="outline"
+                >
+                  <mat-label>Username or Email</mat-label>
+                  <input
+                    class="inputfield"
+                    type="email"
+                    matInput
+                    autocomplete="off"
+                    placeholder="Username or Email"
+                    formControlName="username"
+                  />
+                  <!-- <mat-error *ngIf="loginForm.controls['username'].invalid">Username or Email is required</mat-error> -->
+                </mat-form-field>
+
+                <mat-form-field
+                  class="example-full-width is-signIn"
+                  appearance="outline"
+                >
+                  <mat-label>Password</mat-label>
+                  <input
+                    class="inputfield"
+                    id="password"
+                    [type]="hide ? 'password' : 'text'"
+                    matInput
+                    placeholder="Password"
+                    (keyup.enter)="submit()"
+                    formControlName="password"
+                  />
+                  <span
+                    class="password-icon"
+                    mat-icon-button
+                    matSuffix
+                    (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide"
+                  >
+                    <mat-icon class="eyeicon is-blue">{{
+                      hide ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </span>
+                  <!-- <mat-error *ngIf="loginForm.controls['password'].invalid">Password is required</mat-error> -->
+                </mat-form-field>
+                <ion-row>
+                  <ion-col
+                    size="12"
+                    size-sm="12"
+                    size-md="6"
+                    size-lg="6"
+                    size-xl="6"
+                  >
+                    <mat-form-field
+                      class="example-full-width is-signIn"
+                      appearance="outline"
+                    >
+                      <mat-label>Enter Captcha</mat-label>
+                      <input
+                        class="inputfield"
+                        type="text"
+                        matInput
+                        autocomplete="off"
+                        placeholder="Enter captcha"
+                        formControlName="captcha"
+                      />
+                      <!-- <mat-error *ngIf="loginForm.controls['captcha'].invalid">Captcha is required</mat-error> -->
+                    </mat-form-field>
+                  </ion-col>
+
+                  <ion-col
+                    size="12"
+                    size-sm="12"
+                    size-md="6"
+                    size-lg="6"
+                    size-xl="6"
+                  >
+                    <img
+                      class="captcha"
+                      [src]="images"
+                      onerror="this.src='assets/images/loader.gif';"
+                      width="80%"
+                      height="80%"
+                      alt="{{ productName }}"
+                    />
+                    <span
+                      class="material-icons cursor-pointer recaptcha"
+                      (click)="getcaptcha()"
+                      >refresh</span
+                    >
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="6" class="">
+                    <button
+                      mat-raised-button
+                      type="submit"
+                      id="signin"
+                      color="primary"
+                    >
+                      Sign In
+                    </button>
+                  </ion-col>
+                  <ion-col size="6">
+                    <span
+                      *ngIf="showSignup"
+                      class="forgot-password"
+                      id="forgotpass"
+                      (click)="forgetPassword()"
+                      >Forgot Password?</span
+                    >
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="4">
+                    <hr
+                      style="
+                        width: 100%;
+                        height: 1px;
+                        background-color: black;
+                        margin-top: 16px;
+                      "
+                    />
+                  </ion-col>
+                </ion-row>
+
+                <ion-row style="margin-top: 8px">
+                  <ion-col size="12">
+                    <span>Don't have an account? Create one!</span>
+                  </ion-col>
+                  <ion-col size="6" class="ion-text-start">
+                    <p *ngIf="showSignup">
+                      <span
+                        class="is-signUpText"
+                        id="signup"
+                        (click)="gotoSignUp()"
+                        >Create Account</span
+                      >
+                    </p>
+                  </ion-col>
+                </ion-row>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-grid>
+</div>

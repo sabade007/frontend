@@ -1,0 +1,46 @@
+<div class="modalbox">
+  <div class="modalheader">
+    <a class="clearicon" mat-icon-button (click)="closepopup()">
+      <ion-icon name="close-outline"></ion-icon>
+    </a>
+  </div>
+
+  <div class="modalbody">
+    <ion-row>
+      <ion-col class="ion-text-center heading">
+        <p class="header">Upgrade Storage</p>
+      </ion-col>
+      <ion-col size="12" *ngFor="let item of getMenu">
+        <!-- <p class="logout">This feature will be added soon...!</p> -->
+        <mat-radio-button
+          (change)="radioChange($event.value)"
+          class="example-radio-button btn1"
+          color="primary"
+          [value]="item.id"
+          style="color: black !important"
+          >{{ item.extraSpaceReadable }} - {{ item.description }} - ₹{{
+            item.pricePerYear
+          }}</mat-radio-button
+        >
+        <mat-radio-button
+          (change)="radioChange($event.value)"
+          class="example-radio-button btn2"
+          color="primary"
+          [value]="item.id"
+          ><p class="menus" [matTooltip]="item.extraSpaceReadable">
+            {{ item.extraSpaceReadable }} <br />
+            - {{ item.description }} - <br />
+            - ₹{{ item.pricePerYear }}
+          </p></mat-radio-button
+        >
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <button mat-button class="is-btn bg-blue text-white mx-1" (click)="request()">Request</button>
+        <button mat-raised-button  class="mx-1" (click)="closepopup()">Cancel</button>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

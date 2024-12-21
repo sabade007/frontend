@@ -1,0 +1,84 @@
+@import "../../../appVariable.scss";
+
+.is-paddingMain {
+  padding: 40px 50px !important;
+  @include for-phone-only {
+    padding: 10px 10px !important;
+  }
+  @include for-tablet-only {
+    padding: 10px 10px !important;
+  }
+}
+
+.is-notificationSection {
+  width: 100%;
+  .is-notificationItem {
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 8px 5px;
+    background: white;
+    border: 1px solid #cfd0d1;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    .is-head {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .is-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white !important;
+        background-color: #cfd0d1 !important;
+        padding: 0px;
+      }
+    }
+    .is-body {
+      font-size: 14px;
+      width: 100%;
+      padding: 0px 5px;
+      p {
+        font-size: 12px;
+        height: 24px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .timestamp-icon {
+      padding-top: 8px;
+      padding-right: 6px;
+    }
+    .is-timestamp {
+      width: 40%;
+      padding-top: 10px;
+      white-space: nowrap;
+      p {
+        font-size: 14px;
+      }
+    }
+    .is-action {
+      .is-close {
+        font-size: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.is-trashIcon {
+  width: 100%;
+  height: 300px;
+  font-size: 241px;
+  color: #d2e3fc;
+  font-weight: 100;
+  @include for-phone-only() {
+    width: 100%;
+    height: 50px;
+    font-size: 241px;
+    color: #d2e3fc;
+    font-weight: 100;
+  }
+}

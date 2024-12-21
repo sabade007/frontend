@@ -1,0 +1,378 @@
+@mixin for-phone-only {
+  @media (min-width: 320px) and (max-width: 767px) {
+    @content;
+  }
+}
+@mixin for-tablet-only {
+  @media (min-width: 768px) and (max-width: 1199px) {
+    @content;
+  }
+}
+@mixin for-minilaptop-and-up {
+  @media (min-width: 1200px) and (max-width: 5000px) {
+    @content;
+  }
+}
+
+$text-primary: #7fdd85;
+$text-info: #3dc2ff;
+$text-warning: #fad35f;
+$text-danger: #f25767;
+$text-darkgray: #8c9195;
+$text-pink: #ef9fc4;
+$text-lightgray: #f3f3f3;
+
+$bg-primary: #7fdd85;
+$bg-info: #3dc2ff;
+$bg-warning: #fad35f;
+$bg-danger: #f25767;
+$bg-darkgray: #8c9195;
+$bg-pink: #ef9fc4;
+$bg-lightgray: #f3f3f3;
+
+@keyframes pulse {
+  0% {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  to {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+}
+
+.is-fullwidth {
+  // background: linear-gradient(110deg, #a8d5ea 50%, #1f5284 50%);
+  background: #f2f8ff;
+  margin-bottom: 0rem !important;
+  @include for-phone-only() {
+    background: white !important;
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.is-mainSide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  // overflow: overlay;
+  // background-image: url("../../../../assets/images/loginscreen1.jpg");
+  background-size: 60% 100%;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-attachment: fixed;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
+  position: relative;
+  background-position: left;
+  // @extend .pulse;
+  // @extend .animated;
+  background-color: #fff !important;
+  @include for-phone-only() {
+    background-image: none !important;
+    overflow: auto;
+  }
+  @include for-tablet-only() {
+    background-size: 50% 100%;
+    overflow: auto;
+  }
+}
+
+.is-mainBanner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  // background: #1D56865c;
+}
+// .is-topRightSide{
+//     position: absolute;
+//     top: -115px;
+//     left: -125px;
+//     .is-topBlob{
+//         width: 300px;
+//         height: 300px;
+//         @include for-tablet-only(){
+//             display: none;
+//         }
+//         @include for-phone-only(){
+//             display: none;
+//         }
+//     }
+// }
+.is-topLogo {
+  // position: absolute;
+  margin-top: -80px;
+  @include for-phone-only() {
+    margin-top: 0px;
+  }
+}
+// .is-bottomSide{
+//     position: absolute;
+//     bottom: -90px;
+//     left: 0px;
+//     height: 280px;
+//     @include for-tablet-only(){
+//         display: none;
+//     }
+//     @include for-phone-only(){
+//         display: none;
+//     }
+// }
+.is-loginContainer {
+  background: #ffff;
+  position: absolute;
+  width: 425px !important;
+  // border-radius: 25px;
+  border-radius: 5px;
+  padding: 10px 30px !important;
+  // box-shadow: 2px 2px 10px 2px rgb(0 0 0 / 10%) !important;
+  box-shadow: 0 1px 2px 0 rgb(34 36 38 / 15%);
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  z-index: 9999;
+  height: 550px;
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: 50%;
+
+  margin: auto;
+  @include for-tablet-only() {
+    width: 320px !important;
+    overflow: auto;
+  }
+  @include for-phone-only() {
+    position: static;
+    right: 0%;
+    width: 310px !important;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px 10px !important;
+    top: 0%;
+    box-shadow: none !important;
+    margin-top: 4rem;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  color: #878282;
+  text-align: left;
+  @include for-phone-only() {
+    padding-left: 1rem;
+  }
+}
+mat-form-field {
+  width: 100%;
+  margin-left: 0px;
+  font-size: 0.875rem;
+}
+.is-blue {
+  color: #1d5686 !important;
+}
+button.is-loginBtn {
+  background-color: #1d5686;
+  color: #fff;
+  height: 44px;
+  width: 90px;
+  font-size: 15px;
+  margin-top: 15px;
+  &:hover {
+    background-color: #1d5686;
+    transition: 0.2s ease-in;
+  }
+}
+.forgot-password {
+  font-size: 0.875rem;
+  color: #1d5686;
+  cursor: pointer;
+  width: 100%;
+  text-align: right;
+  display: block;
+  font-weight: 600;
+}
+.footer_text {
+  font-size: 1rem;
+  margin-top: 15px;
+  text-align: center;
+  color: #535f6b;
+  font-family: "Poppins" !important;
+}
+.is-signUpText {
+  color: #1d5686;
+  cursor: pointer;
+}
+._version {
+  color: #1d5686;
+  position: relative;
+  bottom: -32px;
+  font-size: 14px;
+  text-align: right;
+  @include for-tablet-only() {
+    bottom: -25px;
+  }
+  @include for-phone-only() {
+    bottom: -15px;
+  }
+}
+.loginimg {
+  width: 60%;
+  height: 50rem;
+  @include for-phone-only() {
+    display: none;
+  }
+}
+
+::ng-deep {
+  .is-loginContainer {
+    .is-signUp.mat-form-field {
+      width: 100%;
+      font-family: "Poppins" !important;
+    }
+    .is-signUp.mat-form-field-appearance-outline.is-signUp
+      .mat-form-field-wrapper {
+      padding-bottom: 1.25em !important;
+      @include for-phone-only() {
+        padding: 5px 1.25em !important;
+      }
+    }
+    .mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
+      padding: 0px 0em !important;
+      @include for-phone-only() {
+        padding: 10px 0em !important;
+      }
+    }
+    .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+      color: #7c7c7c !important;
+      background: #fff !important;
+    }
+    .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline-gap {
+      border: 0px solid currentColor !important;
+    }
+    .is-signUp.mat-form-field-appearance-outline
+      .mat-form-field-outline-thick
+      .mat-form-field-outline-start,
+    .mat-form-field-appearance-outline
+      .mat-form-field-outline-thick
+      .mat-form-field-outline-end,
+    .mat-form-field-appearance-outline
+      .mat-form-field-outline-thick
+      .mat-form-field-outline-gap {
+      border-width: 0px !important;
+    }
+    .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline {
+      border-bottom: 1px solid #111111 !important;
+    }
+    .is-signUp.mat-form-field-appearance-outline .mat-form-field-outline-start,
+    .mat-form-field-appearance-outline .mat-form-field-outline-end {
+      border: 0px solid currentColor !important;
+    }
+    .is-signUp.mat-form-field-appearance-outline .mat-form-field-flex {
+      padding: 0em 0 0em !important;
+    }
+  }
+  mat-password-strength .mat-progress-bar-fill::after {
+    background-color: #4caf50;
+  }
+}
+
+.recaptcha {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -2.5rem;
+}
+::ng-deep {
+  mat-Input {
+    color: black !important;
+  }
+  .inputfield {
+    color: black !important;
+    @include for-phone-only() {
+      color: black !important;
+    }
+  }
+  .mat-flat-button.mat-primary,
+  .mat-raised-button.mat-primary,
+  .mat-fab.mat-primary,
+  .mat-mini-fab.mat-primary {
+    background-color: #1d5686 !important;
+  }
+}
+.is-d-none {
+  display: none;
+}
+.is-agreeError {
+  color: red;
+  font-size: 12px;
+  margin-left: 0.6rem;
+}
+mat-form-field {
+  width: 100%;
+  margin-left: 0px;
+  font-size: 0.875rem;
+}
+.is-blue {
+  color: #224cbb !important;
+}
+button.is-loginBtn {
+  background-color: #224cbb;
+  color: #fff;
+  height: 44px;
+  width: 90px;
+  font-size: 15px;
+  margin-top: 15px;
+  &:hover {
+    background-color: #8380d7;
+    transition: 0.2s ease-in;
+  }
+}
+.is-signInText {
+  color: #224cbb;
+  cursor: pointer;
+}
+.footer-text {
+  text-align: center;
+  position: absolute;
+  left: 0px;
+  bottom: -55px;
+  width: 100%;
+  color: #1d5686 !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  @include for-phone-only() {
+    display: none;
+  }
+}
+.errorDiv {
+  margin-top: -1rem;
+  font-size: 10px;
+  line-height: 1px;
+  display: flex;
+}
+.signupbtn {
+  margin-top: -10px;
+}

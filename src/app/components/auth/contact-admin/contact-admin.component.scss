@@ -1,0 +1,112 @@
+@mixin for-phone-only {
+    @media (min-width: 320px) and (max-width: 767px) { @content; }
+}
+@mixin for-tablet-only {
+    @media (min-width: 768px) and (max-width: 1199px) { @content; }
+}
+@mixin for-minilaptop-and-up {
+    @media (min-width: 1200px) and (max-width: 5000px) { @content; }
+}
+
+$text-primary: #7fdd85;
+$text-info: #3dc2ff;
+$text-warning: #fad35f;
+$text-danger: #f25767;
+$text-darkgray: #acaeaf;
+$text-pink: #ef9fc4;
+$text-blue: #1D5686;
+$text-orange: #ffba39;
+$text-lightgray: #f3f3f3;
+$text-black: #000;
+$text-white: #fff;
+
+$bg-primary: #7fdd85;
+$bg-info: #3dc2ff;
+$bg-warning: #fad35f;
+$bg-orange: #ffba39;
+$bg-danger: #f25767;
+$bg-darkgray: #acaeaf;
+$bg-pink: #ef9fc4;
+$bg-lightgray: #f3f3f3;
+$bg-blue: #1D5686;
+$bg-black: #000;
+$bg-white: #fff;
+
+
+.modalbox{
+    width: 400px;
+    height: auto;
+    overflow: hidden;
+    // font-family: 'Poppins' !important;
+    @include for-phone-only(){
+        width: 300px !important;
+    }
+}
+.modalheader{
+    font-size: 20px;
+    font-weight: 500;
+    .clearicon{
+        ion-icon{
+            height: 28px;
+            width: 28px;
+            color: #636161;
+            margin: 10px 10px;
+        }
+    }
+    .heading{
+        font-size: 18px;
+    }
+}
+.modalbody{
+    padding: 25px 35px 25px 20px  !important;
+    @include for-phone-only(){
+        padding: 15px 15px 15px 15px  !important;
+    }
+}
+.msgbody{
+    font-size: 1rem;
+    text-align: center;
+    color: #424242;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+.is-okay{
+  border-radius: 5px;
+//   background-color: $bg-success;
+  width: 80px;
+  height: 40px;
+  color: white;
+  outline: none;
+//   font-family: 'Poppins' !important;
+  background-color: #0167b6;
+  margin: 0px 8px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+mat-form-field{
+    width: 100%;
+    // font-family: 'Poppins' !important;
+}
+::ng-deep{
+    mat-Input{
+        color: black !important;
+    }
+    .inputfield{
+        color: black !important;
+        @include for-phone-only(){
+            color: black !important;
+        }
+    }
+}
+.modalheader .clearicon {
+    position: absolute;
+    top: 0px;
+    right: 8px;
+    color: #949494;
+    cursor: pointer;
+}

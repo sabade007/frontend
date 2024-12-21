@@ -1,0 +1,204 @@
+$text-primary: #7fdd85;
+$text-info: #3dc2ff;
+$text-warning: #fad35f;
+$text-danger: #f25767;
+$text-darkgray: #acaeaf;
+$text-pink: #ef9fc4;
+$text-blue: #1D5686;
+$text-orange: #ffba39;
+$text-lightgray: #f3f3f3;
+$text-black: #000;
+$text-white: #fff;
+$text-darkgreen:#006400;
+
+$bg-primary: #7fdd85;
+$bg-info: #3dc2ff;
+$bg-warning: #fad35f;
+$bg-orange: #ffba39;
+$bg-danger: #f25767;
+$bg-darkgray: #acaeaf;
+$bg-pink: #ef9fc4;
+$bg-lightgray: #f3f3f3;
+$bg-blue: #1D5686;
+$bg-black: #000;
+$bg-white: #fff;
+$bg-darkgreen:#006400;
+$bg-lightblue: #568bb7;
+
+@mixin for-phone-only {
+    @media (min-width: 320px) and (max-width: 767px) { @content; }
+}
+@mixin for-tablet-only {
+    @media (min-width: 768px) and (max-width: 1199px) { @content; }
+}
+@mixin for-minilaptop-and-up {
+    @media (min-width: 1200px) and (max-width: 5000px) { @content; }
+}
+
+
+h4{
+    font-size: 1.4rem !important;
+    @include for-phone-only(){
+        font-size: 1.3rem !important;
+    }
+}
+.is-paginationSection{
+    display: flex;
+    .is-prev{
+        background-color: #e0e0e0 !important;
+        mat-icon{
+            color: $text-black;
+        }
+    }
+    .is-next{
+        background-color: #e0e0e0 !important;
+        mat-icon{
+            color: $text-black;
+        }
+    }
+   .is-circle{
+       width: 28px;
+       height: 28px;
+       background-color: #fff;
+       font-size: 14px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       margin: 0px 5px;
+       cursor: pointer;
+       border: 1px solid #e0e0e0;
+       border-radius: 50%;
+       &:last-child{
+        margin: 0px 0px 0px 5px;
+       } 
+    } 
+}
+.is-topStickyHeader{
+    position: sticky;
+    // position: fixed;
+//   top: 20;
+    top: 0px;
+    z-index: 1 !important;
+    background: #fdfdfd;
+    @include for-phone-only(){
+        position: relative;
+        z-index: 0;
+    }
+}
+
+// .addZindex{
+//     z-index: 1 !important;
+//   }
+//   .RemoveZindex{
+//     z-index: 0 !important;
+//   }
+::ng-deep{
+    #toast-container > .toast-success {
+        background-image: none;
+        background-color: #fff;
+        color: black;
+    }
+    #toast-container > .toast-error {
+        background-image: none;
+        background-color: #fff;
+        border-left: 5px solid red !important;
+    }
+    .toast-container .ngx-toastr{
+        border-radius: 0px !important;
+        box-shadow: 0 0 12px #999999;
+        color: #1D5686 !important;
+        font-weight: 600 !important;
+        -webkit-border-radius: 0px !important;
+        -moz-border-radius: 0px !important;
+        -ms-border-radius: 0px !important;
+        -o-border-radius: 0px !important;
+    }
+    .toast-success {
+        border-left: 4px solid #51A351 !important;
+    }
+    .toast-danger {
+        border-left: 4px solid #f25767 !important;
+    }
+    .toast-container .ngx-toastr:hover{
+        box-shadow: none;
+    }
+    .mat-checkbox-checked.mat-primary .mat-checkbox-background {
+        background-color: #1D5686 !important;
+    }
+
+    .introjs-tooltip{
+        background-color: #ecf1fc !important;
+        color: #4f4f4f !important;
+    }
+    .introjs-tooltiptext{
+        font-size: 1rem;
+        text-align: center;
+    }
+    .introjs-skipbutton{
+        color: #4f4f4f !important;
+    }
+    .introjs-tooltipReferenceLayer * {
+        // font-family: 'Poppins' !important;
+    }
+    .introjs-bullets ul li a.active{
+        background: #2d866c !important;
+        border-radius: 5px;
+    }
+    .introjs-bullets ul li a{
+        color: #fff !important;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+    }
+    .introjs-tooltip-header{
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 0px;
+    }
+    .introjs-button{
+        border: 0px solid #bdbdbd;
+        text-shadow: none;
+    }
+    .introjs-nextbutton{
+        background: $text-blue !important;
+        color: $text-white !important;
+    }
+    .introjs-prevbutton{
+        background: $text-white !important;
+        color: $text-black;
+        border: 1px solid #234c88;
+    }
+    .introjs-donebutton{
+        background: $text-blue !important;
+        color: $text-white !important;
+    }
+    .introjs-arrow.left{
+        border-left-color: #ecf1fc;
+        border-right-color: #ecf1fc;
+    }
+    .introjs-arrow.right{
+        border-right-color: #ecf1fc;
+        border-left-color: #ecf1fc;
+    }
+    .introjs-arrow.top{
+        border-top-color: #ecf1fc;
+        border-bottom-color: #ecf1fc;
+    }
+    .introjs-arrow.bottom{
+        border-bottom-color: #ecf1fc;
+        border-top-color: #ecf1fc;
+    }
+    .introjs-helperLayer{
+        box-shadow: rgb(29 86 134) 0px 0px 1px 2px, rgb(33 33 33 / 50%) 0px 0px 0px 5000px !important;
+    }
+    .ngx-file-drop__content{
+        color: #1d5686 !important;
+    }
+    .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+        background-color: #1d5686;
+    }
+  }

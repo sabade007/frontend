@@ -1,0 +1,749 @@
+<div
+  class="smobile"
+  *ngIf="mobile"
+  style="background-color: white; overflow-y: scroll"
+>
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    "
+  >
+    <div
+      style="
+        width: 5%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          width: 100%;
+          height: 50%;
+          border-top-right-radius: 16px;
+          box-shadow: inset 0 0 0 1px #e0e0e0;
+          clip-path: polygon(0 0, 100% 15%, 100% 85%, 0 100%);
+          background-color: #1d5686;
+        "
+      ></div>
+    </div>
+    <div style="width: 90%; height: 100%; overflow-y: scroll">
+      <div
+        class="mmarea"
+        style="
+          display: flex;
+          flex-direction: column;
+          margin-top: 20px;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div>
+          <img
+            src="assets/images/logocmp.png"
+            style="max-height: 40px; margin-bottom: 8px"
+          />
+        </div>
+
+        <smalltypo style="font-family: ttnorms">Drive your business</smalltypo>
+        <hr
+          style="
+            background-color: black;
+            height: 1px;
+            width: 100%;
+            margin-top: 16px;
+          "
+        />
+        <div
+          style="
+            width: 350px;
+            max-width: fit-content;
+
+            margin-top: 16px;
+            padding: 16px;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+            "
+          >
+            <smalltypo
+              style="margin-bottom: 8px; color: #ff6600; font-family: ttnorms"
+              >Signup</smalltypo
+            >
+          </div>
+
+          <form [formGroup]="signupForm" autocomplete="off">
+            <ion-row class="mb-0">
+              <ion-col size="12" style="margin: 0; padding: 0">
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Full name</mat-label>
+                  <input
+                    class="inputfield"
+                    type="text"
+                    matInput
+                    placeholder="Enter Full name"
+                    formControlName="fullName"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['fullName'].invalid">
+                      <span *ngIf="signupFormControls.fullName.errors.required">Full name is required</span>
+                    </mat-error> -->
+                </mat-form-field>
+                <div
+                  class="errorDiv"
+                  *ngIf="signupFormControls.fullName.touched"
+                >
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.fullName.hasError('pattern')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    Full name is Invalid!
+                  </label>
+                </div>
+              </ion-col>
+
+              <ion-col size="12" style="margin: 0; padding: 0">
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                  style="margin: 0"
+                >
+                  <mat-label>User name</mat-label>
+                  <input
+                    class="inputfield"
+                    type="text"
+                    matInput
+                    placeholder="Enter User name"
+                    (keydown.space)="$event.preventDefault()"
+                    formControlName="userName"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['userName'].invalid">User name is required</mat-error> -->
+                </mat-form-field>
+                <div
+                  class="errorDiv"
+                  *ngIf="signupFormControls.userName.touched"
+                >
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.userName.hasError('pattern')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    User name is Invalid!
+                  </label>
+                </div>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="12"
+                size-lg="12"
+                size-xl="12"
+                style="margin: 0; padding: 0"
+              >
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Email</mat-label>
+                  <input
+                    class="inputfield"
+                    type="email"
+                    matInput
+                    placeholder="Enter Email"
+                    [(ngModel)]="useremail"
+                    formControlName="email"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['email'].invalid">
+                      <span *ngIf="signupFormControls.email.errors.required">Email is required</span>
+                    </mat-error> -->
+                  <mat-error
+                    *ngIf="signupForm.get('email').hasError('pattern')"
+                  >
+                    Email must be a valid!
+                  </mat-error>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="5.5"
+                size-md="5.5"
+                size-lg="5.5"
+                size-xl="5.5"
+                style="margin: 0; padding: 0"
+              >
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Phone number</mat-label>
+                  <input
+                    class="inputfield"
+                    type="text"
+                    matInput
+                    placeholder="Enter Phone number"
+                    maxlength="10"
+                    formControlName="phone"
+                    (focusin)="onFocusInEvent()"
+                    oninput="this.value = this.value.replace(/[^0-9_ ]|^ /g,'')"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['phone'].invalid">
+                      <span *ngIf="signupFormControls.phone.errors.required">Phone number is required</span>
+                    </mat-error> -->
+                </mat-form-field>
+                <div class="errorDiv" *ngIf="signupFormControls.phone.touched">
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.phone.hasError('pattern') ||
+                      signupFormControls.phone.hasError('minlength')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    Phone number is Invalid!
+                  </label>
+                </div>
+              </ion-col>
+              <ion-col size="0.5" style="margin: 0; padding: 0"> </ion-col>
+              <ion-col
+                size="12"
+                size-sm="6"
+                size-md="6"
+                size-lg="6"
+                size-xl="6"
+                style="margin: 0; padding: 0"
+              >
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Password</mat-label>
+                  <input
+                    class="inputfield"
+                    #password
+                    [type]="hide ? 'password' : 'text'"
+                    matInput
+                    placeholder="Enter Password"
+                    formControlName="password"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <span
+                    class="password-icon"
+                    mat-icon-button
+                    matSuffix
+                    (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide"
+                  >
+                    <mat-icon class="eyeicon text-blue">{{
+                      hide ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </span>
+                  <!-- <mat-error *ngIf="signupForm.controls['password'].invalid">
+                      <span *ngIf="signupFormControls.password.errors.required">Password is required</span></mat-error> -->
+                </mat-form-field>
+                <div
+                  class="errorDiv"
+                  *ngIf="signupFormControls.password.touched"
+                >
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.password.hasError('pattern')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    The minimum password length is 8 characters and must contain
+                    atleast 1 lowercase letter, 1 capital letter, 1 number and 1
+                    special character.
+                  </label>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row style="row-gap: 10px">
+              <ion-col size="0.5">
+                <mat-checkbox
+                  color="primary"
+                  type="checkbox"
+                  class="example-margin checkboxtxt"
+                  id="checkbox"
+                  #checkbox="matCheckbox"
+                  (click)="Onagree(checkbox)"
+                  #privatUserCheckbox
+                  value="{{ checkbox.checked }}"
+                >
+                </mat-checkbox>
+              </ion-col>
+              <ion-col size="0.5"></ion-col>
+              <ion-col size="11">
+                <p>
+                  I agree with the
+                  <a [href]="eula" target="_blank">EULA </a> and
+                  <a [href]="privacyPolicy" target="_blank"> Privacy Policy</a
+                  >.<br />
+                </p>
+              </ion-col>
+            </ion-row>
+            <p class="is-agreeError">{{ agreeError }}</p>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center signupbtn">
+                <button
+                  mat-raised-button
+                  type="submit"
+                  id="sign-up"
+                  (click)="signup()"
+                  color="primary"
+                >
+                  Create Account
+                </button>
+              </ion-col>
+            </ion-row>
+            <hr
+              style="
+                width: 20%;
+                height: 1px;
+                background-color: black;
+                margin-top: 8px;
+                margin-bottom: 8px;
+              "
+            />
+            <p>
+              Already have an account?
+              <a style="cursor: pointer; color: #1d5686" (click)="gotoLogin()"
+                >Login</a
+              >
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      style="
+        width: 5%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          width: 100%;
+          height: 50%;
+          border-top-right-radius: 16px;
+          box-shadow: inset 0 0 0 1px #e0e0e0;
+          clip-path: polygon(100% 2%, 0 15%, 1% 85%, 100% 100%);
+          background-color: #1d5686;
+        "
+      ></div>
+    </div>
+  </div>
+</div>
+
+<div class="sdesktop" *ngIf="!mobile">
+  <div style="display: flex; flex-direction: row; height: 100%">
+    <div
+      style="
+        width: 50%;
+        height: 100vh;
+        display: flex;
+        background-image: url(../../../../assets/sruvi/cloudbg.png);
+      "
+    >
+      <div style="width: 100%; height: 100%">
+        <div
+          style="
+            height: 10%;
+
+            justify-content: space-between;
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+          "
+        >
+          <div style="padding: 16px">
+            <img
+              src="assets/sruvi/whited.png"
+              style="
+                height: 36px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+              "
+            />
+          </div>
+          <div style="padding: 16px">
+            <p style="color: white; align-self: center">Support</p>
+          </div>
+        </div>
+        <div
+          style="
+            height: 80%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div style="padding: 16px">
+            <large style="color: white">
+              Revolutionise Enterprise Collaboration with Indryve
+            </large>
+            <h4 style="color: white; margin-top: 16px">
+              Empower your enterprise teams with Indryve: Secure, Scalable,
+              Superior
+            </h4>
+            <smalltypo style="color: white"
+              >Explore our other products</smalltypo
+            >
+            <hr style="width: 40%" />
+          </div>
+        </div>
+        <div
+          style="
+            height: 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+          "
+        >
+          <small style="color: white"
+            >Copyright © 2024 Indryve Inc., All rights reserved</small
+          >
+        </div>
+      </div>
+    </div>
+    <div style="width: 50%; height: 100%; overflow-y: scroll">
+      <div
+        style="
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          box-shadow: inset 0 0 0 1px #e0e0e0;
+          background-color: white;
+        "
+      >
+        <img
+          src="assets/images/logocmp.png"
+          style="max-height: 60px; margin-bottom: 8px"
+        />
+        <smalltypo>Drive your business(Tagline)</smalltypo>
+        <div
+          style="
+            width: 400px;
+            max-width: fit-content;
+
+            margin-top: 16px;
+            padding: 16px;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+            "
+          >
+            <smalltypo style="margin-bottom: 8px">Signup</smalltypo>
+          </div>
+
+          <form [formGroup]="signupForm" autocomplete="off">
+            <ion-row class="mb-0">
+              <ion-col size="12" style="margin: 0; padding: 0">
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Full name</mat-label>
+                  <input
+                    class="inputfield"
+                    type="text"
+                    matInput
+                    placeholder="Enter Full name"
+                    formControlName="fullName"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['fullName'].invalid">
+                      <span *ngIf="signupFormControls.fullName.errors.required">Full name is required</span>
+                    </mat-error> -->
+                </mat-form-field>
+                <div
+                  class="errorDiv"
+                  *ngIf="signupFormControls.fullName.touched"
+                >
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.fullName.hasError('pattern')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    Full name is Invalid!
+                  </label>
+                </div>
+              </ion-col>
+
+              <ion-col size="12" style="margin: 0; padding: 0">
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                  style="margin: 0"
+                >
+                  <mat-label>User name</mat-label>
+                  <input
+                    class="inputfield"
+                    type="text"
+                    matInput
+                    placeholder="Enter User name"
+                    (keydown.space)="$event.preventDefault()"
+                    formControlName="userName"
+                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_ ]|^ /g,'')"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['userName'].invalid">User name is required</mat-error> -->
+                </mat-form-field>
+                <div
+                  class="errorDiv"
+                  *ngIf="signupFormControls.userName.touched"
+                >
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.userName.hasError('pattern')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    User name is Invalid!
+                  </label>
+                </div>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="12"
+                size-md="12"
+                size-lg="12"
+                size-xl="12"
+                style="margin: 0; padding: 0"
+              >
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Email</mat-label>
+                  <input
+                    class="inputfield"
+                    type="email"
+                    matInput
+                    placeholder="Enter Email"
+                    [(ngModel)]="useremail"
+                    formControlName="email"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['email'].invalid">
+                      <span *ngIf="signupFormControls.email.errors.required">Email is required</span>
+                    </mat-error> -->
+                  <mat-error
+                    *ngIf="signupForm.get('email').hasError('pattern')"
+                  >
+                    Email must be a valid!
+                  </mat-error>
+                </mat-form-field>
+              </ion-col>
+
+              <ion-col
+                size="12"
+                size-sm="5.5"
+                size-md="5.5"
+                size-lg="5.5"
+                size-xl="5.5"
+                style="margin: 0; padding: 0"
+              >
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Phone number</mat-label>
+                  <input
+                    class="inputfield"
+                    type="text"
+                    matInput
+                    placeholder="Enter Phone number"
+                    maxlength="10"
+                    formControlName="phone"
+                    (focusin)="onFocusInEvent()"
+                    oninput="this.value = this.value.replace(/[^0-9_ ]|^ /g,'')"
+                  />
+                  <!-- <mat-error *ngIf="signupForm.controls['phone'].invalid">
+                      <span *ngIf="signupFormControls.phone.errors.required">Phone number is required</span>
+                    </mat-error> -->
+                </mat-form-field>
+                <div class="errorDiv" *ngIf="signupFormControls.phone.touched">
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.phone.hasError('pattern') ||
+                      signupFormControls.phone.hasError('minlength')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    Phone number is Invalid!
+                  </label>
+                </div>
+              </ion-col>
+              <ion-col size="0.5" style="margin: 0; padding: 0"> </ion-col>
+              <ion-col
+                size="12"
+                size-sm="6"
+                size-md="6"
+                size-lg="6"
+                size-xl="6"
+                style="margin: 0; padding: 0"
+              >
+                <mat-form-field
+                  class="example-full-width is-signUp"
+                  appearance="outline"
+                >
+                  <mat-label>Password</mat-label>
+                  <input
+                    class="inputfield"
+                    #password
+                    [type]="hide ? 'password' : 'text'"
+                    matInput
+                    placeholder="Enter Password"
+                    formControlName="password"
+                    (focusin)="onFocusInEvent()"
+                  />
+                  <span
+                    class="password-icon"
+                    mat-icon-button
+                    matSuffix
+                    (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide"
+                  >
+                    <mat-icon class="eyeicon text-blue">{{
+                      hide ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </span>
+                  <!-- <mat-error *ngIf="signupForm.controls['password'].invalid">
+                      <span *ngIf="signupFormControls.password.errors.required">Password is required</span></mat-error> -->
+                </mat-form-field>
+                <div
+                  class="errorDiv"
+                  *ngIf="signupFormControls.password.touched"
+                >
+                  <label
+                    class="label-style"
+                    [ngClass]="
+                      signupFormControls.password.hasError('pattern')
+                        ? 'text-danger'
+                        : 'is-d-none'
+                    "
+                  >
+                    The minimum password length is 8 characters and must contain
+                    atleast 1 lowercase letter, 1 capital letter, 1 number and 1
+                    special character.
+                  </label>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row style="row-gap: 10px">
+              <ion-col size="0.5">
+                <mat-checkbox
+                  color="primary"
+                  type="checkbox"
+                  class="example-margin checkboxtxt"
+                  id="checkbox"
+                  #checkbox="matCheckbox"
+                  (click)="Onagree(checkbox)"
+                  #privatUserCheckbox
+                  value="{{ checkbox.checked }}"
+                >
+                </mat-checkbox>
+              </ion-col>
+              <ion-col size="0.5"></ion-col>
+              <ion-col size="11">
+                <p>
+                  I agree with the
+                  <a [href]="eula" target="_blank">EULA </a> and
+                  <a [href]="privacyPolicy" target="_blank"> Privacy Policy</a
+                  >.<br />
+                </p>
+              </ion-col>
+            </ion-row>
+            <p class="is-agreeError">{{ agreeError }}</p>
+            <ion-row>
+              <ion-col size="12" class="ion-text-center signupbtn">
+                <button
+                  mat-raised-button
+                  type="submit"
+                  id="sign-up"
+                  (click)="signup()"
+                  color="primary"
+                >
+                  Create Account
+                </button>
+              </ion-col>
+            </ion-row>
+            <hr
+              style="
+                width: 20%;
+                height: 1px;
+                background-color: black;
+                margin-top: 8px;
+                margin-bottom: 8px;
+              "
+            />
+            <p>
+              Already have an account?
+              <a style="cursor: pointer; color: #1d5686" (click)="gotoLogin()"
+                >Login</a
+              >
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

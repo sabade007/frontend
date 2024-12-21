@@ -1,0 +1,147 @@
+<!-- <div class="chat" id="chat1">
+  <div class="requests text-center">
+    <div class="title">
+      <h1>New Group</h1>
+      <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+        <i class="material-icons" (click)="closeChatBox()">close</i>
+      </button>
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+    <div class="content group-content">
+      <form [formGroup]="groupForm" class="group-form" autocomplete="off">
+        <div class="form-group">
+          <label for="user">Group Name</label>
+          <input type="text" matInput class="form-control" maxlength="50" formControlName="groupName"
+            oninput="this.value = this.value.replace(/[^A-Za-z0-9\-\_ ''.,?/:;{}[]+!@#$%^&*()=]|^ /g,'')" id="user" placeholder="Group Name"
+            required />
+        </div>
+        <div class="form-group">
+          <mat-form-field class="w-100 example-chip-list" appearance="fill">
+            <mat-label>Add Participants</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let participent of participents" (removed)="remove(participent)">
+                {{ participent.firstName }}
+                <mat-icon class="matChipRemove" matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input [matChipInputFor]="chipList" [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur" (keydown)="SearchContactsInGroups($event)"
+                (matChipInputTokenEnd)="add($event)"/>
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let option of groupContacts" [value]="option">
+                <ion-row>
+                  <ion-col size="1" class="px-0 is-sharedSection">
+                    <div class="is-d-flex is-justify-content-start is-align-items-center is-shared _shared">
+                      <span class="is-circle bg-blue-6">{{ option.firstName | titlecase | slice:0:1}}</span>
+                    </div>
+                  </ion-col>
+                  <ion-col size="11">
+                    <span class="_optionsName">{{option.firstName | titlecase}}</span>
+                  </ion-col>
+                </ion-row>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="text-center">
+          <button class="button" (click)="createNewGroup()">
+            Create Group
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="modalbox" id="chat1">
+
+  <ion-row>
+    <ion-col size="10" class="ion-text-start heading">
+      <p class="header">New Group</p>
+    </ion-col>
+    <ion-col size="2">
+      <a class="clearicon" mat-icon-button (click)="closepopup()">
+        <ion-icon name="close-outline"></ion-icon>
+      </a>
+    </ion-col>
+  </ion-row>
+
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-center">
+        <div class="is-profile text-center">
+          <div>
+            <span class="is-profile">NG</span>
+          </div>
+          <!-- <div *ngIf="imgsrc != 'NG'">
+            <img class="_image" [src]="_d.bypassSecurityTrustUrl(imgsrc)"/>
+          </div>
+          <input type="file" accept=".jpg,.jpeg,.png" #fileInput class="_uploadBtn"
+            (change)="fileChange($event)"/>
+          <button mat-icon-button (click)="fileInput.click()" class="_Upload">
+            <span class="material-icons-outlined _uploadIcon">image</span>
+          </button> -->
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <form [formGroup]="groupForm" class="groupform">
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="is-d-flex is-justify-content-center">
+          <mat-form-field class="example-full-width is-change" appearance="outline">
+            <mat-label>Group Name</mat-label>
+            <input matInput class="inputfield" placeholder="Group Name" maxlength="25" formControlName="gname" class="inputfield"
+            oninput="this.value = this.value.replace(/[^A-Za-z0-9-,.;'&/.() ><?:!@#$%^&*|[] ]|^ /g,'')" autocomplete="off">
+            <mat-error *ngIf="groupForm.controls['gname'].invalid">Group name is required
+            </mat-error>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12" class="ion-text-center">
+          <mat-form-field class="example" appearance="outline">
+            <mat-label>Search your contacts</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let participent of participents" (removed)="remove(participent)">
+                {{ participent.firstName }}
+                <mat-icon class="matChipRemove" matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input [matChipInputFor]="chipList" #username [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur" (keyup)="setInputField(username.value)"
+               />
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let option of groupContacts" [value]="option">
+                <ion-row>
+                  <ion-col size="1" class="px-0 is-sharedSection">
+                    <div class="is-d-flex is-justify-content-start is-align-items-center is-shared _shared">
+                      <span class="is-circle bg-blue-6">{{option.firstName | titlecase | slice:0:1}}</span>
+                    </div>
+                  </ion-col>
+                  <ion-col size="9">
+                    <span class="_optionsName">{{option.firstName | titlecase}} {{option.lastName | titlecase}}</span>
+                    <span class="_optionsEmail">{{option.mailId}}</span>
+                  </ion-col>
+                  <ion-col *ngIf="option.inContact == true" size="2">
+                    <span class="inContact">In Contact</span>
+                  </ion-col>
+                </ion-row>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+    </form>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <button mat-button type="submit" [disabled]="clicked" class="is-btn text-white is-yes mx-1" (click)="createNewGroup()">Create</button>
+      </ion-col>
+    </ion-row>
+
+  </div>
+
+</div>

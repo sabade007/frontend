@@ -1,0 +1,59 @@
+## [1.1.1](https://github.com/angular-material-extensions/link-preview/compare/v1.1.0...v1.1.1) (2018-12-20)
+
+
+### Bug Fixes
+
+* **package:** provided config InjectionToken `NgxLinkifyjsConfig!` [#50](https://github.com/angular-material-extensions/link-preview/issues/50) ([571eb06](https://github.com/angular-material-extensions/link-preview/commit/571eb06))
+
+
+
+# [1.1.0](https://github.com/angular-material-extensions/link-preview/compare/v1.0.2...v1.1.0) (2018-11-02)
+
+
+### Features
+
+* **package:** support of angular v7 ([74f7b99](https://github.com/angular-material-extensions/link-preview/commit/74f7b99))
+
+
+
+## [1.0.2](https://github.com/angular-material-extensions/link-preview/compare/v1.0.1...v1.0.2) (2018-08-06)
+
+
+### Bug Fixes
+
+* **package:** added catch for fetching link and fixed broken images and content [#16](https://github.com/angular-material-extensions/link-preview/issues/16) ([9f6293c](https://github.com/angular-material-extensions/link-preview/commit/9f6293c))
+
+
+
+## [1.0.1](https://github.com/angular-material-extensions/link-preview/compare/v1.0.0...v1.0.1) (2018-08-02)
+
+
+### Bug Fixes
+
+* **package:** replaced the http with https version for the api ([6d385ee](https://github.com/angular-material-extensions/link-preview/commit/6d385ee))
+
+
+
+# [1.0.0](https://github.com/angular-material-extensions/link-preview/compare/85e9bc0...v1.0.0) (2018-08-02)
+
+
+### Bug Fixes
+
+* **package:** fixed the export name of linkpreview.interface.ts ([b19edc3](https://github.com/angular-material-extensions/link-preview/commit/b19edc3))
+* **package:** relative path of the service fixed ([2630880](https://github.com/angular-material-extensions/link-preview/commit/2630880))
+* **package:** relative path of the service fixed in the container component ([c8d7e8b](https://github.com/angular-material-extensions/link-preview/commit/c8d7e8b))
+
+
+### Features
+
+* **package:** added `mat-link-preview-container` component to render the link preview ([c965247](https://github.com/angular-material-extensions/link-preview/commit/c965247))
+* **package:** added `mat-link-preview` component ([8d6b57c](https://github.com/angular-material-extensions/link-preview/commit/8d6b57c))
+* **package:** added `matLinkPreview` directive to find and render links ([0014c5b](https://github.com/angular-material-extensions/link-preview/commit/0014c5b))
+* **package:** added the 'LinkPreview' interface ([ae8858c](https://github.com/angular-material-extensions/link-preview/commit/ae8858c))
+* **package:** improved the link preview service ([98a2c53](https://github.com/angular-material-extensions/link-preview/commit/98a2c53))
+* **package:** integration of `ngx-linkifyjs` as dependency to find links ([85e9bc0](https://github.com/angular-material-extensions/link-preview/commit/85e9bc0))
+* **package:** new - `MatLinkPreviewComponent` has optional linkPreview input ([3d808c6](https://github.com/angular-material-extensions/link-preview/commit/3d808c6))
+* **package:** optimized the UI ([f8d5bdf](https://github.com/angular-material-extensions/link-preview/commit/f8d5bdf))
+
+
+

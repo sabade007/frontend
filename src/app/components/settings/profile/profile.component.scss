@@ -1,0 +1,223 @@
+@import "../../../../appVariable.scss";
+
+.is-panel {
+  padding: 15px 10px !important;
+  width: 100%;
+  .is-left {
+    border-radius: 8px;
+    box-shadow: 1px 1px 8px 1px rgb(0 0 0 / 8%) !important;
+    .title {
+      padding-top: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .is-right {
+    border-radius: 8px;
+    box-shadow: 1px 1px 8px 1px rgb(0 0 0 / 8%) !important;
+    .title {
+      padding-top: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+.is-profilepicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.titles {
+  padding-top: 10px;
+  padding-left: 30px;
+  margin-bottom: 3rem;
+}
+span.is-profile {
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 4.5rem;
+  margin-top: 2rem;
+}
+mat-form-field {
+  width: 100%;
+  margin-left: 0px;
+  font-size: 0.875rem;
+}
+.bottomText {
+  font-size: 0.875rem;
+  color: #8f8f8f;
+  margin-top: 1rem;
+}
+.is-btn {
+  font-weight: 600 !important;
+}
+.is-update {
+  background-color: $bg-primary;
+  color: white;
+}
+.is-cancle {
+  background-color: $bg-danger;
+  color: white;
+}
+
+.A,
+.K,
+.P,
+.U,
+.Z {
+  background-color: khaki;
+  color: #fff;
+  font-weight: 600;
+}
+
+.B,
+.L,
+.Q,
+.V {
+  background-color: #ef9fc4;
+  color: #fff;
+  font-weight: 600;
+}
+
+.C,
+.M,
+.R,
+.W {
+  background-color: #8f93f6;
+  color: #fff;
+  font-weight: 600;
+}
+
+.D,
+.N,
+.S,
+.X {
+  background-color: #fcbba5;
+  color: #fff;
+  font-weight: 600;
+}
+
+.E,
+.O,
+.T,
+.Y {
+  background-color: #7fdd85;
+  color: #fff;
+  font-weight: 600;
+}
+
+.F,
+.G,
+.H,
+.I,
+.J {
+  background-color: #fad263;
+  color: #fff;
+  font-weight: 600;
+}
+
+._emailDetails {
+  text-align: center;
+  color: grey;
+}
+
+._uploadBtn {
+  opacity: 0;
+  position: absolute;
+}
+._image {
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 4.5rem;
+  margin-top: 2rem;
+}
+._Upload {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  position: relative;
+  top: -2rem;
+  left: 60% !important;
+  @include for-tablet-only() {
+    left: 54% !important;
+  }
+  @include for-phone-only() {
+    left: 9.5rem;
+  }
+}
+
+._uploadIcon {
+  opacity: 0.7;
+}
+
+._uploadIcon:hover {
+  opacity: 1;
+}
+
+._profileDetails {
+  margin-top: 2rem;
+}
+.error {
+  color: red;
+  margin-top: -0.5rem;
+  font-size: 13px;
+  margin-left: 0.3rem;
+}
+._changePassBtn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  @include for-phone-only() {
+    justify-content: center;
+  }
+  @include for-tablet-only() {
+    justify-content: center;
+  }
+}
+._updateProfBtn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  @include for-phone-only() {
+    justify-content: center;
+  }
+  @include for-tablet-only() {
+    justify-content: center;
+  }
+}
+#btn1 {
+  @include for-phone-only {
+    display: none;
+  }
+  @include for-tablet-only {
+    display: block;
+  }
+  @include for-minilaptop-and-up {
+    display: block;
+  }
+}
+#btn2 {
+  @include for-phone-only {
+    display: block;
+  }
+  @include for-tablet-only {
+    display: none;
+  }
+  @include for-minilaptop-and-up {
+    display: none;
+  }
+}
+mat-input{
+  color: #000 !important;
+}

@@ -1,0 +1,58 @@
+<ion-grid class="is-fullwidth is-paddingMain">
+  <ion-row>
+    <ion-col size="8">
+      <p>All Notifications</p>
+    </ion-col>
+    <ion-col size="4">
+      <div class="is-d-flex is-justify-content-end">
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          id="btn1"
+          routerLink="/user/dashboard"
+          color="primary"
+          class="backbtn"
+        >
+          <span class="material-icons-outlined mr-2">arrow_back</span>Back
+        </button>
+      </div>
+    </ion-col>
+
+    <ion-col size="12">
+      <div *ngIf="allnotificationsLength == 0" class="is-fontMedium text-center">
+        <div class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth">
+          <mat-icon class="material-icons-outlined is-trashIcon">notifications</mat-icon>
+          <h2>No notifications in here</h2>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+  <mat-divider></mat-divider>
+  <ion-row>
+    <ion-col size="12">
+      <ul class="p-0 mt-3 is-fullwidth is-notificationSection">
+        <li class="is-notificationItem is-d-flex animated fadeInUp" *ngFor="let item of allnotifications; index as i"
+          [ngClass]="{ 'bl-blue' : (item.objectType == 'WELCOME'), 'bl-info' : (item.objectType == 'EMAIL_VERIFICATION'), 'bl-danger' : (item.objectType == 'STORAGE_FULL' || 'FILE_UNSHARED'),'bl-pink' : (item.objectType == 'FILE_SHARED') }">
+          <div class="is-head">
+            <span class="is-circle text-blue bg-white">{{ i+1 }}</span>
+          </div>
+          <div class="is-body">
+            <span
+              [ngClass]="{ 'text-blue' : (item.objectType == 'WELCOME'), 'text-info' : (item.objectType == 'EMAIL_VERIFICATION'), 'text-danger' : (item.objectType == 'STORAGE_FULL')}"
+              class="is-fontMedium">{{ item.subject }}</span>
+            <p class="mb-0">{{ item.message }}</p>
+          </div>
+          <div class="timestamp-icon">
+            <mat-icon class="material-icons-outlined text-pink mx-0">schedule</mat-icon>
+          </div>
+          <div class="is-timestamp">
+            <p>{{ item.timestamp }}</p>
+          </div>
+          <div class="is-action" (click)="dismissAllNotificationById(item.id)">
+            <mat-icon class="material-icons-outlined is-close">close</mat-icon>
+          </div>
+        </li>
+      </ul>
+    </ion-col>
+  </ion-row>
+</ion-grid>

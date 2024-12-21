@@ -1,0 +1,111 @@
+<ion-grid class="is-fullwidth is-paddingMain is-panel">
+  <ion-row>
+    <ion-col size="12" size-sm="12" size-md="12" size-lg="12" size-xl="12"
+    style="margin-bottom: 2rem;" class="text-right">
+      <button mat-raised-button matTooltip="Back" (click)="goToDashboard()" color="primary">
+        <span class="material-icons-outlined mr-2 hide-mobile">arrow_back</span>Back</button>
+      <!-- <button mat-raised-button id="btn2" style="margin-left: 14rem !important;" matTooltip="Back" (click)="goToDashboard()" color="primary">
+        <span class="material-icons-outlined hide-mobile">arrow_back</span></button> -->
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-justify-content-between bg-white mx-2 is-left">
+    <ion-col size="12" size-sm="12" size-md="12" size-lg="4" size-xl="4">
+      <div class="is-profilepicture text-center">
+        <div class="is-profile"
+          *ngIf="contactImgSrc == 'data:image/png;base64,null' || contactImgSrc == 'data:image/png;base64,' || contactImgSrc == '' || contactImgSrc == 'null'">
+          <span class="is-profile" [ngClass]="userName | slice:0:1 | titlecase">
+            {{ userName | slice:0:1 | titlecase }}</span>
+        </div>
+      </div>
+      <div
+      *ngIf="!(contactImgSrc == 'data:image/png;base64,null' || contactImgSrc == 'data:image/png;base64,' || contactImgSrc == '' || contactImgSrc == 'null')"
+        class="is-profilepicture"
+        (click)="openimage()"
+      >
+        <img class="_image" [src]="_d.bypassSecurityTrustUrl(contactImgSrc)" alt= "{{productName}}"/>
+      </div>
+      <input type="file" accept=".jpg,.jpeg,.png" #fileInputUpload class="_uploadBtn"
+        (change)="fileChangeUpdate($event)"/>
+      <button mat-icon-button *ngIf="enable" class="_Upload">
+        <!-- <span class="material-icons-outlined _uploadIcon">image</span> -->
+        <button
+          mat-icon-button
+          class="_uploadIcon"
+          [matMenuTriggerFor]="moreMenu"
+          #trigger="matMenuTrigger">
+          <mat-icon>image</mat-icon>
+        </button>
+        <mat-menu #moreMenu="matMenu">
+          <button mat-menu-item (click)="fileInputUpload.click()">
+            <mat-icon class="material-icons-filled">file_upload</mat-icon>
+            <span>Upload Image</span>
+          </button>
+          <button mat-menu-item *ngIf="!(contactImgSrc == 'data:image/png;base64,null' || contactImgSrc == 'data:image/png;base64,' 
+            || contactImgSrc == '' || contactImgSrc == 'null')" (click)="removeImg()">
+            <mat-icon class="material-icons-filled">delete</mat-icon>
+            <span>Remove</span>
+          </button>
+        </mat-menu>
+      </button>
+      <div class="_emailDetails mt-1">
+        <span>@{{userDetails['username']}}</span>
+      </div>
+      <div class="_emailDetails">
+        <span>{{userDetails['email']}}</span>
+      </div>
+    </ion-col>
+
+    <ion-col size="12" size-sm="12" size-md="12" size-lg="8" size-xl="8">
+      <ion-row class="mb-2 _profileDetails">
+        <ion-col size="12" size-sm="12" size-md="12" size-lg="10" size-xl="10" >
+          <mat-form-field class="example-full-width is-profile" appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input type="text" matInput placeholder="Enter Full Name" maxlength="100" [(ngModel)]="fullName" [disabled]='disableTextbox'
+              oninput="this.value = this.value.replace(/[^A-Za-z ]|^ /g,'')" />
+          </mat-form-field>
+          <div *ngIf="nameError" class="error">{{nameError}}</div>
+        </ion-col>
+
+        <ion-col size="12" size-sm="12" size-md="12" size-lg="10" size-xl="10">
+          <mat-form-field class="example-full-width is-profile" appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input type="text" matInput placeholder="Enter Phone Number" numbersOnly maxlength="10" [(ngModel)]="phoneNumber" [disabled]='disableTextbox'
+              oninput="this.value = this.value.replace(/[^0-9]|^ /g,'')" />
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="12" size-lg="5" size-xl="5" *ngIf="disabled" class="_updateProfBtn">
+          <button mat-raised-button color="primary" class="is-btn mx-1 mb-4" (click)="OnEditProfile()">Edit</button>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="12" size-lg="5" size-xl="5" *ngIf="enable" class="_updateProfBtn">
+          <button mat-raised-button color="primary" class="is-btn mx-1 mb-4" (click)="OnUpdateProfile()">Update</button>
+        </ion-col>
+        <ion-col *ngIf="hideChangePassword" size="12" size-sm="12" size-md="12" size-lg="5" size-xl="5" class="_changePassBtn">
+          <button mat-stroked-button color="primary" class="is-btn mx-1 mb-4" (click)="changePassword()">Change
+            Password</button>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<tui-root class="fixed">
+  <ng-template #preview let-preview>
+    <tui-preview [rotatable]="true">
+      <tui-preview-title>Profile Picture</tui-preview-title>
+
+      <button
+        tuiPreviewAction
+        tuiIconButton
+        icon="tuiIconCloseLarge"
+        title="Close"
+        (click)="preview.complete()"
+      ></button>
+      <div polymorpheus-outlet [content]="previewContent">
+        <ng-template let-src>
+          <img alt="" [src]="contactImgSrc" />
+        </ng-template>
+      </div>
+    </tui-preview>
+  </ng-template>
+</tui-root>

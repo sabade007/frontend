@@ -1,0 +1,626 @@
+<ion-grid class="is-fullwidth is-paddingMain search-results">
+  <div class="is-topStickyHeader">
+    <!-- File Breadcrumbs  -->
+    <ion-row class="breadcrumbDesign">
+      <ion-col
+        size="7"
+        size-sm="7"
+        size-md="7"
+        size-lg="6.5"
+        size-xl="8"
+        class="mt-1"
+      >
+      </ion-col>
+      <ion-col
+        size="2"
+        size-sm="2.5"
+        size-md="2.5"
+        size-lg="2.5"
+        size-xl="2.5"
+        class="is-d-flex is-justify-content-end is-align-items-center deletecol"
+        (focusin)="onFocusInMulti($event)"
+      >
+        <div *ngIf="multiSelect" class="is-multiSelectAction">
+          <button mat-button>
+            <mat-icon
+              class="material-icons cursor-pointer is-multiActionBtn text-darkgray"
+              matTooltip="Restore"
+              (click)="restoreFile(selectedFiles)"
+              >restore</mat-icon
+            >
+          </button>
+          <button mat-button>
+            <span
+              class="material-icons cursor-pointer is-multiActionBtn text-darkgray"
+              matTooltip="Delete Permanently"
+              (click)="deleteFile(selectedFiles)"
+              >delete_forever</span
+            >
+          </button>
+        </div>
+        <!-- <span class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="List View" *ngIf="filesCount != 0">
+          <mat-icon class="material-icons-outlined text-darkgray">info</mat-icon>
+        </span> -->
+        <span
+          class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="List View"
+          *ngIf="fileGridView"
+          (click)="fileListViewShow()"
+        >
+          <mat-icon
+            class="material-icons-outlined text-darkgray"
+            [ngClass]="fileListView ? 'text-blue' : 'text-dark'"
+          >
+            format_list_bulleted</mat-icon
+          >
+        </span>
+        <span
+          class="mx-2 cursor-pointer is-d-flex"
+          matTooltip="Grid View"
+          *ngIf="fileListView"
+          (click)="fileGridViewShow()"
+        >
+          <mat-icon
+            class="material-icons-outlined text-darkgray"
+            [ngClass]="fileGridView ? 'text-blue' : 'text-dark'"
+          >
+            grid_view</mat-icon
+          >
+        </span>
+      </ion-col>
+      <!-- <ion-col size="1" size-sm="1" size-md="1" size-lg="1">
+        <button mat-raised-button matTooltip="Empty" (click)="emptytrash()">Empty
+        </button>
+      </ion-col> -->
+      <ion-col size="1.5" size-sm="1.5" size-md="1.5" size-lg="1.5">
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          id="btn1"
+          (click)="goToDashboard()"
+          color="primary">
+          <span class="material-icons-outlined mr-2">arrow_back</span>Back
+        </button>
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          id="btn2"
+          (click)="goToDashboard()"
+          color="primary"
+        >
+          <span class="material-icons-outlined">arrow_back</span>
+        </button>
+      </ion-col>
+    </ion-row>
+    <mat-divider></mat-divider>
+
+    <!-- File filtered data  -->
+    <ion-row class="mb-3 mt-2" *ngIf="uploadedFile != 0">
+      <ion-col
+        size="5"
+        size-sm="5"
+        size-md="6"
+        size-lg="6"
+        size-xl="6"
+        class="px-1 is-d-flex is-align-items-center"
+      >
+        <mat-checkbox
+          color="primary"
+          (click)="getAllSelected(checkbox)"
+          #AllselectCheckbox
+          #checkbox="matCheckbox"
+          [value]="uploadedFile"
+          class="example-margin mat-checkbox1"
+        ></mat-checkbox>
+        <p class="is-result mb-0 px-1 is-fontMedium" id="step12" *ngIf="selectedlength && selectedfileLength != 1">
+          You have selected
+          <span class="text-danger is-font-weight-bold">{{selectedfileLength}}</span> files
+        </p>
+        <p class="is-result mb-0 px-1 is-fontMedium" id="step12" *ngIf="selectedlength && selectedfileLength == 1">
+          You have selected
+          <span class="text-danger is-font-weight-bold">{{selectedfileLength}}</span> file
+        </p>
+        <br>
+        <p class="is-result mb-0 px-1 is-fontMedium" *ngIf="filesCount == '1' && !selectedlength">you have
+          <span class="text-danger is-font-weight-bold">{{ filesCount }}</span> file
+        </p>
+        <p class="is-result mb-0 px-1 is-fontMedium" *ngIf="filesCount != '1' && filesCount != '0' && !selectedlength">you have
+          <span class="text-danger is-font-weight-bold">{{ filesCount }}</span> files
+        </p>
+      </ion-col>
+      <ion-col
+        size="7"
+        size-sm="7"
+        size-md="6"
+        size-lg="6"
+        size-xl="6"
+        class="px-2 is-d-flex is-align-items-center is-justify-content-end">
+        <!-- <mat-chip-list #chipList class="mx-2" *ngIf="removable">
+          <mat-chip
+            >{{ sortList }}
+            <mat-icon matChipRemove (click)="matChipremove()">cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+
+        <div class="dropdown">
+          <p class="is-result mb-0 is-fontMedium">
+            Sort by:
+            <span class="text-danger is-font-weight-bold">
+              <button
+                mat-icon-button
+                matTooltip="Filter By"
+                id="sort"
+                class="is-moreMenu is-multiActionBtn text-darkgray"
+              >
+                <mat-icon class="material-icons-outlined">filter_alt</mat-icon>
+              </button>
+            </span>
+            <span>
+              <button
+                mat-icon-button
+                matTooltip="Order By"
+                class="is-moreMenu is-multiActionBtn text-darkgray"
+                (click)="OngetSortbysortList()"
+              >
+                <mat-icon
+                  class="material-icons-outlined"
+                  *ngIf="sortOrder == false"
+                  >south</mat-icon
+                >
+                <mat-icon
+                  class="material-icons-outlined"
+                  *ngIf="sortOrder == true"
+                  >north</mat-icon
+                >
+              </button>
+            </span>
+          </p>
+          <div class="dropdown-content">
+            <div class="mt-2">
+              <button id="title" (click)="OngetSort('Title')">
+                <mat-icon class="material-icons-outlined"
+                  >font_download</mat-icon
+                >
+                <span>Title</span>
+              </button>
+              <button id="date" (click)="OngetSort('Trashed Time')">
+                <mat-icon class="material-icons-outlined">access_time</mat-icon>
+                <span>Trashed Time</span>
+              </button>
+            </div>
+          </div>
+        </div> -->
+        <div class="dropdown">
+          <p class="is-result mb-0 is-fontMedium">
+
+            <span>
+              <button tuiButton size="s" appearance="secondary" matTooltip="Order By"
+                class=" is-multiBtn text-darkgray" (click)="OngetSortbysortList()">
+
+                <mat-chip-list class="mx-2" *ngIf="removable">
+                  <mat-basic-chip>{{ sortList }}
+                  </mat-basic-chip>
+                </mat-chip-list>
+                <tui-svg src="tuiIconArrowDownLarge" size="s" class="material-icons-outlined"
+                  *ngIf="sortOrder == false"></tui-svg>
+
+                <tui-svg src="tuiIconArrowUpLarge" size="s" class="material-icons-outlined" *ngIf="sortOrder == true">
+                </tui-svg>
+              </button>
+            </span>
+          </p>
+          <div class="dropdown-content">
+            <div class="mt-2">
+              <button id="title" (click)="OngetSort('Title')">
+                <mat-icon class="material-icons-outlined">font_download</mat-icon>
+                <span>Title</span>
+              </button>
+              <button id="date" (click)="OngetSort('Trashed Time')">
+                <mat-icon class="material-icons-outlined">access_time</mat-icon>
+                <span>Trashed Time</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf = "isLoadingTrash" class="d-flex justify-content-center">
+    <img class="img-center" src="assets/images/icons/loader1.gif" alt="{{ productName }}">
+  </div>
+
+  <!-- File List View  -->
+  <ion-content style="height: calc(100% - 112px);overflow: auto;--ion-background-color: #ffff !important;">
+  <ion-row class="my-2" *ngIf="fileListView && !isLoadingTrash">
+    <ion-col
+      size="12"
+      style="border: 0px solid #dcdddf; border-radius: 5px; margin-bottom: 15px;"
+    >
+      <div *ngIf="showIcon && uploadedFile.length == 0" class="text-center">
+        <div
+          class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth"
+        >
+          <img
+            alt={{productName}}
+            class="is-trashIcon"
+            src="assets/images/empty_trash.svg"
+          />
+          <h2 class="text-secondary">No Items</h2>
+          <p class="is-fontMedium text-secondary">
+            Items moved to the trash will appear here
+          </p>
+        </div>
+      </div>
+
+      <ion-list>
+      <!-- <ion-item *ngFor="let files of uploadedFile; let i = index"> -->
+      <ion-row *ngFor="let files of uploadedFile; let i = index"
+        class="bg-white is-fileList animated fadeInUp"style="width:100%;"
+        (window:mouseup)="mouseUp()"
+        [class.active]="i == HighlightRow"
+      >
+        <ion-col
+          size="3"
+          size-sm="3"
+          size-md="1.5"
+          size-lg="1"
+          size-xl="1"
+          class="is-leftSide"
+        >
+          <span class="is-selectFile">
+            <mat-checkbox
+              color="primary"
+              [checked]="allSelected"
+              #MultiselectCheckbox
+              class="example-margin checkboxGrid-checkbox mx-1"
+              #checkbox="matCheckbox"
+              (click)="getSelectedFiles(checkbox)"
+              [value]="files.id"
+            ></mat-checkbox>
+          </span>
+          <span class="is-docImage">
+            <img
+              width="34px"
+              height="34px"
+              [src]="
+                mimes[files.mimeType].icon === 'src'
+                  ? files.icon
+                  : mimes[files.mimeType].icon
+              "
+              class="img-fluid1"
+              alt={{productName}}
+            />
+          </span>
+        </ion-col>
+        <ion-col
+          size="8"
+          size-sm="8"
+          size-md="6"
+          size-lg="7"
+          size-xl="7"
+          class="px-2">
+          <!-- (click)="ClickedRow(i, files.id, $event)" -->
+          <h1 class="is-fileName" [matTooltip]="files.title">
+            {{ files.title }}
+          </h1>
+          <p class="mb-0">
+            <span class="is-label">Size: </span>
+            <span class="is-fileSize text-blue">{{ files.sizeRead }}</span>
+            <label *ngIf="files.mimeType == 'httpd/unix-directory'">
+              <span class="is-label px-1"> Files: </span>
+              <span class="is-fileSize text-danger"
+                >{{ files.itemCount }} files</span
+              >
+            </label>
+          </p>
+        </ion-col>
+        <ion-col
+          size="12"
+          size-sm="12"
+          size-md="3"
+          size-lg="3"
+          size-xl="3"
+          class="px-2 is-dateTime"
+        >
+          <div class="">
+            <h2 class="is-createdAt">
+              <mat-icon class="material-icons-outlined text-pink mx-0"
+                >schedule</mat-icon
+              >
+              {{ files.modifiedAtRead }}
+            </h2>
+          </div>
+        </ion-col>
+        <ion-col
+          size="1"
+          size-sm="1"
+          size-md="1.5"
+          size-lg="1"
+          size-xl="1"
+          class="is-d-flex is-justify-content-center is-align-items-center px-2 is-rightSide"
+        >
+          <div class="card-header-toolbar">
+            <button
+              matTooltip="More actions"
+              id="morevert"
+              mat-icon-button
+              class="is-moreMenu text-blue"
+              [matMenuTriggerFor]="moreMenu"
+              aria-label="Example icon-button with a menu"
+              #trigger="matMenuTrigger"
+              (click)="moreActions()"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #moreMenu="matMenu">
+              <div (mouseleave)="trigger.closeMenu()">
+                <button
+                  mat-menu-item
+                  id="restore"
+                  (click)="restoreFile(files.id)"
+                >
+                  <mat-icon class="material-icons-outlined"
+                    >restore_from_trash</mat-icon
+                  >
+                  <span>Restore</span>
+                </button>
+                <button
+                  mat-menu-item
+                  id="delete"
+                  (click)="deleteFile(files.id)"
+                >
+                  <mat-icon class="material-icons-outlined"
+                    >delete_forever</mat-icon
+                  >
+                  <span>Delete permanently</span>
+                </button>
+              </div>
+            </mat-menu>
+          </div>
+          <span
+            class="is-favroiteIcon"
+            id="star"
+            *ngIf="files.favorite == true"
+          >
+            <mat-icon class="material-icons-outlined text-orange mx-0"
+              >star</mat-icon
+            >
+          </span>
+        </ion-col>
+      </ion-row>
+      <!-- </ion-item> -->
+      </ion-list>
+      <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+      <!-- <ion-row *ngIf="uploadedFile.length != 0" id="btn1">
+        <ion-col class="px-0">
+          <mat-paginator
+            class="media-table-paginator"
+            [length]="filesCount"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+            (page)="pageEvent = $event; onPageChange($event)"
+            showFirstLastButtons
+          >
+          </mat-paginator>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="uploadedFile.length != 0" id="btn2">
+        <ion-col class="px-0">
+          <mat-paginator
+            hidePageSize
+            class="media-table-paginator"
+            [length]="filesCount"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+            (page)="pageEvent = $event; onPageChange($event)"
+            showFirstLastButtons
+          >
+          </mat-paginator>
+        </ion-col>
+      </ion-row> -->
+    </ion-col>
+  </ion-row>
+
+  <!-- Folders & Files Grid View  -->
+  <div class="is-fullwidth" *ngIf="fileGridView">
+    <ion-row class="my-1">
+      <ion-col size="12" class="col-lg-12">
+        <!-- <div
+          class="card-block card-stretch card-transparent"
+          *ngIf="uploadedFile != 0"
+        >
+          <div
+            class="card-header is-d-flex is-justify-content-between is-align-items-center pb-0"
+          >
+            <div class="header-title">
+              <h4 class="card-title mb-0" *ngIf="uploadedFile.length != 0">
+                Folders and Files
+              </h4>
+            </div>
+          </div>
+        </div> -->
+        <div *ngIf="showIcon && uploadedFile == 0" class="text-center">
+          <div
+            class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth"
+          >
+            <img
+              alt={{productName}}
+              class="is-trashIcon"
+              src="assets/images/empty_trash.svg"
+            />
+            <h2 class="text-secondary">No Items</h2>
+            <p class="is-fontMedium text-secondary">
+              Items moved to the trash will appear here
+            </p>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <!-- Grid View  -->
+    <ion-grid>
+    <ion-row class="ion-justify-content-start" style="margin-bottom: 20px">
+      <ion-col
+        size="6"
+        size-sm="6"
+        size-md="3"
+        size-lg="2.4"
+        size-xl="2.4"
+        class="my-2 animated fadeInLeft"
+        *ngFor="let files of uploadedFile; let i = index"
+      >
+        <!-- <mat-card class="cursor-pointer px-2 pt-0 pb-2 _selectedFile" (window:mouseup)="mouseUp()" [class.active]="i == HighlightRow"> -->
+        <div class="cclr card cursor-pointer px-2 pt-0 pb-2 _selectedFile" [class.active]="i == HighlightRow" (window:mouseup)="mouseUp()">
+          <div class="card-body1 is-folder">
+            <div class="is-header">
+              <span>
+                <mat-checkbox
+                  color="primary"
+                  [checked]="allSelected"
+                  #MultiselectCheckbox
+                  class="example-margin checkboxGrid-checkbox mx-1"
+                  #checkbox="matCheckbox"
+                  (click)="getSelectedFiles(checkbox)"
+                  [value]="files.id"
+                ></mat-checkbox>
+              </span>
+              <span class="is-favroiteIcon" *ngIf="files.favorite == true">
+                <mat-icon
+                  class="material-icons-outlined text-orange mx-0 is-fontLarge"
+                  >star</mat-icon
+                >
+              </span>
+              <button
+                mat-icon-button
+                matTooltip="More actions"
+                id="moreaction"
+                class="is-moreMenu"
+                [matMenuTriggerFor]="moreMenu"
+                #trigger="matMenuTrigger"
+                (click)="moreActions()"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <div (mouseleave)="trigger.closeMenu()">
+                  <button
+                    mat-menu-item
+                    id="restore"
+                    (click)="restoreFile(files.id)"
+                  >
+                    <mat-icon class="material-icons-outlined"
+                      >restore_from_trash</mat-icon
+                    >
+                    <span>Restore</span>
+                  </button>
+                  <button
+                    mat-menu-item
+                    id="delete"
+                    (click)="deleteFile(files.id)"
+                  >
+                    <mat-icon class="material-icons-outlined"
+                      >delete_forever</mat-icon
+                    >
+                    <span>Delete permanently</span>
+                  </button>
+                </div>
+              </mat-menu>
+            </div>
+            <!-- Grid View Folders -->
+            <div *ngIf="files.mimeType == 'httpd/unix-directory'">
+              <div>
+                <div class="is-d-flex is-justify-content-between mt-2">
+                  <a>
+                    <div>
+                      <img alt={{productName}} src="assets/images/foldericon.png" width="35px" height="35px"
+                        class=" text-center is-docThumb d-flex justify-align-center folder-fluid"/>
+                    </div>
+                  </a>
+                </div>
+                <a class="folder">
+                  <h5 class="is-fileName" [matTooltip]="files.title">
+                    {{ files["title"] }}
+                  </h5>
+                  <p class="mb-0">
+                    <span class="is-folderDetails"
+                      >{{ files.itemCount }} Files</span
+                    >,
+                    <span class="is-folderDetails">{{
+                      files.modifiedAtRead
+                    }}</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <!-- Grid View Files -->
+            <div
+              *ngIf="files.mimeType != 'httpd/unix-directory'"
+              class="document-card image-thumb"
+              [title]="files.title">
+              <!-- (click)="ClickedRow(i, files.id, $event)" -->
+              <div class="text-center is-docThumb">
+                <img
+                  width="90"
+                  height="82"
+                  [src]="
+                    mimes[files.mimeType].icon === 'src'
+                      ? files.icon
+                      : mimes[files.mimeType].icon
+                  "
+                  class="img-fluid1"
+                  alt={{productName}}
+                />
+              </div>
+              <h6 class="is-fileName" [matTooltip]="files.title">
+                {{ files.title }}
+              </h6>
+              <p class="mb-1 mt-2">
+                <span class="is-folderDetails"
+                  >{{ files["extention"] | uppercase }} ,</span
+                >
+                <span class="is-folderDetails">{{ files.modifiedAtRead }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- </mat-card> -->
+      </ion-col>
+    </ion-row>
+    </ion-grid>
+    <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <!-- <ion-row *ngIf="uploadedFile.length != 0" id="btn1">
+      <ion-col class="px-0">
+        <mat-paginator
+          class="media-table-paginator"
+          [length]="filesCount"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+          (page)="pageEvent = $event; onPageChange($event)"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="uploadedFile.length != 0" id="btn2">
+      <ion-col class="px-0">
+        <mat-paginator
+          hidePageSize
+          class="media-table-paginator"
+          [length]="filesCount"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+          (page)="pageEvent = $event; onPageChange($event)"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </ion-col>
+    </ion-row> -->
+  </div>
+</ion-content>
+</ion-grid>

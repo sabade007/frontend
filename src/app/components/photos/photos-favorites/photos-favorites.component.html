@@ -1,0 +1,446 @@
+<ion-grid class="is-fullwidth is-paddingMain">
+  <ion-row class="ion-justify-content-between">
+    <ion-row class="is-topStickyHeader is-fullwidth">
+      <!-- Photos Breadcrumbs design-->
+      <ion-col
+        *ngIf="photosLength != 0"
+        size="9"
+        size-sm="12"
+        size-md="3.5"
+        size-lg="4"
+        size-xl="3"
+        class="px-1 is-d-flex is-align-items-center"
+      >
+        <p
+          class="is-result mb-0 px-1 is-fontMedium"
+          *ngIf="filesCount == '1' || filesCount == '0'"
+        >
+          You have
+          <span class="text-danger is-font-weight-bold">{{ filesCount }}</span>
+          Favorite Photo
+        </p>
+        <p
+          class="is-result mb-0 px-1 is-fontMedium"
+          *ngIf="filesCount != '1' && filesCount != '0'"
+        >
+          You ave
+          <span class="text-danger is-font-weight-bold">{{ filesCount }}</span>
+          Favorite Photos
+        </p>
+      </ion-col>
+      <ion-col
+        *ngIf="photosLength != 0"
+        size="3"
+        size-sm="12"
+        size-md="1.5"
+        size-lg="1.5"
+        size-xl="2"
+        class="px-2"
+        (focusin)="onFocusInMulti($event)"
+      >
+        <div *ngIf="multiSelect">
+          <button mat-button id="Info">
+            <span
+              matRipple
+              class="material-icons cursor-pointer is-multiActionBtn text-darkgray"
+              matTooltip="Info"
+              (click)="OnmoreDetails(pDetails)"
+              >info</span
+            >
+          </button>
+          <button mat-button id="remove">
+            <span
+              matRipple
+              matTooltip="Move to trash"
+              (click)="trashFile(selectedFiles)"
+              class="material-icons cursor-pointer is-multiActionBtn text-darkgray"
+              >delete</span
+            >
+          </button>
+        </div>
+      </ion-col>
+      <ion-col
+        *ngIf="photosLength != 0"
+        size="11"
+        size-sm="12"
+        size-md="4.5"
+        size-lg="3"
+        size-xl="5"
+        class="px-2 is-d-flex is-align-items-center is-justify-content-end sortcol">
+        <!-- <mat-chip-list #chipList class="mx-2" *ngIf="removable">
+          <mat-chip
+            >{{ sortList }}
+            <mat-icon matChipRemove (click)="matChipremove()">cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        <div class="dropdown">
+          <p class="is-result mb-0 is-fontMedium" id="step13">
+            Sort by:
+            <span class="text-danger is-font-weight-bold">
+              <button
+                mat-icon-button
+                matTooltip="Filter By"
+                class="is-moreMenu is-multiActionBtn text-darkgray"
+              >
+                <mat-icon class="material-icons-outlined">filter_alt</mat-icon>
+              </button>
+            </span>
+          </p>
+          <div class="dropdown-content">
+            <div class="mt-2">
+              <button id="title" (click)="OngetSort('Title')">
+                <mat-icon
+                  class="material-icons-outlined"
+                  *ngIf="sortOrder == false"
+                  >south</mat-icon
+                >
+                <mat-icon
+                  class="material-icons-outlined"
+                  *ngIf="sortOrder == true"
+                  >north</mat-icon
+                >
+                <span>Title</span>
+              </button>
+              <button id="size" (click)="OngetSort('Size')">
+                <mat-icon class="material-icons-outlined">sort</mat-icon>
+                <span>Size</span>
+              </button>
+              <button id="created" (click)="OngetSort('Created At')">
+                <mat-icon class="material-icons-outlined">date_range</mat-icon>
+                <span>Created at</span>
+              </button>
+              <button id="modified" (click)="OngetSort('Modified At')">
+                <mat-icon class="material-icons-outlined">watch_later</mat-icon>
+                <span>Modified at</span>
+              </button>
+            </div>
+          </div>
+        </div> -->
+        <span class="px-2">
+          <div class="dropdown">
+            <p class="is-result mb-0 is-fontMedium" id="step13">
+              <span>
+                <button tuiButton size="s" appearance="secondary" matTooltip="Order By"
+                    class="is-multiBtn">
+                    <mat-chip-list class="mx-2" *ngIf="removable">
+                        <mat-basic-chip>{{ sortList }}
+                        </mat-basic-chip>
+                    </mat-chip-list>
+                    <tui-svg src="tuiIconArrowDownLarge" *ngIf="sortOrder == false"></tui-svg>
+                    <tui-svg src="tuiIconArrowUpLarge" class="material-icons-outlined"
+                        *ngIf="sortOrder == true"></tui-svg>
+                </button>
+            </span>
+            </p>
+            <div class="dropdown-content">
+              <div class="mt-2">
+                <button id="title" (click)="OngetSort('Title')">
+                  <mat-icon class="material-icons-outlined">font_download</mat-icon>
+                  <span>Title</span>
+                </button>
+                <button id="size" (click)="OngetSort('Size')">
+                  <mat-icon class="material-icons-outlined">sort</mat-icon>
+                  <span>Size</span>
+                </button>
+                <button id="created" (click)="OngetSort('Created At')">
+                  <mat-icon class="material-icons-outlined">date_range</mat-icon>
+
+                  <span>Created At</span>
+                </button>
+                <button id="modified" (click)="OngetSort('Modified At')">
+                  <mat-icon class="material-icons-outlined">watch_later</mat-icon>
+                  <span>Modified At</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </span>
+      </ion-col>
+      <ion-col
+        *ngIf="photosLength != 0"
+        size="1.5"
+        size-sm="1.5"
+        size-md="1.5"
+        size-lg="1.5"
+        size-xl="1.5"
+      >
+        <button
+          id="btn1"
+          mat-raised-button
+          matTooltip="Back"
+          (click)="goToDashboard()"
+          color="primary"
+        >
+          <span class="material-icons-outlined mr-2 hide-mobile"
+            >arrow_back</span
+          >Back
+        </button>
+        <button
+          id="btn2"
+          mat-raised-button
+          matTooltip="Back"
+          (click)="goToDashboard()"
+          color="primary"
+        >
+          <span class="material-icons-outlined hide-mobile">arrow_back</span>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row style="width: 100%">
+      <ion-col
+        *ngIf="photosLength == 0"
+        size="2"
+        size-sm="12"
+        size-md="12"
+        size-lg="12"
+        size-xl="12"
+        class="is-d-flex is-justify-content-end is-align-items-center"
+      >
+        <button
+          mat-raised-button
+          matTooltip="Back"
+          (click)="goToDashboard()"
+          color="primary"
+        >
+          <span class="material-icons-outlined mr-2 hide-mobile"
+            >arrow_back</span
+          >Back
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <!-- Phot0s List -->
+    <div *ngIf = "isLoadingPhotosFav" class="d-flex justify-content-center loader_style">
+      <!-- <div class="spinner-border m-3 text-secondary loader_style" role="status"></div>
+        <span class="text_style text-secondary">Loading...</span> -->
+        <img class="img-center" src="assets/images/icons/loader1.gif" alt="{{ productName }}">
+    </div>
+    <ion-row style="width: 100%">
+    <ion-content style="height: calc(100vh - 200px);overflow: auto;--ion-background-color: #ffff !important;">
+    <ion-row *ngIf="!isLoadingPhotosFav" class="is-fullwidth" style="height: calc(100% - 0px)">
+      <ion-col size="12" style="height: calc(100% - 0px)">
+        <div *ngIf="photosLength == 0" class="text-center">
+          <div
+            class="is-d-flex is-align-items-center is-justify-content-center is-flex-column is-fullwidth is-emptyStatusSection"
+          >
+            <span class="is-position-relative">
+              <mat-icon class="material-icons-outlined is-emptyStatusIcon"
+                >image_not_supported</mat-icon
+              >
+              <h2>No starred photos</h2>
+              <span class="is-position-absolute is-favroiteEmptyIcon">
+                <mat-icon class="material-icons-outlined text-orange"
+                  >star</mat-icon
+                >
+              </span>
+            </span>
+            <p class="is-fontMedium">
+              Add stars to things that you want to easily find later            </p>
+          </div>
+        </div>
+        <ion-grid>
+        <ion-row class="my-2 photosrow" style="margin-bottom: 40px !important">
+          <ion-col
+            size="6"
+            size-sm="6"
+            size-md="3"
+            size-lg="2.4"
+            size-xl="2.4"
+            class="my-2 animated fadeInLeft"
+            *ngFor="let photo of uploadedPhoto; let idx = index"
+          >
+           <!-- <mat-card (window:mouseup)="mouseUp()" [class.active]="idx == HighlightRow" class="cursor-pointer px-0 pt-0 pb-0 _selectedFile"> -->
+            <div class="cclr card cursor-pointer px-2 pt-0 pb-2 _selectedFile" [class.active]="idx == HighlightRow" (window:mouseup)="mouseUp()">
+              <div class="document-card image-thumb">
+                <button
+                  mat-icon-button
+                  matTooltip="More actions"
+                  class="is-moreMenu"
+                  [matMenuTriggerFor]="moreMenu"
+                  #trigger="matMenuTrigger"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #moreMenu="matMenu">
+                  <div (mouseleave)="trigger.closeMenu()">
+                    <button
+                      (click)="viewPhoto(photo.id, photo.title, idx)"
+                      id="preview"
+                      mat-menu-item
+                    >
+                      <mat-icon class="material-icons-outlined"
+                        >remove_red_eye</mat-icon
+                      >
+                      <span>Preview</span>
+                    </button>
+                    <button
+                      (click)="removeFavorite(photo.id)"
+                      id="fav"
+                      mat-menu-item
+                    >
+                      <mat-icon class="material-icons-outlined"
+                        >star_border</mat-icon
+                      >
+                      <span *ngIf="photo.favorite === false">Add to favorites</span>
+                      <span *ngIf="photo.favorite === true"
+                        >Remove from favorites</span
+                      >
+                    </button>
+                    <button
+                      (click)="OnmoreDetails(photo)"
+                      id="trash"
+                      mat-menu-item
+                    >
+                      <mat-icon class="material-icons-outlined">info</mat-icon>
+                      <span>Details</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button
+                      (click)="trashFile(photo.id)"
+                      id="trash"
+                      mat-menu-item
+                    >
+                      <mat-icon class="material-icons-outlined"
+                        >delete</mat-icon
+                      >
+                      <span>Trash</span>
+                    </button>
+                  </div>
+                </mat-menu>
+                <a class="is-documentSection"  (click)="ClickedRow(idx, photo.id, photo)">
+                  <div class="is-header">
+                    <span
+                      class="is-favroiteIcon"
+                      *ngIf="photo.favorite == true"
+                    >
+                      <mat-icon
+                        class="material-icons-outlined text-orange mx-0 is-fontLarge"
+                        >star</mat-icon
+                      >
+                    </span>
+                    <div class="is-d-flex pr-5 is-justify-content-center is-align-items-center is-fullwidth">
+                      <!-- <span class="text-danger is-fontMedium mx-1">Size:</span>
+                      <span class="is-photoSize is-fontMedium">{{photo.size}}</span> -->
+                    </div>
+                  </div>
+                  <div *ngIf="isMobile"
+                    (click)="viewPhoto(photo.id, photo.title, idx)"
+                    class="text-center is-docThumb"
+                  >
+                    <img
+                      width="120px"
+                      height="120px"
+                      [src]="photo.icon"
+                      class="img-fluid"
+                      [alt]="photo.title" loading="lazy"
+                      onerror="this.src='assets/images/image.png';"
+                    />
+                  </div>
+                  <div *ngIf="!isMobile"
+                  (dblclick)="viewPhoto(photo.id, photo.title, idx)"
+                  class="text-center is-docThumb"
+                >
+                  <img
+                    width="90"
+                    height="90"
+                    [src]="photo.icon"
+                    class="img-fluid1"
+                    [alt]="photo.title" loading="lazy"
+                    onerror="this.src='assets/images/image.png';"
+                  />
+                </div>
+                  <h6 class="is-fileName" [matTooltip]="photo.title">{{ photo.title }}</h6>
+
+                  <p class="pb-1 is-d-flex is-align-items-center is-justify-content-center">
+                    <!-- <span class="is-photoSize">{{ photo["extention"] | uppercase }} ,</span> -->
+                    <span class="is-photoSize is-fontMedium">{{photo.sizeRead}}, </span>
+                    <span class="is-photoSize is-fontMedium" *ngIf="createdTime">{{ photo.createdAtRead }}</span>
+                    <span class="is-photoSize is-fontMedium" *ngIf="!createdTime">{{ photo.modifiedAtRead }}</span>
+                  </p>
+                </a>
+              </div>
+            </div>
+            <!-- </mat-card> -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-infinite-scroll threshold="15px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loader="bubbles"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+        <!-- <ion-row *ngIf="uploadedPhoto.length != 0" id="btn1">
+          <ion-col class="px-0">
+            <mat-paginator
+              class="media-table-paginator"
+              [length]="filesCount"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+              (page)="pageEvent = $event; onPageChange($event)"
+              showFirstLastButtons
+            ></mat-paginator>
+          </ion-col>
+        </ion-row> -->
+        <!-- <ion-row *ngIf="uploadedPhoto.length != 0" id="btn2">
+          <ion-col class="px-0">
+            <mat-paginator
+              hidePageSize
+              class="media-table-paginator"
+              [length]="filesCount"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
+              (page)="pageEvent = $event; onPageChange($event)"
+              showFirstLastButtons
+            ></mat-paginator>
+          </ion-col>
+        </ion-row> -->
+      </ion-col>
+    </ion-row>
+  </ion-content>
+  </ion-row>
+    <!-- <ng-image-fullscreen-view
+      (close)="closeEventHandler()"
+      [imageIndex]="currentIndex"
+      [images]="fullImage"
+      [show]="showFlag"
+    >
+    </ng-image-fullscreen-view> -->
+
+    <tui-root
+      class="fixed"
+      (keyup)="keyup($event)"
+      (keydown)="keydown($event)"
+      (keyup)="keyup($event)"
+    >
+      <ng-template #preview let-preview>
+        <tui-preview [rotatable]="true">
+          <tui-preview-title>{{ photo_title }}</tui-preview-title>
+          <tui-preview-pagination
+            (click)="onclick(fullImage[newIndex].imageid)"
+            [length]="uploadedPhoto.length"
+            [(index)]="newIndex"
+          ></tui-preview-pagination>
+          <button
+            tuiIconButton
+            tuiPreviewAction
+            icon="tuiIconDownload"
+            title="Download"
+            (click)="download(photo_id)"
+          ></button>
+          <button
+            tuiPreviewAction
+            tuiIconButton
+            icon="tuiIconCloseLarge"
+            title="Close"
+            (click)="preview.complete();closePreview()"
+          ></button>
+
+          <div polymorpheus-outlet [content]="previewContent">
+            <ng-template let-src>
+              <img alt="" [src]="selectedpic" />
+            </ng-template>
+          </div>
+        </tui-preview>
+      </ng-template>
+    </tui-root>
+  </ion-row>
+</ion-grid>

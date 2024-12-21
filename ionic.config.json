@@ -1,0 +1,7 @@
+{
+  "name": "Indryve",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,25 @@
+<div class="modalbox">
+  <div class="modalheader"></div>
+
+  <div class="modalbody">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <p class="deleteText">
+          <!-- Your session has expired, do you want to extend the session? -->
+          You're being timed out due to inactivity. Please choose to stay signed in or to logoff. Otherwise, you will logged off automatically.
+        </p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <button mat-raised-button color="light" class="mx-1" (click)="logout()">
+          Log Off
+        </button>
+        <button mat-raised-button color="primary" style="color: white;" class="mx-1"(click)="closepopup()">
+          Stay Logged In
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>
